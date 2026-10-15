@@ -318,7 +318,7 @@ export function createPalette(shell) {
     const mySeq = ++seq;
     const raw = input.value;
     /** @type {Item[]} */
-    let next = [];
+    let next;
     if (step) {
       if (step.input) {
         next = [{ id: 'input', kind: 'input', title: raw || '…', icon: 'check', activate: () => step?.input?.(raw) }];
@@ -535,14 +535,12 @@ export function createPalette(shell) {
       const current = sys.settings.get('system', 'theme');
       return [
         { value: 'auto', label: t('palette.themeAuto'), icon: 'contrast', current: current === 'auto' },
-        ...sys.theme
-          .themes()
-          .map((th) => ({
-            value: th.id,
-            label: sys.localize(th.name),
-            icon: th.scheme === 'light' ? 'sun' : 'moon',
-            current: current === th.id,
-          })),
+        ...sys.theme.themes().map((th) => ({
+          value: th.id,
+          label: sys.localize(th.name),
+          icon: th.scheme === 'light' ? 'sun' : 'moon',
+          current: current === th.id,
+        })),
       ];
     },
     ...(() => {
