@@ -13,6 +13,8 @@ import { startShell } from './shell.js';
 import { pickStrings } from './strings.js';
 import { createToastHost } from './toast.js';
 import { createTopBar } from './topbar.js';
+import { createOverview } from './wm/overview.js';
+import { createSwitcher } from './wm/switcher.js';
 
 /** @param {HTMLElement} root */
 export function boot(root) {
@@ -32,6 +34,8 @@ export function boot(root) {
       shell.ui.launcher = createLauncher(shell);
       shell.ui.center = createNotificationCenter(shell);
       shell.ui.personalize = createPersonalize(shell);
+      shell.ui.overview = createOverview(shell);
+      shell.ui.switcher = createSwitcher(shell);
       shell.wm.relayout();
       if (!shell.wm.list().length && !shell.session.data.windows.length) void shell.launch('nexus.welcome');
       showNotificationToasts(sys, toasts, t.dismiss);

@@ -41,7 +41,9 @@
     "levelUp": "Level {level} reached"
   },
   "dialog": {
-    "unavailable": "This dialog arrives with the desktop in a later version."
+    "unavailable": "This dialog arrives with the desktop in a later version.",
+    "ok": "OK",
+    "cancel": "Cancel"
   },
   "commands": {
     "category": "System",
@@ -310,5 +312,22 @@
     },
     "display": "Display settings",
     "terminalHere": "Open terminal here"
+  },
+  "overview": {
+    "title": "Overview",
+    "search": "Type to search apps",
+    "workspace": "Workspace {n}",
+    "windows": {
+      "=0": "No windows",
+      "one": "1 window",
+      "other": "{count} windows"
+    },
+    "empty": "No windows on this workspace",
+    "rename": "Rename workspace {n}",
+    "renameLabel": "Workspace name"
+  },
+  "switcher": {
+    "title": "Switch windows",
+    "onWorkspace": "{title} (workspace {n})"
   }
 }

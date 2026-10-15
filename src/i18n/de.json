@@ -41,7 +41,9 @@
     "levelUp": "Stufe {level} erreicht"
   },
   "dialog": {
-    "unavailable": "Dieser Dialog kommt mit dem Desktop in einer späteren Version."
+    "unavailable": "Dieser Dialog kommt mit dem Desktop in einer späteren Version.",
+    "ok": "OK",
+    "cancel": "Abbrechen"
   },
   "commands": {
     "category": "System",
@@ -310,5 +312,22 @@
     },
     "display": "Anzeigeeinstellungen",
     "terminalHere": "Terminal hier öffnen"
+  },
+  "overview": {
+    "title": "Übersicht",
+    "search": "Tippen, um Apps zu suchen",
+    "workspace": "Arbeitsfläche {n}",
+    "windows": {
+      "=0": "Keine Fenster",
+      "one": "1 Fenster",
+      "other": "{count} Fenster"
+    },
+    "empty": "Keine Fenster auf dieser Arbeitsfläche",
+    "rename": "Arbeitsfläche {n} umbenennen",
+    "renameLabel": "Name der Arbeitsfläche"
+  },
+  "switcher": {
+    "title": "Fenster wechseln",
+    "onWorkspace": "{title} (Arbeitsfläche {n})"
   }
 }

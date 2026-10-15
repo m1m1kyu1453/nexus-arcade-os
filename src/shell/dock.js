@@ -7,6 +7,7 @@ import { openPopover } from '../ui/overlay.js';
 import { appIcon } from './app-icon.js';
 import './dock.css';
 import { appName } from './util.js';
+import { windowThumb } from './wm/thumb.js';
 
 /** @param {import('./shell.js').ShellContext} shell */
 export function createDock(shell) {
@@ -48,24 +49,7 @@ export function createDock(shell) {
     if (!anchor) return;
     preview?.close();
     const items = windowsOf(appId).map((w) => {
-      const thumb = h('div', { class: 'nx-dock-thumb', 'aria-hidden': 'true' });
-      const clone = /** @type {HTMLElement} */ (w.el.cloneNode(true));
-      clone.removeAttribute('id');
-      clone.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
-      clone.classList.remove('is-minimized', 'is-focused', 'is-opening');
-      const scale = Math.min(180 / w.rect.w, 110 / w.rect.h);
-      Object.assign(clone.style, {
-        left: '0',
-        top: '0',
-        transform: `scale(${scale})`,
-        transformOrigin: '0 0',
-        visibility: 'visible',
-        pointerEvents: 'none',
-      });
-      clone.inert = true;
-      thumb.append(clone);
-      thumb.style.width = `${Math.round(w.rect.w * scale)}px`;
-      thumb.style.height = `${Math.round(w.rect.h * scale)}px`;
+      const thumb = windowThumb(w, 180, 110);
       return h(
         'button',
         {

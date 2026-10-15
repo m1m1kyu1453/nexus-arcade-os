@@ -207,17 +207,6 @@
   }
 }
 
-.nx-dock-thumb {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--radius-sm);
-  background: var(--surface-2);
-
-  & .nx-window {
-    position: absolute;
-  }
-}
-
 @media (max-width: 767px) {
   .nx-dock {
     display: none;
