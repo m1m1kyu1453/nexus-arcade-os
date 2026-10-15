@@ -41,9 +41,8 @@ export interface AppManifest {
   achievements?: AchievementDecl[];
   /** Lazy search provider, loaded when the search service first needs it. */
   search?: () => Promise<{ default: SearchProvider }>;
-  /** Schema version of this app's stored data. Bump together with a new migration. */
-  storageVersion?: number;
-  migrations?: () => Promise<{ default: Migration[] }>;
+  /** Stored data: collections (one IndexedDB store each) and the data schema version. */
+  storage?: StorageDecl;
   /** Lazy code chunk. */
   load: () => Promise<AppModule>;
 }
@@ -103,9 +102,31 @@ export interface AchievementDecl {
   goal?: number;
 }
 
+export interface StorageDecl {
+  /** Data schema version. Bump it together with a new migration (data from phase 2 must load in phase 13). */
+  version: number;
+  /**
+   * Collections this app uses, with their indexes. Declared up front so one IndexedDB upgrade at
+   * boot creates every store (stores can only be created during an upgrade).
+   * Index value: a key path ('updatedAt', 'meta.due', ['folder', 'title']) or full options.
+   */
+  collections?: Record<string, { indexes?: Record<string, string | string[] | IndexDecl> }>;
+  /** Lazy list of migrations; each runs atomically with its version update. */
+  migrations?: () => Promise<{ default: Migration[] }>;
+}
+
+export interface IndexDecl {
+  keyPath: string | string[];
+  unique?: boolean;
+  /** Index each element of an array value (e.g. tags). */
+  multiEntry?: boolean;
+}
+
 export interface Migration {
   /** Schema version this migration produces. Migrations run in ascending order. */
   to: number;
+  description?: string;
+  /** Use only `tx` inside (no other async work), so the step stays one atomic transaction. */
   run(tx: MigrationContext): Promise<void>;
 }
 
@@ -216,21 +237,52 @@ export type HeadlessContext = Omit<AppContext, 'window' | 'signal' | 'timers'>;
 
 export interface AppStorage {
   kv: KeyValueStore;
-  collection<T extends { id: string }>(name: string, options?: { indexes?: string[] }): Collection<T>;
+  /** A collection declared in `manifest.storage.collections`. */
+  collection<T extends { id: string }>(name: string): Collection<T>;
 }
 export interface KeyValueStore {
   get<T>(key: string, fallback?: T): Promise<T | undefined>;
+  /** `undefined` is rejected; use delete(). */
   set(key: string, value: unknown): Promise<void>;
   delete(key: string): Promise<void>;
   keys(): Promise<string[]>;
+  entries(): Promise<Record<string, unknown>>;
+  clear(): Promise<void>;
+}
+
+/** IndexedDB key: number, string, Date, binary, or an array of those. */
+export type StorageKey = IDBValidKey;
+export interface KeyRange {
+  only?: StorageKey;
+  lower?: StorageKey;
+  upper?: StorageKey;
+  lowerOpen?: boolean;
+  upperOpen?: boolean;
+}
+export interface CollectionQuery {
+  /** Index declared in the manifest; omitted = by id. */
+  index?: string;
+  equals?: StorageKey;
+  range?: KeyRange;
+  direction?: 'next' | 'prev';
+  offset?: number;
+  limit?: number;
 }
 export interface Collection<T extends { id: string }> {
   get(id: string): Promise<T | undefined>;
+  all(query?: CollectionQuery): Promise<T[]>;
+  query(query: CollectionQuery): Promise<T[]>;
+  count(query?: CollectionQuery): Promise<number>;
+  /** Creates or replaces. Throws ValidationError for invalid items. */
   put(item: T): Promise<T>;
+  /** Adds an item, generating an id if it has none. */
+  create(data: Omit<T, 'id'> & { id?: string }): Promise<T>;
+  /** Merges a patch into an existing item atomically. */
+  update(id: string, patch: Partial<T>): Promise<T>;
   delete(id: string): Promise<void>;
-  all(): Promise<T[]>;
-  query(options: { index?: string; equals?: unknown; range?: [unknown, unknown]; limit?: number }): Promise<T[]>;
-  onChange(fn: (change: { type: 'put' | 'delete'; id: string }) => void): Unsub;
+  clear(): Promise<void>;
+  /** Also fires for changes made in other tabs (`remote: true`). */
+  onChange(fn: (change: { type: 'put' | 'delete' | 'clear'; id?: string; remote?: boolean }) => void): Unsub;
 }
 
 export interface AppSettings {
@@ -306,5 +358,12 @@ export interface Job {
   [field: string]: unknown;
 }
 export interface MigrationContext {
-  [operation: string]: unknown;
+  /** Raw access to one of this app's collections inside the migration transaction. */
+  collection(name: string): {
+    get(id: string): Promise<any>;
+    getAll(): Promise<any[]>;
+    put(item: any): Promise<void>;
+    delete(id: string): Promise<void>;
+    clear(): Promise<void>;
+  };
 }
