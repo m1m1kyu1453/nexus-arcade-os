@@ -148,11 +148,15 @@ export interface AppInstance {
   onResume?(): void;
   /** A single-instance app received a new file or shared data. */
   onIntent?(intent: Intent): void;
+  /** State to restore after a reload (structured-cloneable); returned as `args.restoredState`. */
+  saveState?(): unknown;
 }
 
 export interface LaunchArgs {
   intent?: Intent;
   command?: string;
+  /** What `saveState()` returned before the page was reloaded. */
+  restoredState?: unknown;
   [key: string]: unknown;
 }
 
@@ -339,7 +343,22 @@ export interface VfsEntry {
   mime?: string;
 }
 export interface WindowHandle {
-  [operation: string]: unknown;
+  readonly title: string;
+  setTitle(title: string): void;
+  /** Number shown on the app's dock icon (null hides it). */
+  setBadge(count: number | null): void;
+  /** Progress bar on the dock icon, 0–1 (null hides it). */
+  setProgress(value: number | null): void;
+  minimize(): void;
+  maximize(): void;
+  restore(): void;
+  close(): Promise<void> | void;
+  focus(): void;
+  resize(width: number, height: number): void;
+  setFullscreen(on: boolean): void;
+  readonly isFocused: boolean;
+  /** Called when the window's content area changes size. */
+  onResize(fn: () => void): Unsub;
 }
 export interface Dialogs {
   [operation: string]: unknown;

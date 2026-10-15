@@ -24,6 +24,10 @@ const RESERVED_EVENTS = [
   'ai:',
   'search:',
   'system:',
+  'window:',
+  'workspace:',
+  'shell:',
+  'boot:',
 ];
 
 /**

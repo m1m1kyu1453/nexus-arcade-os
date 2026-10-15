@@ -88,6 +88,7 @@ export function createLifecycle({ registry, bus, logger, host, createContext, os
     focused: focusedId === i.id,
     launchedAt: i.launchedAt,
     activeTimers: i.runtime.activeCount,
+    args: i.args,
   });
 
   /**
@@ -302,6 +303,20 @@ export function createLifecycle({ registry, bus, logger, host, createContext, os
     list: () => [...instances.values()].map(info),
     get focusedId() {
       return focusedId;
+    },
+    /**
+     * The app's own state for session restore (AppInstance.saveState), or undefined.
+     * @param {string} id
+     */
+    appState(id) {
+      const i = instances.get(id);
+      if (!i || i.state !== 'running' || typeof i.app?.saveState !== 'function') return undefined;
+      try {
+        return i.app.saveState();
+      } catch (error) {
+        logger.log('warn', `app:${i.appId}`, 'saveState failed', error);
+        return undefined;
+      }
     },
     /** Reports an error that happened outside the app's own callbacks but belongs to it. */
     reportError(/** @type {string} */ id, /** @type {unknown} */ error) {

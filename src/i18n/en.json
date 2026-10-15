@@ -1,5 +1,7 @@
 {
-  "profile": { "defaultName": "User" },
+  "profile": {
+    "defaultName": "User"
+  },
   "crash": {
     "title": "{app} stopped working",
     "body": "Nexus kept running. You can restart the app; unsaved changes in this window may be lost.",
@@ -28,10 +30,16 @@
   },
   "scheduler": {
     "missedTitle": "While you were away",
-    "missedBody": { "one": "{count} reminder was due: {titles}", "other": "{count} reminders were due: {titles}" },
+    "missedBody": {
+      "one": "{count} reminder was due: {titles}",
+      "other": "{count} reminders were due: {titles}"
+    },
     "limits": "Reminders and alarms only ring while Nexus is open in a browser tab. A closed tab can't ring."
   },
-  "achievements": { "unlockedTitle": "Achievement unlocked", "levelUp": "Level {level} reached" },
+  "achievements": {
+    "unlockedTitle": "Achievement unlocked",
+    "levelUp": "Level {level} reached"
+  },
   "dialog": {
     "unavailable": "This dialog arrives with the desktop in a later version."
   },
@@ -47,6 +55,27 @@
       "indexeddb": "IndexedDB",
       "localstorage": "localStorage (limited)",
       "memory": "Memory only (not saved)"
+    }
+  },
+  "wm": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "restore": "Restore",
+    "close": "Close",
+    "snapLayouts": "Snap layouts",
+    "zone": {
+      "max": "Maximize",
+      "left": "Left half",
+      "right": "Right half",
+      "top-left": "Top left quarter",
+      "top-right": "Top right quarter",
+      "bottom-left": "Bottom left quarter",
+      "bottom-right": "Bottom right quarter",
+      "third-1": "Left third",
+      "third-2": "Middle third",
+      "third-3": "Right third",
+      "two-thirds-left": "Left two thirds",
+      "two-thirds-right": "Right two thirds"
     }
   }
 }

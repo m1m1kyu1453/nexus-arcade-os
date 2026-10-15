@@ -1,5 +1,7 @@
 {
-  "profile": { "defaultName": "Benutzer" },
+  "profile": {
+    "defaultName": "Benutzer"
+  },
   "crash": {
     "title": "{app} funktioniert nicht mehr",
     "body": "Nexus läuft weiter. Du kannst die App neu starten; ungespeicherte Änderungen in diesem Fenster können verloren gehen.",
@@ -34,7 +36,10 @@
     },
     "limits": "Erinnerungen und Wecker klingeln nur, während Nexus in einem Browser-Tab geöffnet ist. Ein geschlossener Tab kann nicht klingeln."
   },
-  "achievements": { "unlockedTitle": "Erfolg freigeschaltet", "levelUp": "Stufe {level} erreicht" },
+  "achievements": {
+    "unlockedTitle": "Erfolg freigeschaltet",
+    "levelUp": "Stufe {level} erreicht"
+  },
   "dialog": {
     "unavailable": "Dieser Dialog kommt mit dem Desktop in einer späteren Version."
   },
@@ -50,6 +55,27 @@
       "indexeddb": "IndexedDB",
       "localstorage": "localStorage (begrenzt)",
       "memory": "Nur im Arbeitsspeicher (nicht gespeichert)"
+    }
+  },
+  "wm": {
+    "minimize": "Minimieren",
+    "maximize": "Maximieren",
+    "restore": "Wiederherstellen",
+    "close": "Schließen",
+    "snapLayouts": "Andock-Layouts",
+    "zone": {
+      "max": "Maximieren",
+      "left": "Linke Hälfte",
+      "right": "Rechte Hälfte",
+      "top-left": "Viertel oben links",
+      "top-right": "Viertel oben rechts",
+      "bottom-left": "Viertel unten links",
+      "bottom-right": "Viertel unten rechts",
+      "third-1": "Linkes Drittel",
+      "third-2": "Mittleres Drittel",
+      "third-3": "Rechtes Drittel",
+      "two-thirds-left": "Linke zwei Drittel",
+      "two-thirds-right": "Rechte zwei Drittel"
     }
   }
 }
