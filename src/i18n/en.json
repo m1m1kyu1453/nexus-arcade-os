@@ -1,0 +1,50 @@
+{
+  "profile": { "defaultName": "User" },
+  "crash": {
+    "title": "{app} stopped working",
+    "body": "Nexus kept running. You can restart the app; unsaved changes in this window may be lost.",
+    "details": "Details",
+    "copy": "Copy report",
+    "copied": "Report copied",
+    "restart": "Restart",
+    "close": "Close"
+  },
+  "storage": {
+    "localstorageTitle": "Storage is limited",
+    "localstorageBody": "IndexedDB isn't available here, so Nexus uses localStorage (about 5 MB). Export a backup regularly.",
+    "memoryTitle": "Nothing will be saved",
+    "memoryBody": "This browser blocks storage (private mode or blocked site data). Everything disappears when you close the tab.",
+    "quotaTitle": "Storage is full",
+    "quotaBody": "The last change couldn't be saved. Free space in Settings → Storage: empty the trash or remove large files.",
+    "evictionHint": "Your browser may delete Nexus data that isn't used for a while. Install Nexus as an app and export backups to keep it safe."
+  },
+  "migration": {
+    "failedTitle": "{app} couldn't update its data",
+    "failedBody": "Your data is safe and read-only until this is fixed. Details are in the system log.",
+    "newerTitle": "{app} has data from a newer Nexus",
+    "newerBody": "It opens read-only. Reload the page to get the newest version of Nexus."
+  },
+  "scheduler": {
+    "missedTitle": "While you were away",
+    "missedBody": { "one": "{count} reminder was due: {titles}", "other": "{count} reminders were due: {titles}" },
+    "limits": "Reminders and alarms only ring while Nexus is open in a browser tab. A closed tab can't ring."
+  },
+  "achievements": { "unlockedTitle": "Achievement unlocked", "levelUp": "Level {level} reached" },
+  "dialog": {
+    "unavailable": "This dialog arrives with the desktop in a later version."
+  },
+  "commands": {
+    "category": "System",
+    "toggleDnd": "Toggle Do not disturb",
+    "languageEnglish": "Switch language to English",
+    "languageGerman": "Switch language to German",
+    "nextTheme": "Next theme"
+  },
+  "settings": {
+    "storageEngine": {
+      "indexeddb": "IndexedDB",
+      "localstorage": "localStorage (limited)",
+      "memory": "Memory only (not saved)"
+    }
+  }
+}

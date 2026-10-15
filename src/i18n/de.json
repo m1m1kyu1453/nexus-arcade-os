@@ -1,0 +1,53 @@
+{
+  "profile": { "defaultName": "Benutzer" },
+  "crash": {
+    "title": "{app} funktioniert nicht mehr",
+    "body": "Nexus läuft weiter. Du kannst die App neu starten; ungespeicherte Änderungen in diesem Fenster können verloren gehen.",
+    "details": "Details",
+    "copy": "Bericht kopieren",
+    "copied": "Bericht kopiert",
+    "restart": "Neu starten",
+    "close": "Schließen"
+  },
+  "storage": {
+    "localstorageTitle": "Speicher ist begrenzt",
+    "localstorageBody": "IndexedDB ist hier nicht verfügbar, deshalb nutzt Nexus localStorage (etwa 5 MB). Exportiere regelmäßig eine Sicherung.",
+    "memoryTitle": "Nichts wird gespeichert",
+    "memoryBody": "Dieser Browser blockiert Speicher (privater Modus oder blockierte Websitedaten). Alles verschwindet, wenn du den Tab schließt.",
+    "quotaTitle": "Speicher ist voll",
+    "quotaBody": "Die letzte Änderung konnte nicht gespeichert werden. Schaffe Platz unter Einstellungen → Speicher: Papierkorb leeren oder große Dateien entfernen.",
+    "evictionHint": "Dein Browser kann Nexus-Daten löschen, die länger nicht genutzt werden. Installiere Nexus als App und exportiere Sicherungen, um sie zu schützen."
+  },
+  "migration": {
+    "failedTitle": "{app} konnte seine Daten nicht aktualisieren",
+    "failedBody": "Deine Daten sind sicher und schreibgeschützt, bis das behoben ist. Details stehen im Systemprotokoll.",
+    "newerTitle": "{app} hat Daten aus einem neueren Nexus",
+    "newerBody": "Die App öffnet sich schreibgeschützt. Lade die Seite neu, um die neueste Nexus-Version zu bekommen."
+  },
+  "scheduler": {
+    "missedTitle": "Während du weg warst",
+    "missedBody": {
+      "one": "{count} Erinnerung war fällig: {titles}",
+      "other": "{count} Erinnerungen waren fällig: {titles}"
+    },
+    "limits": "Erinnerungen und Wecker klingeln nur, während Nexus in einem Browser-Tab geöffnet ist. Ein geschlossener Tab kann nicht klingeln."
+  },
+  "achievements": { "unlockedTitle": "Erfolg freigeschaltet", "levelUp": "Stufe {level} erreicht" },
+  "dialog": {
+    "unavailable": "Dieser Dialog kommt mit dem Desktop in einer späteren Version."
+  },
+  "commands": {
+    "category": "System",
+    "toggleDnd": "Nicht stören umschalten",
+    "languageEnglish": "Sprache auf Englisch umstellen",
+    "languageGerman": "Sprache auf Deutsch umstellen",
+    "nextTheme": "Nächstes Design"
+  },
+  "settings": {
+    "storageEngine": {
+      "indexeddb": "IndexedDB",
+      "localstorage": "localStorage (begrenzt)",
+      "memory": "Nur im Arbeitsspeicher (nicht gespeichert)"
+    }
+  }
+}

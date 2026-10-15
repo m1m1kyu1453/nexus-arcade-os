@@ -1,0 +1,11 @@
+{
+  "title": "Kernel test app",
+  "add": "Add item",
+  "items": { "=0": "No items yet", "one": "{count} item", "other": "{count} items" },
+  "ticks": "Timer ticks: {count}",
+  "crash": "Crash (sync)",
+  "crashAsync": "Crash (async)",
+  "saved": "Saved {path}",
+  "notify": "Send notification",
+  "itemTitle": "Item {n}"
+}

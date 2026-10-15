@@ -58,10 +58,11 @@ import { createRuntime } from './runtime.js';
  * @param {Host} options.host
  * @param {(manifest: AppManifest, extras: ContextExtras) => import('./types').AppContext} options.createContext
  * @param {string} options.os  e.g. "0.1.0 (web)" for crash reports
+ * @param {(manifest: AppManifest) => Promise<void>} [options.prepare]  runs before mount (e.g. load messages)
  * @param {Document} [options.document]  to suspend apps while the tab is hidden
  * @param {import('./runtime.js').Clock} [options.clock]
  */
-export function createLifecycle({ registry, bus, logger, host, createContext, os, document, clock }) {
+export function createLifecycle({ registry, bus, logger, host, createContext, os, document, clock, prepare }) {
   const log = logger.child('kernel');
   /** @type {Map<string, InstanceRecord>} */
   const instances = new Map();
@@ -178,7 +179,10 @@ export function createLifecycle({ registry, bus, logger, host, createContext, os
     bus.emit('app:launching', { id, appId });
 
     instance.frame = host.open(manifest, { instanceId: id });
-    const loaded = await instance.boundary.run(() => registry.load(appId), 'load');
+    const loaded = await instance.boundary.run(async () => {
+      const [module] = await Promise.all([registry.load(appId), prepare?.(manifest)]);
+      return module;
+    }, 'load');
     if (!loaded.ok || instance.state !== 'loading') return id;
 
     const ctx = createContext(manifest, {

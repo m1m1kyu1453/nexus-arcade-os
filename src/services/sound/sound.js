@@ -58,7 +58,7 @@ export function categoryVolume(get, category) {
  * @param {object} options
  * @param {import('../settings/settings.js').Settings} options.settings
  * @param {() => boolean} [options.quiet]  true while Do-not-disturb is on (UI sounds pause)
- * @param {typeof AudioContext} [options.AudioContextImpl]
+ * @param {typeof AudioContext | null} [options.AudioContextImpl]  null = no Web Audio
  */
 export function createSound({ settings, quiet = () => false, AudioContextImpl = globalThis.AudioContext }) {
   /** @type {AudioContext | null} */

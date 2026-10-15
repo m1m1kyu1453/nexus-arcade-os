@@ -1,0 +1,11 @@
+{
+  "title": "Kernel-Test-App",
+  "add": "Eintrag hinzufügen",
+  "items": { "=0": "Noch keine Einträge", "one": "{count} Eintrag", "other": "{count} Einträge" },
+  "ticks": "Timer-Ticks: {count}",
+  "crash": "Absturz (synchron)",
+  "crashAsync": "Absturz (asynchron)",
+  "saved": "{path} gespeichert",
+  "notify": "Benachrichtigung senden",
+  "itemTitle": "Eintrag {n}"
+}

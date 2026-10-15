@@ -8,7 +8,7 @@ import { compileWhen, evaluateWhen } from './when.js';
  * @property {string} id
  * @property {string | import('../../kernel/types').L10n} title
  * @property {string} [icon]
- * @property {string} [category]
+ * @property {string | import('../../kernel/types').L10n} [category]
  * @property {string} [when]         e.g. "focusedApp == 'nexus.notes'"
  * @property {string} [shortcut]     default binding, e.g. 'Mod+Alt+N'
  * @property {boolean} [hidden]      not listed in the palette (still executable)
@@ -68,7 +68,11 @@ export function createCommands({ bus, log, context, localize }) {
       const ctx = context();
       return [...commands.values()]
         .filter((c) => all || (!c.hidden && evaluateWhen(c.when, ctx)))
-        .map((c) => ({ ...c, title: localize(c.title) }))
+        .map((c) => ({
+          ...c,
+          title: localize(c.title),
+          category: c.category === undefined ? undefined : localize(c.category),
+        }))
         .sort((a, b) => (a.category ?? '').localeCompare(b.category ?? '') || a.title.localeCompare(b.title));
     },
 
