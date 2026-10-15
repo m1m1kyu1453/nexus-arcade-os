@@ -1,6 +1,9 @@
 // @ts-check
-// Boots the OS: logger, storage, profile, services, apps. The shell (phase 2) and the phase 1
-// debug screen call `startSystem` and supply a `host` that shows app instances.
+// Boots the OS in two stages:
+//   bootKernel()               logger, storage engine, system database, profile list
+//   kernel.openProfile(p)      the profile's database, every service and the apps
+// The shell runs the lock screen between the two stages, so a locked profile's data is only
+// opened after unlocking. `startSystem` does both for tests and the debug screen.
 import { createAchievements, ACHIEVEMENTS_STORE_SCHEMA } from '../services/achievements/achievements.js';
 import { createAi } from '../services/ai/ai.js';
 import { createBackup } from '../services/backup/backup.js';
@@ -67,9 +70,36 @@ const RELAYED = ['storage:', 'vfs:', 'settings:', 'notifications:history-changed
  * @property {typeof AudioContext | null} [AudioContextImpl]
  */
 
-/** @param {StartOptions} options */
+/**
+ * Boot step names reported through `onProgress` (the boot screen shows them).
+ * @typedef {'storage' | 'profile' | 'settings' | 'theme' | 'files' | 'services' | 'migrations' | 'apps' | 'search' | 'ready'} BootStep
+ */
+export const BOOT_STEPS = /** @type {const} */ ([
+  'storage',
+  'profile',
+  'settings',
+  'theme',
+  'files',
+  'services',
+  'migrations',
+  'apps',
+  'search',
+  'ready',
+]);
+
+/** Boots the kernel and opens the last used (or a new default) unlocked profile. @param {StartOptions} options */
 export async function startSystem(options) {
-  const { edition, version, dev, manifests, host } = options;
+  const kernel = await bootKernel(options);
+  return kernel.openProfile(await kernel.defaultProfile());
+}
+
+/**
+ * Stage 1: logging, storage and the profile list. Nothing profile-specific is opened yet.
+ * @param {StartOptions & { onProgress?: (step: BootStep) => void }} options
+ */
+export async function bootKernel(options) {
+  const { edition, version, dev } = options;
+  const progress = options.onProgress ?? (() => {});
   const doc = options.document ?? globalThis.document;
   const win = doc?.defaultView ?? undefined;
 
@@ -105,19 +135,77 @@ export async function startSystem(options) {
       /** @type {any} */ (systemDb).put('system-kv', value, key),
   };
 
-  // 3. Profile: the last used one, or a new default profile on first start.
+  progress('storage');
   const languages = options.languages ?? globalThis.navigator?.languages ?? ['en'];
   const profiles = createProfiles({ systemDb, engine, bus });
-  const lastId = await systemKv.get('lastProfile');
-  const all = await profiles.list();
-  let profile = all.find((p) => p.id === lastId && !p.locked) ?? all.find((p) => !p.locked) ?? null;
-  if (!profile) {
-    // Settings (and with them i18n) live in the profile, so read the name straight from the file.
-    const messages =
-      detectLocale(languages) === 'de' ? await import('../i18n/de.json') : await import('../i18n/en.json');
-    profile = await profiles.create({ name: messages.default.profile.defaultName });
-    log.info('Created the default profile');
-  }
+  /** Messages for screens shown before a profile (and its language setting) is open. */
+  const preLoginMessages = async () =>
+    (detectLocale(languages) === 'de' ? await import('../i18n/de.json') : await import('../i18n/en.json')).default;
+
+  return {
+    logger,
+    bus,
+    engine,
+    storageWarning: selected.warning,
+    systemDb,
+    systemKv,
+    profiles,
+    preLoginMessages,
+    /** Locale for pre-login screens (lock screen, boot screen). */
+    preLoginLocale: () => detectLocale(languages),
+
+    /** The last used unlocked profile, or a new default profile on first start. */
+    async defaultProfile() {
+      const lastId = await systemKv.get('lastProfile');
+      const all = await profiles.list();
+      const found = all.find((p) => p.id === lastId && !p.locked) ?? all.find((p) => !p.locked);
+      if (found) return found;
+      const profile = await profiles.create({ name: (await preLoginMessages()).profile.defaultName });
+      log.info('Created the default profile');
+      return profile;
+    },
+
+    /** The profile the lock screen should preselect (last used, even if locked). */
+    async lastProfile() {
+      const lastId = await systemKv.get('lastProfile');
+      const all = await profiles.list();
+      return all.find((p) => p.id === lastId) ?? all[0] ?? null;
+    },
+
+    /**
+     * Stage 2: opens a profile (the caller has unlocked it) with all services and apps.
+     * @param {import('../services/profiles/profiles.js').PublicProfile} profile
+     */
+    openProfile: (profile) =>
+      openProfile(
+        { ...options, progress },
+        { logger, log, bus, engine, selected, systemDb, systemKv, win, doc },
+        profile,
+      ),
+  };
+}
+
+/**
+ * @param {StartOptions & { progress: (step: BootStep) => void }} options
+ * @param {{
+ *   logger: import('./logger.js').SystemLogger,
+ *   log: import('./logger.js').Logger,
+ *   bus: import('./bus.js').EventBus,
+ *   engine: import('../services/storage/types.js').Engine,
+ *   selected: { warning: null | 'localstorage' | 'memory' },
+ *   systemDb: import('../services/storage/types.js').Database,
+ *   systemKv: { get(key: string): Promise<any>, set(key: string, value: unknown): Promise<unknown> },
+ *   win: (Window & typeof globalThis) | undefined,
+ *   doc: Document | undefined,
+ * }} k  stage 1 objects
+ * @param {import('../services/profiles/profiles.js').PublicProfile} profile
+ */
+async function openProfile(options, k, profile) {
+  const { edition, version, dev, manifests, host, progress } = options;
+  const { logger, log, bus, engine, selected, systemDb, systemKv, win, doc } = k;
+  const languages = options.languages ?? globalThis.navigator?.languages ?? ['en'];
+  const profiles = createProfiles({ systemDb, engine, bus });
+  progress('profile');
   await profiles.touch(profile.id);
   await systemKv.set('lastProfile', profile.id);
 
@@ -178,6 +266,7 @@ export async function startSystem(options) {
   settings.register('system', SYSTEM_SETTINGS);
   for (const m of registry.list({ includeDisabled: true })) if (m.settings?.length) settings.register(m.id, m.settings);
   await settings.load();
+  progress('settings');
 
   const resolveLocale = () => {
     const chosen = /** @type {string} */ (settings.get('system', 'language'));
@@ -199,10 +288,12 @@ export async function startSystem(options) {
     matchMedia: win?.matchMedia?.bind(win),
   });
   if (doc) theme.apply();
+  progress('theme');
 
   // 6. Files, notifications, sound and the other services.
   const vfs = createVfs({ db, bus, user: profile.username });
   await vfs.init();
+  progress('files');
 
   /** @type {ReturnType<typeof createSound>} */
   let sound;
@@ -258,6 +349,7 @@ export async function startSystem(options) {
     whenLeader: options.whenLeader,
   });
   const ai = createAi(bus);
+  progress('services');
 
   // 7. App data migrations. Problems make that app's storage read-only, never wipe data.
   /** @type {Set<string>} */
@@ -291,6 +383,8 @@ export async function startSystem(options) {
       timeoutMs: 0,
     });
   }
+
+  progress('migrations');
 
   // 8. Commands, shortcuts, intents, permissions, search, lifecycle.
   /** @type {ReturnType<typeof createLifecycle>} */
@@ -399,6 +493,7 @@ export async function startSystem(options) {
   bus.on('app:crashed', () => sound.play('error'));
   const detachShortcuts = win ? shortcuts.attach(win) : () => {};
 
+  progress('apps');
   const search = createSearch({
     backend:
       options.searchBackend ??
@@ -426,6 +521,7 @@ export async function startSystem(options) {
     log: logger.child('search'),
   });
   await sources.start();
+  progress('search');
 
   const relay = createTabRelay({ bus, channel: `nexus:${profileDbName(profile.id)}`, prefixes: RELAYED });
 
@@ -470,6 +566,7 @@ export async function startSystem(options) {
 
   log.info(`Ready: ${registry.list().length} app(s), profile "${profile.name}"`);
   bus.emit('system:ready', { profile: profile.id });
+  progress('ready');
 
   return {
     ...services,
