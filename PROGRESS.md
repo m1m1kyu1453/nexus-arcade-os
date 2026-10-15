@@ -3,7 +3,7 @@
 ## Status
 
 - **Current phase:** 0 — Foundation
-- **Next step:** create the GitHub repo, get CI green, then the owner connects Render (New → Blueprint) and the live site is verified (loads, works offline, update toast after a second deploy).
+- **Next step:** owner connects Render (New → Blueprint, repo `m1m1kyu1453/nexus-arcade-os`). Then: verify the live site loads and works offline, push a second deploy to verify the update toast, add the live URL to README (0.5 P2), tag `v0.0.0`.
 
 ## Decisions
 
@@ -73,8 +73,8 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **0.5 CI and deployment**
 
-- [ ] [P1] GitHub Actions workflow per master brief §4.2, with npm and Playwright browser caching.
-- [ ] [P1] Create the GitHub repo `nexus-arcade-os`, push, CI green.
+- [x] [P1] GitHub Actions workflow per master brief §4.2, with npm and Playwright browser caching.
+- [x] [P1] Create the GitHub repo `nexus-arcade-os`, push, CI green.
 - [ ] [P1] `render.yaml` per master brief §4.3. Tell me to connect it; after I confirm, verify the live site loads and works offline.
 - [ ] [P2] README badge for CI status; live URL in README.
 
