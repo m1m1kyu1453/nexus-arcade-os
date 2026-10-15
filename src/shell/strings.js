@@ -6,6 +6,20 @@ const en = {
   reload: 'Reload',
   offlineReady: 'Nexus is ready to work offline.',
   dismiss: 'Dismiss',
+  bootTitle: 'Nexus is starting',
+  bootSkip: 'Press any key to skip',
+  bootSteps: {
+    storage: 'Opening storage…',
+    profile: 'Loading your profile…',
+    settings: 'Reading settings…',
+    theme: 'Applying the theme…',
+    files: 'Mounting files…',
+    services: 'Starting services…',
+    migrations: 'Checking saved data…',
+    apps: 'Registering apps…',
+    search: 'Building the search index…',
+    ready: 'Ready',
+  },
 };
 
 /** @type {typeof en} */
@@ -14,6 +28,20 @@ const de = {
   reload: 'Neu laden',
   offlineReady: 'Nexus ist bereit für die Offline-Nutzung.',
   dismiss: 'Schließen',
+  bootTitle: 'Nexus startet',
+  bootSkip: 'Beliebige Taste zum Überspringen',
+  bootSteps: {
+    storage: 'Speicher wird geöffnet …',
+    profile: 'Profil wird geladen …',
+    settings: 'Einstellungen werden gelesen …',
+    theme: 'Design wird angewendet …',
+    files: 'Dateien werden eingebunden …',
+    services: 'Dienste werden gestartet …',
+    migrations: 'Gespeicherte Daten werden geprüft …',
+    apps: 'Apps werden registriert …',
+    search: 'Suchindex wird aufgebaut …',
+    ready: 'Bereit',
+  },
 };
 
 /** @param {readonly string[]} languages browser preference list */

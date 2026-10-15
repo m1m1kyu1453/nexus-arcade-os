@@ -233,6 +233,17 @@ describe('shortcut manager', () => {
     expect(isEditable(null)).toBe(false);
   });
 
+  it('can be switched off (lock screen)', () => {
+    const { shortcuts, press } = setup();
+    const fn = vi.fn();
+    shortcuts.register('Mod+K', fn);
+    shortcuts.setEnabled(false);
+    expect(press('k', { ctrlKey: true }).handled).toBe(false);
+    shortcuts.setEnabled(true);
+    press('k', { ctrlKey: true });
+    expect(fn).toHaveBeenCalledTimes(1);
+  });
+
   it('supports chords with a timeout', () => {
     const { shortcuts, press, advance } = setup();
     const chord = vi.fn();

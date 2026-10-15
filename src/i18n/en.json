@@ -329,5 +329,21 @@
   "switcher": {
     "title": "Switch windows",
     "onWorkspace": "{title} (workspace {n})"
+  },
+  "lock": {
+    "title": "Sign in",
+    "pin": "PIN",
+    "password": "Password",
+    "unlock": "Unlock",
+    "wrongPin": "Wrong PIN",
+    "wrongPassword": "Wrong password",
+    "tooMany": "Too many attempts. Try again in {seconds} seconds.",
+    "privacyNotice": "A PIN keeps others out of your desktop on a shared device. It doesn't encrypt your data.",
+    "switchProfile": "Switch profile",
+    "createProfile": "Create profile",
+    "name": "Name",
+    "optionalPin": "PIN (optional, 4–12 digits)",
+    "create": "Create",
+    "lockCommand": "Lock the screen"
   }
 }

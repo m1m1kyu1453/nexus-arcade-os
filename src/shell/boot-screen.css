@@ -1,0 +1,116 @@
+.nx-boot {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-toast) + 50);
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  background:
+    radial-gradient(50rem 30rem at 50% 40%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 70%),
+    var(--bg);
+  color: var(--text-1);
+  transition: opacity 300ms var(--ease-out);
+
+  &.is-leaving {
+    opacity: 0;
+    pointer-events: none;
+  }
+  &[hidden] {
+    display: none;
+  }
+}
+
+.nx-boot-logo svg {
+  width: 112px;
+  height: 112px;
+  filter: drop-shadow(0 0 22px color-mix(in srgb, var(--accent) 60%, transparent));
+  animation: nx-boot-pulse 2.4s ease-in-out infinite;
+
+  & path {
+    stroke-dasharray: 160;
+    stroke-dashoffset: 160;
+    animation: nx-boot-draw 1.2s var(--ease-out) forwards;
+  }
+  & path + path {
+    animation-delay: 0.35s;
+  }
+}
+
+.nx-boot-bar {
+  width: min(320px, 70vw);
+  height: 4px;
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--surface-3);
+}
+
+.nx-boot-bar-fill {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  box-shadow: 0 0 12px var(--accent);
+  transition: width 250ms var(--ease-out);
+}
+
+.nx-boot-step {
+  min-height: 1.5em;
+  margin: 0;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+.nx-boot-log {
+  display: grid;
+  gap: 2px;
+  width: min(560px, 90vw);
+  height: 10.5em;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  list-style: none;
+  color: var(--text-3);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  mask-image: linear-gradient(transparent, #000 40%);
+
+  & li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  & .is-warn {
+    color: var(--warning);
+  }
+  & .is-error {
+    color: var(--danger);
+  }
+}
+
+.nx-boot-skip {
+  margin: 0;
+  color: var(--text-3);
+  font-size: var(--text-xs);
+}
+
+@keyframes nx-boot-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes nx-boot-pulse {
+  50% {
+    filter: drop-shadow(0 0 32px color-mix(in srgb, var(--accent) 80%, transparent));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-boot-logo svg,
+  .nx-boot-logo svg path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}

@@ -47,6 +47,8 @@ export function createShortcuts({ commands, log, store, activeScope, bus, apple 
   const direct = new Set();
   /** @type {{ first: string, until: number } | null} */
   let pendingChord = null;
+  /** Off while the screen is locked. */
+  let enabled = true;
 
   /** @param {string} shortcut */
   const parse = (shortcut) => parseShortcut(shortcut, { apple });
@@ -102,7 +104,7 @@ export function createShortcuts({ commands, log, store, activeScope, bus, apple 
    * @param {KeyboardEvent} event
    */
   function handle(event) {
-    if (event.isComposing || event.repeat) return false;
+    if (!enabled || event.isComposing || event.repeat) return false;
     const combo = comboFromEvent(event);
     if (!combo) return false;
     const inInput = isEditable(event.target);
@@ -224,6 +226,12 @@ export function createShortcuts({ commands, log, store, activeScope, bus, apple 
     },
 
     handle,
+
+    /** Turns all shortcuts off (lock screen) or back on. @param {boolean} on */
+    setEnabled(on) {
+      enabled = on;
+      pendingChord = null;
+    },
 
     /** Listens for key presses on `target` (capture phase, before apps see them). */
     attach(/** @type {EventTarget} */ target) {

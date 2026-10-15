@@ -329,5 +329,21 @@
   "switcher": {
     "title": "Fenster wechseln",
     "onWorkspace": "{title} (Arbeitsfläche {n})"
+  },
+  "lock": {
+    "title": "Anmelden",
+    "pin": "PIN",
+    "password": "Passwort",
+    "unlock": "Entsperren",
+    "wrongPin": "Falsche PIN",
+    "wrongPassword": "Falsches Passwort",
+    "tooMany": "Zu viele Versuche. Versuche es in {seconds} Sekunden erneut.",
+    "privacyNotice": "Eine PIN hält andere auf einem geteilten Gerät von deinem Desktop fern. Sie verschlüsselt deine Daten nicht.",
+    "switchProfile": "Profil wechseln",
+    "createProfile": "Profil erstellen",
+    "name": "Name",
+    "optionalPin": "PIN (optional, 4–12 Ziffern)",
+    "create": "Erstellen",
+    "lockCommand": "Bildschirm sperren"
   }
 }

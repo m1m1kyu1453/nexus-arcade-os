@@ -1,0 +1,164 @@
+.nx-lock {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-toast) + 40);
+  display: grid;
+  grid-template-rows: 1fr auto 1.4fr;
+  justify-items: center;
+  gap: var(--space-5);
+  padding: var(--space-5);
+  background: rgb(5 6 13 / 0.55);
+  backdrop-filter: blur(28px) saturate(120%);
+  -webkit-backdrop-filter: blur(28px) saturate(120%);
+  color: #fff;
+  animation: nx-fade-in var(--dur-slow) var(--ease-out);
+  transition: opacity 300ms var(--ease-out);
+
+  &.is-login {
+    background:
+      radial-gradient(60rem 40rem at 20% 10%, color-mix(in srgb, var(--accent) 20%, transparent), transparent 60%),
+      radial-gradient(50rem 40rem at 85% 90%, color-mix(in srgb, var(--accent-2) 24%, transparent), transparent 60%),
+      var(--bg);
+  }
+  &.is-leaving {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.nx-lock-clock {
+  align-self: end;
+  text-align: center;
+  text-shadow: 0 2px 20px rgb(0 0 0 / 0.5);
+}
+
+.nx-lock-time {
+  font-size: clamp(3.5rem, 10vw, 6.5rem);
+  font-weight: 200;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.nx-lock-date {
+  margin-top: var(--space-2);
+  color: rgb(255 255 255 / 0.8);
+  font-size: var(--text-lg);
+}
+
+.nx-lock-panel {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: var(--space-3);
+  width: min(560px, 100%);
+}
+
+.nx-lock-avatar {
+  display: block;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 3px rgb(255 255 255 / 0.15),
+    0 8px 28px rgb(0 0 0 / 0.4);
+
+  & svg,
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.nx-lock-name {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 600;
+}
+
+.nx-lock-profiles {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.nx-lock-profile {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  min-width: 120px;
+  padding: var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+
+  & small {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: rgb(255 255 255 / 0.65);
+    font-size: var(--text-xs);
+  }
+  &:hover,
+  &:focus-visible {
+    border-color: rgb(255 255 255 / 0.2);
+    background: rgb(255 255 255 / 0.08);
+  }
+}
+
+.nx-lock-form {
+  display: grid;
+  gap: var(--space-2);
+  width: min(360px, 100%);
+
+  &.is-shaking {
+    animation: nx-lock-shake 320ms;
+  }
+}
+
+.nx-lock-create {
+  text-align: start;
+  color: var(--text-1);
+}
+
+.nx-lock-row {
+  display: flex;
+  gap: var(--space-2);
+  justify-content: center;
+}
+
+.nx-lock-secret {
+  flex: 1;
+  text-align: center;
+  letter-spacing: 0.2em;
+}
+
+.nx-lock-error {
+  min-height: 1.2em;
+  margin: 0;
+  color: #ffb4be;
+  font-size: var(--text-sm);
+  text-align: center;
+}
+
+.nx-lock-notice {
+  margin: 0;
+  color: rgb(255 255 255 / 0.7);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+@keyframes nx-lock-shake {
+  20%,
+  60% {
+    transform: translateX(-8px);
+  }
+  40%,
+  80% {
+    transform: translateX(8px);
+  }
+}

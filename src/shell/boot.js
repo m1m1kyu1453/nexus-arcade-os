@@ -1,12 +1,14 @@
 // Boots the OS into its root element. Shared by both editions; edition-specific work
 // (Service Worker) lives in the entry files.
 import '../styles/base.css';
+import { rememberFastBoot, showBootScreen } from './boot-screen.js';
 import { registerShellCommands } from './commands.js';
 import { createNotificationCenter } from './center/center.js';
 import { createDesktop } from './desktop/desktop.js';
 import { createWallpaper } from './desktop/wallpaper.js';
 import { createDock } from './dock.js';
 import { createLauncher } from './launcher/launcher.js';
+import { createLockScreen } from './lock/lock.js';
 import { createPalette } from './palette/palette.js';
 import { createPersonalize } from './personalize/personalize.js';
 import { startShell } from './shell.js';
@@ -22,7 +24,12 @@ export function boot(root) {
   document.documentElement.lang = locale;
   const toasts = createToastHost(document.body);
 
-  const system = startShell(root).then(
+  const bootScreen = showBootScreen(document.body, { title: t.bootTitle, skip: t.bootSkip, steps: t.bootSteps });
+  const system = startShell(root, {
+    onProgress: bootScreen.progress,
+    onLog: bootScreen.log,
+    beforeLogin: bootScreen.hide,
+  }).then(
     (shell) => {
       const sys = shell.system();
       shell.ui.wallpaper = createWallpaper(shell);
@@ -36,6 +43,10 @@ export function boot(root) {
       shell.ui.personalize = createPersonalize(shell);
       shell.ui.overview = createOverview(shell);
       shell.ui.switcher = createSwitcher(shell);
+      shell.ui.lock = createLockScreen(shell);
+      rememberFastBoot(!!sys.settings.get('system', 'fastBoot'));
+      sys.settings.onChange('system', 'fastBoot', (on) => rememberFastBoot(!!on));
+      void bootScreen.done();
       shell.wm.relayout();
       if (!shell.wm.list().length && !shell.session.data.windows.length) void shell.launch('nexus.welcome');
       showNotificationToasts(sys, toasts, t.dismiss);
@@ -46,6 +57,7 @@ export function boot(root) {
     },
     (error) => {
       document.documentElement.dataset.kernel = 'failed';
+      bootScreen.hide();
       console.error('Nexus could not start', error);
       throw error;
     },

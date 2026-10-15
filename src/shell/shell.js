@@ -6,6 +6,7 @@ import { edition, version } from '../env.js';
 import { bootKernel } from '../kernel/system.js';
 import { h } from '../ui/dom.js';
 import { installTooltips } from '../ui/overlay.js';
+import { consumeLoginRequest, loginScreen } from './lock/lock.js';
 import { createSession } from './session.js';
 import { appName, createStore } from './util.js';
 import './shell.css';
@@ -29,10 +30,10 @@ const TOP_BAR_HEIGHT = 36;
 
 /**
  * @param {HTMLElement} root
- * @param {{ onProgress?: (step: string) => void }} [options]
+ * @param {{ onProgress?: (step: string) => void, onLog?: (entry: any) => void, beforeLogin?: () => void }} [options]
  * @returns {Promise<ShellContext>}
  */
-export async function startShell(root, { onProgress } = {}) {
+export async function startShell(root, { onProgress, onLog, beforeLogin } = {}) {
   const layers = {
     wallpaper: h('div', { class: 'nx-wallpaper', 'aria-hidden': 'true' }),
     desktop: h('div', { class: 'nx-desktop' }),
@@ -76,9 +77,16 @@ export async function startShell(root, { onProgress } = {}) {
     manifests,
     host: shell.wm.host,
     onProgress,
+    onLog,
   });
   shell.kernel = kernel;
-  const profile = await kernel.defaultProfile();
+  // Login screen when the last profile is locked, or after "Switch profile" / "Log out".
+  const last = await kernel.lastProfile();
+  let profile;
+  if (consumeLoginRequest() || last?.locked) {
+    beforeLogin?.();
+    profile = await loginScreen({ parent: document.body, kernel });
+  } else profile = await kernel.defaultProfile();
   system = await kernel.openProfile(profile);
 
   // Session: workspaces, pinned apps, windows.

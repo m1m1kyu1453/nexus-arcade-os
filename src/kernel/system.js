@@ -95,7 +95,7 @@ export async function startSystem(options) {
 
 /**
  * Stage 1: logging, storage and the profile list. Nothing profile-specific is opened yet.
- * @param {StartOptions & { onProgress?: (step: BootStep) => void }} options
+ * @param {StartOptions & { onProgress?: (step: BootStep) => void, onLog?: (entry: import('./logger.js').LogEntry) => void }} options
  */
 export async function bootKernel(options) {
   const { edition, version, dev } = options;
@@ -113,6 +113,7 @@ export async function bootKernel(options) {
     persist: { save: (entries) => systemDb?.put('log', entries, 'entries') },
   });
   const log = logger.child('kernel');
+  if (options.onLog) logger.subscribe(options.onLog);
   const bus = createEventBus({ onError: (error, { type }) => log.error(`A listener for "${type}" failed`, error) });
   if (win) {
     win.addEventListener('error', (e) => logger.log('error', 'global', e.message || 'Uncaught error', e.error));
