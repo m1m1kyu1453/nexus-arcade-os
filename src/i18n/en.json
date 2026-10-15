@@ -370,5 +370,11 @@
     "optionalPin": "PIN (optional, 4–12 digits)",
     "create": "Create",
     "lockCommand": "Lock the screen"
+  },
+  "shortcuts": {
+    "title": "Keyboard shortcuts",
+    "hint": "Hold {keys} to peek · Esc closes",
+    "other": "Other",
+    "none": "No shortcuts are available right now."
   }
 }

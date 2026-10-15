@@ -370,5 +370,11 @@
     "optionalPin": "PIN (optional, 4–12 Ziffern)",
     "create": "Erstellen",
     "lockCommand": "Bildschirm sperren"
+  },
+  "shortcuts": {
+    "title": "Tastenkürzel",
+    "hint": "{keys} gedrückt halten zum Anzeigen · Esc schließt",
+    "other": "Sonstiges",
+    "none": "Gerade sind keine Tastenkürzel verfügbar."
   }
 }
