@@ -23,6 +23,7 @@ describe('manifest validation', () => {
           widgets: [{ id: 'w', title: L('Widget'), size: [2, 1], load: async () => ({}) }],
           achievements: [{ id: 'first', title: L('First'), description: L('Did it'), goal: 10 }],
           search: async () => ({ default: async () => [] }),
+          messages: { en: async () => ({ default: {} }), de: async () => ({ default: {} }) },
           storage: {
             version: 1,
             collections: {
@@ -82,6 +83,7 @@ describe('manifest validation', () => {
           { key: 'b', type: 'boolean', default: 'true', label: L('B') },
         ],
         widgets: [{ id: 'w', title: L('W'), size: [0, 1] }],
+        messages: { en: async () => ({}) },
       }),
     );
     expect(problems.map((p) => p.split(':')[0])).toEqual([
@@ -93,6 +95,7 @@ describe('manifest validation', () => {
       'settings[1].default',
       'widgets[0].size',
       'widgets[0].load',
+      'messages.de',
     ]);
   });
 

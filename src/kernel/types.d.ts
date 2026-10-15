@@ -43,6 +43,8 @@ export interface AppManifest {
   search?: () => Promise<{ default: SearchProvider }>;
   /** Stored data: collections (one IndexedDB store each) and the data schema version. */
   storage?: StorageDecl;
+  /** Lazy message files (`i18n/en.json`, `i18n/de.json`), loaded together with the app. */
+  messages?: Record<Locale, () => Promise<{ default: Record<string, unknown> }>>;
   /** Lazy code chunk. */
   load: () => Promise<AppModule>;
 }

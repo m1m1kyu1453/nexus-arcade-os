@@ -157,6 +157,15 @@ export function validateManifest(manifest) {
 
   if (m.search !== undefined && typeof m.search !== 'function') fail('search', 'must be a function returning import()');
 
+  if (m.messages !== undefined) {
+    if (!isObject(m.messages)) fail('messages', 'must be { en: () => import(…), de: () => import(…) }');
+    else
+      for (const locale of LOCALES) {
+        if (typeof m.messages[locale] !== 'function')
+          fail(`messages.${locale}`, 'must be a function returning import()');
+      }
+  }
+
   if (m.storage !== undefined) {
     const s = m.storage;
     if (!isObject(s)) fail('storage', 'must be an object');
