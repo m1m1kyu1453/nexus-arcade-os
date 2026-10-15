@@ -11,6 +11,7 @@ Read with `NEXUS_BRIEF.md`, `PROGRESS.md` and the current phase's spec in `specs
 | `npm run preview`         | Serve `dist/` (SW works on localhost)                                                      |
 | `npm test`                | Vitest unit tests                                                                          |
 | `npm run test:e2e`        | Playwright against the **built** app — run `npm run build` first                           |
+| `npm run test:live [url]` | Website e2e projects against the deployed site (default: Render URL)                       |
 | `npm run lint` / `format` | ESLint + Prettier check / Prettier write                                                   |
 | `npm run typecheck`       | `tsc -p jsconfig.json` (checks `src/kernel`, `src/services`, `src/env.js`)                 |
 | `npm run icons`           | Re-render `public/icons/*` from `src/ui/brand/logo.svg`; commit the output                 |
@@ -59,6 +60,10 @@ As in NEXUS_BRIEF.md §5.1, plus:
 Ask before adding anything else (brief §2.4).
 
 ## Gotchas
+
+- Live site: https://nexus-arcade-os.onrender.com (Render static site, deploys after CI passes).
+- Playwright persistent profiles on Windows need a **short path** (e.g. `%TEMP%
+xp`): under the long scratchpad path Cache Storage fails with "Unexpected internal error" (MAX_PATH), so the SW never installs.
 
 - Vite 8 uses Rolldown; vite-plugin-pwa prints an `inlineDynamicImports` deprecation warning while building the SW. Harmless.
 - ESLint `no-restricted-imports` glob negations can't re-include paths under an excluded parent (`../*` swallows `../..`), hence regex patterns.

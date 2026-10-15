@@ -10,7 +10,7 @@ backend: your data stays in your browser.
 > **Status: phase 0 (foundation).** The build, offline support, Nexus Lite, tests and CI are in
 > place; the desktop arrives in phase 2. See [PROGRESS.md](PROGRESS.md) for the full roadmap.
 
-**Live site:** added here once the Render deployment is connected.
+**Live site:** https://nexus-arcade-os.onrender.com · **Nexus Lite:** [download `nexus-lite.html`](https://nexus-arcade-os.onrender.com/nexus-lite.html)
 
 ## Two editions
 

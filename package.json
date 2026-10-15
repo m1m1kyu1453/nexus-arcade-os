@@ -20,7 +20,8 @@
     "lint": "eslint . && prettier --check .",
     "format": "prettier --write .",
     "typecheck": "tsc -p jsconfig.json",
-    "icons": "node scripts/build-icons.js"
+    "icons": "node scripts/build-icons.js",
+    "test:live": "node scripts/test-live.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

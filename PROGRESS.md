@@ -75,8 +75,8 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 - [x] [P1] GitHub Actions workflow per master brief §4.2, with npm and Playwright browser caching.
 - [x] [P1] Create the GitHub repo `nexus-arcade-os`, push, CI green.
-- [ ] [P1] `render.yaml` per master brief §4.3. Tell me to connect it; after I confirm, verify the live site loads and works offline.
-- [ ] [P2] README badge for CI status; live URL in README.
+- [x] [P1] `render.yaml` per master brief §4.3. Tell me to connect it; after I confirm, verify the live site loads and works offline.
+- [x] [P2] README badge for CI status; live URL in README.
 
 **0.6 Placeholder screen**
 
