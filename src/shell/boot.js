@@ -3,6 +3,8 @@
 import '../styles/base.css';
 import { registerShellCommands } from './commands.js';
 import { createDock } from './dock.js';
+import { createLauncher } from './launcher/launcher.js';
+import { createPalette } from './palette/palette.js';
 import { startShell } from './shell.js';
 import { pickStrings } from './strings.js';
 import { createToastHost } from './toast.js';
@@ -20,6 +22,8 @@ export function boot(root) {
       shell.ui.topbar = createTopBar(shell);
       shell.ui.dock = createDock(shell);
       registerShellCommands(shell);
+      shell.ui.palette = createPalette(shell);
+      shell.ui.launcher = createLauncher(shell);
       shell.wm.relayout();
       if (!shell.wm.list().length && !shell.session.data.windows.length) void shell.launch('nexus.welcome');
       showNotificationToasts(sys, toasts, t.dismiss);

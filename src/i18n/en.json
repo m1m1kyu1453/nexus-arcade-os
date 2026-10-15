@@ -130,5 +130,63 @@
       "workspaceRemove": "Remove the last workspace",
       "launchApp": "Open app"
     }
+  },
+  "palette": {
+    "title": "Command palette",
+    "placeholder": "Search apps, commands, settings, files…",
+    "hint": "> commands · / files · @ settings · = calculate · ? help · # tags",
+    "hintStep": "↑↓ choose · Enter apply · Esc back",
+    "hintInput": "Enter apply · Esc back",
+    "filter": "Filter…",
+    "typeValue": "Type a value…",
+    "noResults": "Nothing found",
+    "empty": "Start typing to search",
+    "calcCopy": "Enter copies the result",
+    "copied": "Copied {value}",
+    "noApp": "No app can open this yet",
+    "on": "On",
+    "off": "Off",
+    "changeTheme": "Change theme…",
+    "themeAuto": "Auto (follow system)",
+    "kind": {
+      "app": "App",
+      "command": "Command",
+      "setting": "Setting",
+      "file": "File",
+      "folder": "Folder",
+      "provider": "Result",
+      "calc": "Calculator",
+      "help": "Help",
+      "option": "",
+      "input": "",
+      "recent": "Recent"
+    },
+    "help": {
+      "shortcuts": "Keyboard shortcuts",
+      "tour": "Welcome tour",
+      "prefixes": "How to use the command palette"
+    }
+  },
+  "launcher": {
+    "title": "Apps",
+    "search": "Search apps and files",
+    "apps": "Apps",
+    "files": "Files",
+    "pinned": "Pinned",
+    "recentApps": "Recently used",
+    "recentFiles": "Recent files",
+    "noResults": "Nothing found",
+    "noApps": "No apps installed",
+    "category": {
+      "productivity": "Productivity",
+      "study": "Study",
+      "office": "Office",
+      "dev": "Developer tools",
+      "cslab": "CS Lab",
+      "games": "Games",
+      "media": "Media",
+      "ai": "AI",
+      "system": "System"
+    }
   }
 }

@@ -14,7 +14,12 @@ import { compileWhen, evaluateWhen } from './when.js';
  * @property {boolean} [hidden]      not listed in the palette (still executable)
  * @property {string} [source]       'system' or the app id
  * @property {(args?: unknown) => unknown} run
+ * @property {() => PickOption[] | Promise<PickOption[]>} [pick]  asks for an argument first (the palette shows the options)
+ * @property {(value: unknown) => void} [preview]   live preview while moving through the options
+ * @property {() => void} [cancelPreview]          undo the preview when the user cancels
  */
+
+/** @typedef {{ value: unknown, label: string, icon?: string, hint?: string, current?: boolean }} PickOption */
 
 export class CommandUnavailableError extends Error {
   name = 'CommandUnavailableError';

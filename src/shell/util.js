@@ -41,18 +41,10 @@ export function liveText(system, key) {
 /**
  * Registers a shell command with a localized title and optional default shortcut.
  * @param {import('../kernel/system.js').System} system
- * @param {{ id: string, title: string, icon?: string, shortcut?: string, when?: string, hidden?: boolean, category?: string, run: (args?: any) => unknown }} command
+ * @param {{ id: string, title: string, icon?: string, shortcut?: string, when?: string, hidden?: boolean, category?: string, run: (args?: any) => unknown, pick?: () => any, preview?: (value: any) => void, cancelPreview?: () => void }} command
  *   `title` and `category` are system message keys
  */
-export function registerCommand(system, { id, title, icon, shortcut, when, hidden, category = 'shell.category', run }) {
-  system.commands.register({
-    id,
-    title: liveText(system, title),
-    icon,
-    when,
-    hidden,
-    category: liveText(system, category),
-    run,
-  });
-  if (shortcut) system.shortcuts.setDefault(id, shortcut);
+export function registerCommand(system, { title, shortcut, category = 'shell.category', ...rest }) {
+  system.commands.register({ ...rest, title: liveText(system, title), category: liveText(system, category) });
+  if (shortcut) system.shortcuts.setDefault(rest.id, shortcut);
 }

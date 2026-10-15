@@ -130,5 +130,63 @@
       "workspaceRemove": "Letzte Arbeitsfläche entfernen",
       "launchApp": "App öffnen"
     }
+  },
+  "palette": {
+    "title": "Befehlspalette",
+    "placeholder": "Apps, Befehle, Einstellungen, Dateien suchen …",
+    "hint": "> Befehle · / Dateien · @ Einstellungen · = rechnen · ? Hilfe · # Schlagwörter",
+    "hintStep": "↑↓ wählen · Enter übernehmen · Esc zurück",
+    "hintInput": "Enter übernehmen · Esc zurück",
+    "filter": "Filtern …",
+    "typeValue": "Wert eingeben …",
+    "noResults": "Nichts gefunden",
+    "empty": "Tippe, um zu suchen",
+    "calcCopy": "Enter kopiert das Ergebnis",
+    "copied": "{value} kopiert",
+    "noApp": "Noch keine App kann das öffnen",
+    "on": "An",
+    "off": "Aus",
+    "changeTheme": "Design ändern …",
+    "themeAuto": "Automatisch (wie System)",
+    "kind": {
+      "app": "App",
+      "command": "Befehl",
+      "setting": "Einstellung",
+      "file": "Datei",
+      "folder": "Ordner",
+      "provider": "Ergebnis",
+      "calc": "Rechner",
+      "help": "Hilfe",
+      "option": "",
+      "input": "",
+      "recent": "Zuletzt"
+    },
+    "help": {
+      "shortcuts": "Tastenkürzel",
+      "tour": "Willkommenstour",
+      "prefixes": "So nutzt du die Befehlspalette"
+    }
+  },
+  "launcher": {
+    "title": "Apps",
+    "search": "Apps und Dateien suchen",
+    "apps": "Apps",
+    "files": "Dateien",
+    "pinned": "Angeheftet",
+    "recentApps": "Zuletzt verwendet",
+    "recentFiles": "Zuletzt geöffnete Dateien",
+    "noResults": "Nichts gefunden",
+    "noApps": "Keine Apps installiert",
+    "category": {
+      "productivity": "Produktivität",
+      "study": "Lernen",
+      "office": "Büro",
+      "dev": "Entwicklerwerkzeuge",
+      "cslab": "Informatik-Labor",
+      "games": "Spiele",
+      "media": "Medien",
+      "ai": "KI",
+      "system": "System"
+    }
   }
 }
