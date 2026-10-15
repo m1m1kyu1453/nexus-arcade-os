@@ -7,6 +7,7 @@ import { createNotificationCenter } from './center/center.js';
 import { createDialogs } from './dialogs/dialogs.js';
 import { createDesktop } from './desktop/desktop.js';
 import { createWallpaper } from './desktop/wallpaper.js';
+import { createWidgetHost } from './widgets/host.js';
 import { createDock } from './dock.js';
 import { createLauncher } from './launcher/launcher.js';
 import { createLockScreen } from './lock/lock.js';
@@ -40,6 +41,7 @@ export function boot(root) {
       Object.assign(sys.dialogs, shell.ui.dialogs);
       shell.ui.wallpaper = createWallpaper(shell);
       shell.ui.desktop = createDesktop(shell);
+      shell.ui.widgets = createWidgetHost(shell);
       shell.ui.topbar = createTopBar(shell);
       shell.ui.dock = createDock(shell);
       registerShellCommands(shell);

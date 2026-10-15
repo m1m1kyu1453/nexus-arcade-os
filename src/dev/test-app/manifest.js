@@ -22,6 +22,15 @@ export default {
       description: { en: 'Add an item', de: 'Füge einen Eintrag hinzu' },
     },
   ],
+  widgets: [
+    {
+      id: 'ticker',
+      title: { en: 'Kernel test widget', de: 'Kernel-Test-Widget' },
+      size: [2, 1],
+      settings: [{ key: 'prefix', type: 'string', default: 'Ticks:', label: { en: 'Prefix', de: 'Präfix' } }],
+      load: () => import('./widget.js'),
+    },
+  ],
   storage: { version: 1, collections: { items: { indexes: { created: 'created' } } } },
   messages: { en: () => import('./i18n/en.json'), de: () => import('./i18n/de.json') },
   search: () => import('./search.js'),

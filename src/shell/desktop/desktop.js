@@ -566,6 +566,7 @@ export function createDesktop(shell) {
           icon: 'wallpaper',
           run: () => shell.ui.personalize?.open('wallpaper'),
         },
+        { label: t('widgets.add'), icon: 'layout-quarters', run: () => void shell.ui.widgets?.openGallery() },
         { label: t('desktop.display'), icon: 'monitor', run: () => shell.ui.personalize?.open('appearance') },
         ...(terminal
           ? [

@@ -68,7 +68,8 @@
       "downloads": "Downloads",
       "pictures": "Bilder",
       "projects": "Projekte"
-    }
+    },
+    "close": "Schließen"
   },
   "commands": {
     "category": "System",
@@ -376,5 +377,76 @@
     "hint": "{keys} gedrückt halten zum Anzeigen · Esc schließt",
     "other": "Sonstiges",
     "none": "Gerade sind keine Tastenkürzel verfügbar."
+  },
+  "widgets": {
+    "region": "Widgets",
+    "add": "Widgets hinzufügen …",
+    "gallery": "Widget hinzufügen",
+    "galleryHint": "Widgets landen auf der aktuellen Arbeitsfläche. Zum Verschieben an der Titelleiste ziehen, zum Ändern der Größe an der Ecke. Mit der Tastatur: Alt+Pfeile verschiebt, Alt+Umschalt+Pfeile ändert die Größe, Entf entfernt.",
+    "builtIn": "Eingebaut",
+    "menu": "Widget",
+    "settings": "Widget-Einstellungen",
+    "settingsOf": "Einstellungen: {name}",
+    "remove": "Widget entfernen",
+    "reload": "Widget neu laden",
+    "moveTo": "Auf Arbeitsfläche verschieben",
+    "full": "Auf dieser Arbeitsfläche ist kein Platz für dieses Widget.",
+    "crashed": "Dieses Widget funktioniert nicht mehr.",
+    "clock": {
+      "local": "Ortszeit",
+      "badZone": "Unbekannte Zeitzone: {zones}"
+    },
+    "calendar": {
+      "previous": "Vorheriger Monat",
+      "next": "Nächster Monat",
+      "today": "Zurück zu heute"
+    },
+    "status": {
+      "fps": "Bildrate",
+      "storage": "Speicher",
+      "network": "Netzwerk",
+      "online": "Online",
+      "offline": "Offline",
+      "battery": "Akku",
+      "charging": "lädt"
+    },
+    "note": {
+      "label": "Schnellnotiz",
+      "placeholder": "Schreib etwas … es wird als Datei gespeichert."
+    },
+    "pomodoro": {
+      "work": "Fokus",
+      "break": "Pause",
+      "start": "Starten",
+      "pause": "Anhalten",
+      "skip": "Zur nächsten Phase springen",
+      "reset": "Zurücksetzen",
+      "workDone": "Fokuszeit vorbei: Zeit für eine Pause",
+      "breakDone": "Pause vorbei: zurück zum Fokus",
+      "count": {
+        "=0": "noch keine",
+        "one": "{count} geschafft",
+        "other": "{count} geschafft"
+      }
+    },
+    "countdown": {
+      "empty": "Lege in den Widget-Einstellungen ein Datum fest.",
+      "today": "Heute!",
+      "days": {
+        "one": "{count} Tag",
+        "other": "{count} Tage"
+      },
+      "hours": {
+        "one": "{count} Stunde",
+        "other": "{count} Stunden"
+      },
+      "ago": {
+        "one": "vor {count} Tag",
+        "other": "vor {count} Tagen"
+      }
+    },
+    "launcher": {
+      "empty": "Keine Apps zum Anzeigen."
+    }
   }
 }

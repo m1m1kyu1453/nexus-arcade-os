@@ -82,7 +82,7 @@ interface SettingBase {
 }
 export type SettingDecl =
   | (SettingBase & { type: 'number'; default: number; min?: number; max?: number; step?: number })
-  | (SettingBase & { type: 'string' | 'color' | 'shortcut' | 'path'; default: string })
+  | (SettingBase & { type: 'string' | 'color' | 'shortcut' | 'path' | 'date'; default: string })
   | (SettingBase & { type: 'boolean'; default: boolean })
   | (SettingBase & { type: 'enum'; default: string; options: { value: string; label: L10n }[] });
 
@@ -91,6 +91,11 @@ export interface WidgetDecl {
   title: L10n;
   /** Default size in grid cells [columns, rows]. */
   size: [number, number];
+  /** Smallest size the user can resize to (default [1, 1]). */
+  minSize?: [number, number];
+  /** Per-widget settings; the shell renders the form and stores values per placed widget. */
+  settings?: SettingDecl[];
+  icon?: string;
   load: () => Promise<WidgetModule>;
 }
 
@@ -169,8 +174,25 @@ export interface Intent {
 }
 
 export interface WidgetModule {
-  mount(container: HTMLElement, ctx: HeadlessContext): { unmount?(): void };
+  mount(container: HTMLElement, ctx: WidgetContext): { unmount?(): void } | void;
 }
+
+/** ctx for a placed desktop widget: headless ctx plus a lifetime (timers, signal) and its own settings. */
+export type WidgetContext = HeadlessContext &
+  Pick<AppContext, 'signal' | 'timers' | 'guard'> & {
+    widget: {
+      /** Unique id of this placed widget. */
+      id: string;
+      /** Current size in grid cells. */
+      size(): [number, number];
+      onResize(fn: (size: [number, number]) => void): () => void;
+      config: {
+        get<T = unknown>(key: string): T;
+        set(key: string, value: unknown): void;
+        onChange(fn: (key: string) => void): () => void;
+      };
+    };
+  };
 
 export interface SearchResult {
   title: string;

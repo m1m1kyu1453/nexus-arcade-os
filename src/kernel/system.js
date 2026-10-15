@@ -33,9 +33,11 @@ import { createNativeDialogs } from '../shell/native-dialogs.js';
 import { createEventBus } from './bus.js';
 import { createAppContext } from './context.js';
 import { createIntents } from './intents.js';
+import { createBoundary } from './error-boundary.js';
 import { createLifecycle } from './lifecycle.js';
 import { createLogger } from './logger.js';
 import { createRegistry } from './registry.js';
+import { createRuntime } from './runtime.js';
 import { createTabRelay } from './tab-relay.js';
 
 /** @typedef {import('./types').AppManifest} AppManifest */
@@ -458,6 +460,20 @@ async function openProfile(options, k, profile) {
   /** @param {AppManifest} m */
   const headless = (m) => createAppContext(m, services);
 
+  /**
+   * Context for a desktop widget: the headless ctx plus timers, signal and guard that end when
+   * the widget is removed (dispose). The first uncaught error reaches `onCrash`.
+   * @param {AppManifest} m
+   * @param {{ onCrash: (error: unknown) => void }} options
+   */
+  async function widgetContext(m, { onCrash }) {
+    const boundary = createBoundary({ onCrash });
+    const runtime = createRuntime({ boundary });
+    await i18n.load(m.id);
+    const ctx = createAppContext(m, services, { runtime, boundary, instanceId: `${m.id}#widget` });
+    return { ctx, guard: runtime.guard, dispose: () => runtime.dispose() };
+  }
+
   for (const m of registry.list({ includeDisabled: true })) {
     for (const decl of m.commands ?? []) {
       commands.register({
@@ -584,6 +600,7 @@ async function openProfile(options, k, profile) {
     backup,
     migrationResults,
     localize,
+    widgetContext,
     async stop() {
       sources.stop();
       scheduler.stop();

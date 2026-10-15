@@ -68,7 +68,8 @@
       "downloads": "Downloads",
       "pictures": "Pictures",
       "projects": "Projects"
-    }
+    },
+    "close": "Close"
   },
   "commands": {
     "category": "System",
@@ -376,5 +377,76 @@
     "hint": "Hold {keys} to peek · Esc closes",
     "other": "Other",
     "none": "No shortcuts are available right now."
+  },
+  "widgets": {
+    "region": "Widgets",
+    "add": "Add widgets…",
+    "gallery": "Add a widget",
+    "galleryHint": "Widgets go on the current workspace. Drag them by their title bar; resize from the corner. With the keyboard: Alt+Arrows move, Alt+Shift+Arrows resize, Delete removes.",
+    "builtIn": "Built-in",
+    "menu": "Widget",
+    "settings": "Widget settings",
+    "settingsOf": "{name} settings",
+    "remove": "Remove widget",
+    "reload": "Reload widget",
+    "moveTo": "Move to workspace",
+    "full": "No free space for this widget on this workspace.",
+    "crashed": "This widget stopped working.",
+    "clock": {
+      "local": "Local time",
+      "badZone": "Unknown time zone: {zones}"
+    },
+    "calendar": {
+      "previous": "Previous month",
+      "next": "Next month",
+      "today": "Back to today"
+    },
+    "status": {
+      "fps": "Frame rate",
+      "storage": "Storage",
+      "network": "Network",
+      "online": "Online",
+      "offline": "Offline",
+      "battery": "Battery",
+      "charging": "charging"
+    },
+    "note": {
+      "label": "Quick note",
+      "placeholder": "Write something… it's saved as a file."
+    },
+    "pomodoro": {
+      "work": "Focus",
+      "break": "Break",
+      "start": "Start",
+      "pause": "Pause",
+      "skip": "Skip to the next phase",
+      "reset": "Reset",
+      "workDone": "Focus time is over: take a break",
+      "breakDone": "Break is over: back to focus",
+      "count": {
+        "=0": "none done",
+        "one": "{count} done",
+        "other": "{count} done"
+      }
+    },
+    "countdown": {
+      "empty": "Set a date in the widget settings.",
+      "today": "Today!",
+      "days": {
+        "one": "{count} day",
+        "other": "{count} days"
+      },
+      "hours": {
+        "one": "{count} hour",
+        "other": "{count} hours"
+      },
+      "ago": {
+        "one": "{count} day ago",
+        "other": "{count} days ago"
+      }
+    },
+    "launcher": {
+      "empty": "No apps to show."
+    }
   }
 }

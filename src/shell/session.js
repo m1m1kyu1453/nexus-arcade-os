@@ -41,6 +41,8 @@ export function createSession(store, log) {
   let timer;
   /** @type {(() => Omit<SessionData, 'pinned' | 'recentApps' | 'version'>) | null} */
   let collect = null;
+  /** @type {Set<() => void>} */
+  const pinnedListeners = new Set();
 
   async function save() {
     clearTimeout(timer);
@@ -76,6 +78,12 @@ export function createSession(store, log) {
     setPinned(pinned) {
       data.pinned = [...new Set(pinned)];
       this.schedule();
+      for (const fn of pinnedListeners) fn();
+    },
+    /** @param {() => void} fn @returns {() => void} unsubscribe */
+    onPinned(fn) {
+      pinnedListeners.add(fn);
+      return () => pinnedListeners.delete(fn);
     },
     /** @param {string} appId */
     noteLaunch(appId) {

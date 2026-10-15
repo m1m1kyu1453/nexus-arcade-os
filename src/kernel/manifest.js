@@ -29,7 +29,7 @@ export const LOCALES = /** @type {const} */ (['en', 'de']);
 const ID = /^[a-z0-9]+(\.[a-z0-9-]+)+$/;
 const SEMVER = /^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$/;
 const NAME = /^[a-z0-9][a-z0-9_-]*$/;
-const SETTING_TYPES = ['string', 'number', 'boolean', 'enum', 'color', 'shortcut', 'path'];
+const SETTING_TYPES = ['string', 'number', 'boolean', 'enum', 'color', 'shortcut', 'path', 'date'];
 
 export class ManifestError extends Error {
   /** @param {string} id @param {string[]} problems */
@@ -140,6 +140,17 @@ export function validateManifest(manifest) {
     ) {
       fail(`${path}.size`, 'must be [columns, rows] with positive integers');
     }
+    if (
+      w.minSize !== undefined &&
+      !(
+        Array.isArray(w.minSize) &&
+        w.minSize.length === 2 &&
+        w.minSize.every((/** @type {unknown} */ n) => Number.isInteger(n) && /** @type {number} */ (n) > 0)
+      )
+    ) {
+      fail(`${path}.minSize`, 'must be [columns, rows] with positive integers');
+    }
+    if (w.settings !== undefined && !Array.isArray(w.settings)) fail(`${path}.settings`, 'must be an array');
     if (typeof w.load !== 'function') fail(`${path}.load`, 'must be a function');
   });
 
