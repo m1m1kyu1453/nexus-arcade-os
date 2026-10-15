@@ -1,0 +1,110 @@
+.nx-desk-grid {
+  position: absolute;
+  inset: 0;
+  outline: none;
+  touch-action: none;
+}
+
+.nx-desktop.is-drop-target {
+  outline: 2px dashed var(--accent);
+  outline-offset: -8px;
+}
+
+.nx-desk-icon {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 4px;
+  width: 84px;
+  padding: 6px 4px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: #fff;
+  text-align: center;
+  cursor: default;
+  outline: none;
+  transition:
+    left var(--dur-fast) var(--ease-out),
+    top var(--dur-fast) var(--ease-out);
+
+  &:hover {
+    background: rgb(255 255 255 / 0.08);
+  }
+  &.is-selected {
+    border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+    background: color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+  }
+  &.is-dragging {
+    z-index: 2;
+    opacity: 0.85;
+    transition: none;
+  }
+}
+
+.nx-desk-glyph {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  color: #e6edff;
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.5));
+
+  &.is-folder {
+    color: var(--accent);
+  }
+}
+
+.nx-desk-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: 6px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.5);
+}
+
+.nx-desk-label {
+  display: -webkit-box;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: var(--text-xs);
+  line-height: 1.25;
+  text-shadow:
+    0 1px 3px rgb(0 0 0 / 0.9),
+    0 0 1px #000;
+  overflow-wrap: anywhere;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+
+  .is-selected & {
+    -webkit-line-clamp: 4;
+  }
+}
+
+.nx-desk-rename {
+  width: 100%;
+  padding: 2px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--surface-1);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-xs);
+  text-align: center;
+  resize: none;
+}
+
+.nx-desk-marquee {
+  position: absolute;
+  z-index: 3;
+  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  pointer-events: none;
+
+  &[hidden] {
+    display: none;
+  }
+}

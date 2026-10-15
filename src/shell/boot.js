@@ -3,6 +3,7 @@
 import '../styles/base.css';
 import { registerShellCommands } from './commands.js';
 import { createNotificationCenter } from './center/center.js';
+import { createDesktop } from './desktop/desktop.js';
 import { createWallpaper } from './desktop/wallpaper.js';
 import { createDock } from './dock.js';
 import { createLauncher } from './launcher/launcher.js';
@@ -23,6 +24,7 @@ export function boot(root) {
     (shell) => {
       const sys = shell.system();
       shell.ui.wallpaper = createWallpaper(shell);
+      shell.ui.desktop = createDesktop(shell);
       shell.ui.topbar = createTopBar(shell);
       shell.ui.dock = createDock(shell);
       registerShellCommands(shell);

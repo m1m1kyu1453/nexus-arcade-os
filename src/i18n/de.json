@@ -187,7 +187,8 @@
       "media": "Medien",
       "ai": "KI",
       "system": "System"
-    }
+    },
+    "addToDesktop": "Zum Desktop hinzufügen"
   },
   "center": {
     "title": "Benachrichtigungen",
@@ -283,5 +284,31 @@
     "dockMagnification": "Symbole beim Überfahren vergrößern",
     "done": "Fertig",
     "changeWallpaper": "Hintergrund ändern"
+  },
+  "desktop": {
+    "label": "Desktop",
+    "menu": "Desktop",
+    "open": "Öffnen",
+    "openWith": "Öffnen mit",
+    "copy": "Kopieren",
+    "cut": "Ausschneiden",
+    "paste": "Einfügen",
+    "rename": "Umbenennen",
+    "renameFailed": "Umbenennen fehlgeschlagen",
+    "pasteFailed": "Einfügen fehlgeschlagen",
+    "trash": "In den Papierkorb",
+    "newFolder": "Neuer Ordner",
+    "newFolderName": "Neuer Ordner",
+    "newTextFile": "Neue Textdatei",
+    "newTextFileName": "Neue Textdatei",
+    "newNote": "Neue Notiz",
+    "sort": "Symbole sortieren",
+    "sortBy": {
+      "name": "Nach Name",
+      "type": "Nach Typ",
+      "modified": "Nach Änderungsdatum"
+    },
+    "display": "Anzeigeeinstellungen",
+    "terminalHere": "Terminal hier öffnen"
   }
 }

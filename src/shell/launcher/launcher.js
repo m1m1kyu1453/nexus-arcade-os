@@ -4,7 +4,7 @@
 // Mod+Space or by tapping the Mod key alone. On phones it fills the screen.
 import { isEditable } from '../../services/commands/shortcuts.js';
 import { h, icon, replace } from '../../ui/dom.js';
-import { closeMenus } from '../../ui/menu.js';
+import { attachContextMenu, closeMenus } from '../../ui/menu.js';
 import { trapFocus } from '../../ui/overlay.js';
 import { appIcon } from '../app-icon.js';
 import { appName, registerCommand } from '../util.js';
@@ -61,8 +61,8 @@ export function createLauncher(shell) {
   }
 
   /** @param {import('../../kernel/types').AppManifest} m */
-  const tile = (m) =>
-    h(
+  const tile = (m) => {
+    const el = h(
       'button',
       {
         class: 'nx-launcher-tile',
@@ -73,6 +73,22 @@ export function createLauncher(shell) {
       appIcon(m, 44),
       h('span', { text: appName(sys, m.id) }),
     );
+    attachContextMenu(el, () => {
+      const pinned = session.data.pinned.includes(m.id);
+      return [
+        { label: t('shell.newWindow'), icon: 'plus', run: () => (close(), void shell.launch(m.id)) },
+        pinned
+          ? {
+              label: t('shell.unpin'),
+              icon: 'pin-off',
+              run: () => session.setPinned(session.data.pinned.filter((id) => id !== m.id)),
+            }
+          : { label: t('shell.pin'), icon: 'pin', run: () => session.setPinned([...session.data.pinned, m.id]) },
+        { label: t('launcher.addToDesktop'), icon: 'monitor', run: () => void shell.ui.desktop?.addShortcut(m.id) },
+      ];
+    });
+    return el;
+  };
 
   /** @param {string} title @param {Node[]} children @param {string} [className] */
   const section = (title, children, className = 'nx-launcher-grid') =>

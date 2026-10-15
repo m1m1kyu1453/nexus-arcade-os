@@ -187,7 +187,8 @@
       "media": "Media",
       "ai": "AI",
       "system": "System"
-    }
+    },
+    "addToDesktop": "Add to desktop"
   },
   "center": {
     "title": "Notifications",
@@ -283,5 +284,31 @@
     "dockMagnification": "Magnify icons on hover",
     "done": "Done",
     "changeWallpaper": "Change wallpaper"
+  },
+  "desktop": {
+    "label": "Desktop",
+    "menu": "Desktop",
+    "open": "Open",
+    "openWith": "Open with",
+    "copy": "Copy",
+    "cut": "Cut",
+    "paste": "Paste",
+    "rename": "Rename",
+    "renameFailed": "Couldn't rename",
+    "pasteFailed": "Couldn't paste",
+    "trash": "Move to trash",
+    "newFolder": "New folder",
+    "newFolderName": "New folder",
+    "newTextFile": "New text file",
+    "newTextFileName": "New text file",
+    "newNote": "New note",
+    "sort": "Sort icons",
+    "sortBy": {
+      "name": "By name",
+      "type": "By type",
+      "modified": "By date modified"
+    },
+    "display": "Display settings",
+    "terminalHere": "Open terminal here"
   }
 }

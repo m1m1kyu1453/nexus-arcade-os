@@ -68,6 +68,7 @@ const TYPES = {
   // Nexus formats
   '.nexus-backup': 'application/vnd.nexus.backup',
   '.nexus-plugin': 'application/vnd.nexus.plugin',
+  '.nexus-app': 'application/vnd.nexus.app',
 };
 
 export const FOLDER_MIME = 'inode/directory';
