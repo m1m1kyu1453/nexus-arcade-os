@@ -448,5 +448,11 @@
     "launcher": {
       "empty": "No apps to show."
     }
+  },
+  "mobile": {
+    "bar": "App bar",
+    "apps": "Apps",
+    "home": "Home",
+    "switcher": "Switcher"
   }
 }

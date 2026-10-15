@@ -11,6 +11,7 @@ import { createWidgetHost } from './widgets/host.js';
 import { createDock } from './dock.js';
 import { createLauncher } from './launcher/launcher.js';
 import { createLockScreen } from './lock/lock.js';
+import { createMobileShell } from './mobile/mobile.js';
 import { createPalette } from './palette/palette.js';
 import { createShortcutsOverlay } from './shortcuts/shortcuts-overlay.js';
 import { createPersonalize } from './personalize/personalize.js';
@@ -53,6 +54,7 @@ export function boot(root) {
       shell.ui.switcher = createSwitcher(shell);
       shell.ui.lock = createLockScreen(shell);
       shell.ui.shortcuts = createShortcutsOverlay(shell);
+      shell.ui.mobile = createMobileShell(shell);
       rememberFastBoot(!!sys.settings.get('system', 'fastBoot'));
       sys.settings.onChange('system', 'fastBoot', (on) => rememberFastBoot(!!on));
       void bootScreen.done();

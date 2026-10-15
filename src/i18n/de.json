@@ -448,5 +448,11 @@
     "launcher": {
       "empty": "Keine Apps zum Anzeigen."
     }
+  },
+  "mobile": {
+    "bar": "App-Leiste",
+    "apps": "Apps",
+    "home": "Start",
+    "switcher": "Wechseln"
   }
 }

@@ -281,7 +281,8 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
   // ─── Pointer interactions ──────────────────────────────────────────────
   /** @param {Win} w @param {PointerEvent} e */
   function startDrag(w, e) {
-    if (e.button !== 0 || w.fullscreen) return;
+    // Mobile shows windows as full-screen sheets: nothing to drag or snap.
+    if (e.button !== 0 || w.fullscreen || document.documentElement.hasAttribute('data-mobile')) return;
     const startX = e.clientX;
     const startY = e.clientY;
     const startRect = { ...w.rect };
@@ -566,7 +567,11 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
       startDrag(w, e);
     });
     titlebar.addEventListener('dblclick', (e) => {
-      if (/** @type {HTMLElement} */ (e.target).closest('.nx-window-controls') || manifest.window?.resizable === false)
+      if (
+        /** @type {HTMLElement} */ (e.target).closest('.nx-window-controls') ||
+        manifest.window?.resizable === false ||
+        document.documentElement.hasAttribute('data-mobile')
+      )
         return;
       snap(w, w.state === 'maximized' ? null : 'max');
     });
