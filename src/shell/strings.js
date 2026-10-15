@@ -1,24 +1,7 @@
 // @ts-check
-// Phase 0 strings. Moves to the i18n service (JSON per language) in phase 1.
+// Strings needed before the kernel's i18n is ready (update prompts from the Service Worker).
 
 const en = {
-  tagline: 'Phase 1 — kernel ready',
-  version: 'Version',
-  built: 'Built',
-  edition: 'Edition',
-  editionWeb: 'Website',
-  editionLite: 'Lite (single file)',
-  network: 'Network',
-  online: 'Online',
-  offline: 'Offline',
-  workers: 'Web Workers',
-  checking: 'Checking…',
-  workersOk: 'Running',
-  workersFail: 'Unavailable in this browser',
-  storage: 'Storage',
-  persistent: 'Persistent',
-  bestEffort: 'Not guaranteed — the browser may clear it',
-  unsupported: 'Persistence not supported',
   updateAvailable: 'Update available — reload to get the new version.',
   reload: 'Reload',
   offlineReady: 'Nexus is ready to work offline.',
@@ -27,23 +10,6 @@ const en = {
 
 /** @type {typeof en} */
 const de = {
-  tagline: 'Phase 1 — Kernel bereit',
-  version: 'Version',
-  built: 'Erstellt',
-  edition: 'Edition',
-  editionWeb: 'Website',
-  editionLite: 'Lite (Einzeldatei)',
-  network: 'Netzwerk',
-  online: 'Online',
-  offline: 'Offline',
-  workers: 'Web Worker',
-  checking: 'Wird geprüft …',
-  workersOk: 'Laufen',
-  workersFail: 'In diesem Browser nicht verfügbar',
-  storage: 'Speicher',
-  persistent: 'Dauerhaft',
-  bestEffort: 'Nicht garantiert – der Browser kann Daten löschen',
-  unsupported: 'Dauerhafter Speicher nicht unterstützt',
   updateAvailable: 'Update verfügbar – neu laden, um die neue Version zu erhalten.',
   reload: 'Neu laden',
   offlineReady: 'Nexus ist bereit für die Offline-Nutzung.',

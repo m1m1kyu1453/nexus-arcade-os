@@ -47,5 +47,5 @@ export async function startNexus(page, { url = '/', seed, seedArg } = {}) {
   });
   if (seed) await page.evaluate(seed, /** @type {T} */ (seedArg));
   await page.reload();
-  await expect(page.getByTestId('version')).toBeVisible();
+  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
 }

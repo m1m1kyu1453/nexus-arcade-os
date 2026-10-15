@@ -1,0 +1,74 @@
+.nx-welcome {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 720px;
+  margin: 0 auto;
+  padding: var(--space-5);
+
+  & .nx-welcome-head h1 {
+    margin: 0;
+    font-size: var(--text-xl);
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  & .nx-welcome-head p {
+    margin: var(--space-1) 0 0;
+    color: var(--text-2);
+  }
+  & h2 {
+    margin: var(--space-2) 0 0;
+    font-size: var(--text-md);
+  }
+}
+
+.nx-welcome-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.nx-welcome-tour {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  & li {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface-2);
+    color: var(--accent);
+  }
+  & strong {
+    color: var(--text-1);
+  }
+  & p {
+    margin: var(--space-1) 0 0;
+    color: var(--text-2);
+    font-size: var(--text-sm);
+  }
+}
+
+.nx-welcome-keys {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  font-size: var(--text-sm);
+
+  & dt {
+    display: flex;
+    gap: 4px;
+  }
+  & dd {
+    margin: 0;
+    color: var(--text-2);
+  }
+}

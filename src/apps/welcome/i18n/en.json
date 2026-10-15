@@ -1,0 +1,32 @@
+{
+  "title": "Welcome to Nexus",
+  "lead": "A desktop in your browser. Everything stays on this device and works offline.",
+  "tour": {
+    "windows": {
+      "title": "Windows",
+      "body": "Drag a window to a screen edge or corner to snap it. Hover the maximize button for layouts."
+    },
+    "workspaces": {
+      "title": "Workspaces",
+      "body": "Spread your windows over several desktops and switch with the dots in the top bar."
+    },
+    "search": { "title": "Search everything", "body": "The command palette finds apps, commands, settings and files." },
+    "personalize": { "title": "Make it yours", "body": "Choose a theme, an accent color and a live wallpaper." }
+  },
+  "shortcuts": "Shortcuts",
+  "keys": {
+    "palette": "Command palette",
+    "launcher": "Launcher",
+    "snap": "Snap the window",
+    "overview": "Overview",
+    "switcher": "Switch windows",
+    "lock": "Lock",
+    "help": "All shortcuts"
+  },
+  "actions": {
+    "palette": "Open the command palette",
+    "personalize": "Personalize",
+    "another": "Open another window"
+  },
+  "opened": "Window {n}"
+}

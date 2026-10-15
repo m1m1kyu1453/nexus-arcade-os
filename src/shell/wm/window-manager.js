@@ -298,6 +298,10 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
         if (Math.hypot(dx, dy) < 4) return;
         dragging = true;
         w.el.classList.add('is-dragging');
+        // The snap preview sits right under the dragged window.
+        zTop += 2;
+        preview.style.zIndex = String(zTop - 1);
+        w.el.style.zIndex = String(zTop);
         if (w.state !== 'normal') {
           // Dragging a maximized/snapped window restores it under the pointer.
           const ratio = (startX - startRect.x) / startRect.w;
@@ -502,7 +506,7 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
       ctrl('close', 'close', t('wm.close')),
     );
     const titlebar = h(
-      'header',
+      'div',
       { class: 'nx-titlebar' },
       h('span', { class: 'nx-window-icon' }, icon(manifest.icon, { size: 16 })),
       titleEl,
@@ -768,6 +772,21 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
       if (workspaces[index]) workspaces[index].name = name.trim().slice(0, 40);
       changed();
       emit('workspace:changed', { index: current, previous: current });
+    },
+    /** Saved layout of one window. @param {string} id @returns {SavedWindow | undefined} */
+    layoutOf(id) {
+      const w = windows.get(id);
+      return (
+        w && {
+          appId: w.appId,
+          rect: w.rect,
+          normalRect: w.normalRect,
+          state: w.state,
+          zone: w.zone,
+          minimized: w.minimized,
+          workspace: w.workspace,
+        }
+      );
     },
     /** Saved layout (the shell stores it with app args). @returns {SavedWindow[]} */
     snapshot: () =>

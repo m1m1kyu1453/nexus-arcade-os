@@ -1,0 +1,45 @@
+.nx-shell {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  /* App content may be selectable again. */
+  & .nx-window-body {
+    user-select: text;
+    -webkit-user-select: text;
+  }
+}
+
+.nx-wallpaper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(70rem 50rem at 15% 10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
+    radial-gradient(60rem 50rem at 90% 90%, color-mix(in srgb, var(--accent-2) 22%, transparent), transparent 60%),
+    var(--bg);
+}
+
+.nx-desktop {
+  position: absolute;
+  inset: 36px 0 0;
+  z-index: 1;
+}
+
+.nx-chrome {
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-dock);
+  pointer-events: none;
+
+  & > * {
+    pointer-events: auto;
+  }
+}
+
+.nx-toasts {
+  z-index: var(--z-toast);
+  bottom: 84px;
+}

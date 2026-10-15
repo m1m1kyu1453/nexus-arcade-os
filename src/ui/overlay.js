@@ -71,7 +71,7 @@ export function openModal({ title, body, actions = [], dismissValue, onOpen, cla
         'aria-modal': 'true',
         'aria-labelledby': titleId,
       },
-      h('header', {}, h('h2', { id: titleId, text: title })),
+      h('div', { class: 'nx-modal-head' }, h('h2', { id: titleId, text: title })),
       h('div', { class: 'nx-modal-body' }, typeof body === 'string' ? h('p', { text: body }) : (body ?? '')),
       footer,
     );

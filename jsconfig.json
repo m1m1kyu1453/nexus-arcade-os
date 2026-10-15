@@ -11,5 +11,5 @@
     "skipLibCheck": true,
     "types": []
   },
-  "include": ["src/globals.d.ts", "src/kernel/**/*", "src/services/**/*", "src/env.js", "src/workers/ping.js"]
+  "include": ["src/globals.d.ts", "src/kernel/**/*", "src/services/**/*", "src/env.js"]
 }

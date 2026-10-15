@@ -1,15 +1,20 @@
 import { expect, test } from '@playwright/test';
 import { collectErrors, startNexus } from '../helpers/nexus.js';
 
-test('website loads with no console errors', async ({ page }) => {
+/** The desktop is up: kernel ready, top bar, and the Welcome window on first start. */
+async function expectDesktop(page) {
+  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
+  await expect(page.getByRole('banner')).toBeVisible();
+  await expect(page.getByRole('dialog', { name: /Welcome|Willkommen/ }).first()).toBeVisible();
+}
+
+test('website loads the desktop with no console errors', async ({ page }) => {
   const errors = collectErrors(page);
   await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'Nexus Arcade OS' })).toBeVisible();
-  await expect(page.getByTestId('edition')).toHaveAttribute('data-edition', 'web');
-  await expect(page.getByTestId('network')).toHaveAttribute('data-state', 'online');
-  await expect(page.getByTestId('workers')).toHaveAttribute('data-state', 'ok');
-  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
+  await expectDesktop(page);
   await expect(page.locator('html')).toHaveAttribute('data-storage', 'indexeddb');
+  await expect(page.locator('html')).toHaveAttribute('data-search', 'worker');
+  expect(await page.evaluate(() => window.NEXUS_EDITION)).toBe('web');
   await page.evaluate(() => navigator.serviceWorker.ready);
   expect(errors).toEqual([]);
 });
@@ -19,14 +24,12 @@ test('still loads after going offline and reloading', async ({ page, context }) 
   await page.goto('/');
   // The first visit installs the Service Worker and precaches the app.
   await page.evaluate(() => navigator.serviceWorker.ready);
+  await expectDesktop(page);
 
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Nexus Arcade OS' })).toBeVisible();
-  await expect(page.getByTestId('network')).toHaveAttribute('data-state', 'offline');
-  await expect(page.getByTestId('workers')).toHaveAttribute('data-state', 'ok');
-  // The kernel (incl. lazily loaded chunks like the search worker) boots offline too.
-  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
+  // The kernel (incl. lazily loaded chunks like the search worker and the app) boots offline.
+  await expectDesktop(page);
   // Fonts come from the precache too.
   expect(await page.evaluate(() => document.fonts.check('16px "Inter Variable"'))).toBe(true);
   expect(errors).toEqual([]);

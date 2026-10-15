@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { collectErrors, liteUrl } from '../helpers/nexus.js';
 
-test('nexus-lite.html loads from file:// with no console errors', async ({ page }) => {
+test('nexus-lite.html runs the desktop from file:// with no console errors', async ({ page }) => {
   const errors = collectErrors(page);
   /** @type {string[]} */
   const requests = [];
@@ -10,16 +10,13 @@ test('nexus-lite.html loads from file:// with no console errors', async ({ page 
   });
 
   await page.goto(liteUrl);
-  await expect(page.getByRole('heading', { name: 'Nexus Arcade OS' })).toBeVisible();
-  await expect(page.getByTestId('edition')).toHaveAttribute('data-edition', 'lite');
+  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
   expect(await page.evaluate(() => window.NEXUS_EDITION)).toBe('lite');
   expect(await page.evaluate(() => navigator.serviceWorker?.controller ?? null)).toBeNull();
-
-  // Proof that workers start from an inline Blob URL on file://.
-  await expect(page.getByTestId('workers')).toHaveAttribute('data-state', 'ok');
-  // The whole kernel runs from file:// (IndexedDB, search worker from a Blob URL).
-  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
+  await expect(page.getByRole('dialog', { name: /Welcome|Willkommen/ }).first()).toBeVisible();
+  // IndexedDB works on file://, and the search worker starts from an inline Blob URL.
   await expect(page.locator('html')).toHaveAttribute('data-storage', 'indexeddb');
+  await expect(page.locator('html')).toHaveAttribute('data-search', 'worker');
 
   // Fully self-contained: the only file loaded is the HTML itself.
   expect(requests).toEqual([liteUrl]);

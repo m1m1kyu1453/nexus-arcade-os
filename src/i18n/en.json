@@ -77,5 +77,58 @@
       "two-thirds-left": "Left two thirds",
       "two-thirds-right": "Right two thirds"
     }
+  },
+  "shell": {
+    "category": "Desktop",
+    "launcher": "Apps",
+    "workspaces": "Workspaces",
+    "desktop": "Desktop",
+    "workspaceN": "Workspace {n} {name}",
+    "online": "Online",
+    "offline": "Offline — apps keep working",
+    "muted": "Sound off",
+    "volumeLevel": "Volume {level} %",
+    "volume": "Volume",
+    "mute": "Mute all sounds",
+    "notificationsCount": {
+      "=0": "No new notifications",
+      "one": "{count} new notification",
+      "other": "{count} new notifications"
+    },
+    "calendar": "Calendar",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "profileMenu": "Profile",
+    "lock": "Lock",
+    "switchProfile": "Switch profile",
+    "personalize": "Personalize",
+    "logOut": "Log out",
+    "dock": "Dock",
+    "dockRunning": {
+      "one": "{app}, 1 window",
+      "other": "{app}, {count} windows"
+    },
+    "newWindow": "New window",
+    "pin": "Keep in dock",
+    "unpin": "Remove from dock",
+    "closeAll": "Close all windows",
+    "openFailed": "{app} couldn't be opened",
+    "cmd": {
+      "snapLeft": "Snap window left",
+      "snapRight": "Snap window right",
+      "snapUp": "Maximize or snap window up",
+      "snapDown": "Restore, snap down or minimize window",
+      "minimize": "Minimize window",
+      "maximize": "Maximize or restore window",
+      "close": "Close window",
+      "workspaceNext": "Next workspace",
+      "workspacePrevious": "Previous workspace",
+      "workspaceGo": "Go to workspace",
+      "moveRight": "Move window to the next workspace",
+      "moveLeft": "Move window to the previous workspace",
+      "workspaceAdd": "Add a workspace",
+      "workspaceRemove": "Remove the last workspace",
+      "launchApp": "Open app"
+    }
   }
 }

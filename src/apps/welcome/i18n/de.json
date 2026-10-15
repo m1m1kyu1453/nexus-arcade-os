@@ -1,0 +1,38 @@
+{
+  "title": "Willkommen bei Nexus",
+  "lead": "Ein Desktop in deinem Browser. Alles bleibt auf diesem Gerät und funktioniert offline.",
+  "tour": {
+    "windows": {
+      "title": "Fenster",
+      "body": "Zieh ein Fenster an einen Bildschirmrand oder in eine Ecke, um es anzudocken. Fahre über die Maximieren-Taste für Layouts."
+    },
+    "workspaces": {
+      "title": "Arbeitsflächen",
+      "body": "Verteile deine Fenster auf mehrere Desktops und wechsle mit den Punkten in der oberen Leiste."
+    },
+    "search": {
+      "title": "Alles finden",
+      "body": "Die Befehlspalette findet Apps, Befehle, Einstellungen und Dateien."
+    },
+    "personalize": {
+      "title": "Mach es zu deinem",
+      "body": "Wähle ein Design, eine Akzentfarbe und einen Live-Hintergrund."
+    }
+  },
+  "shortcuts": "Tastenkürzel",
+  "keys": {
+    "palette": "Befehlspalette",
+    "launcher": "Starter",
+    "snap": "Fenster andocken",
+    "overview": "Übersicht",
+    "switcher": "Fenster wechseln",
+    "lock": "Sperren",
+    "help": "Alle Tastenkürzel"
+  },
+  "actions": {
+    "palette": "Befehlspalette öffnen",
+    "personalize": "Personalisieren",
+    "another": "Weiteres Fenster öffnen"
+  },
+  "opened": "Fenster {n}"
+}

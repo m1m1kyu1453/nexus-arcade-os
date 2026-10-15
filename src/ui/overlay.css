@@ -30,7 +30,7 @@
     width: min(860px, 100%);
   }
 
-  & header {
+  & .nx-modal-head {
     padding: var(--space-4) var(--space-5) 0;
     & h2 {
       margin: 0;

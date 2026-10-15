@@ -1,0 +1,225 @@
+.nx-dock {
+  --dock-size: 48px;
+  position: absolute;
+  z-index: var(--z-dock);
+  padding: 6px 8px;
+  border-radius: calc(var(--radius-lg) + 4px);
+  transition: transform var(--dur-med) var(--ease-out);
+
+  &[data-position='bottom'] {
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  &[data-position='left'],
+  &[data-position='right'] {
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  &[data-position='left'] {
+    left: 8px;
+  }
+  &[data-position='right'] {
+    right: 8px;
+  }
+
+  &.is-autohide[data-position='bottom']:not(.is-revealed) {
+    transform: translate(-50%, calc(100% + 12px));
+  }
+  &.is-autohide[data-position='left']:not(.is-revealed) {
+    transform: translate(calc(-100% - 12px), -50%);
+  }
+  &.is-autohide[data-position='right']:not(.is-revealed) {
+    transform: translate(calc(100% + 12px), -50%);
+  }
+}
+
+.nx-dock-hot-edge {
+  position: absolute;
+  z-index: var(--z-dock);
+
+  &[data-position='bottom'] {
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+  }
+  &[data-position='left'],
+  &[data-position='right'] {
+    top: 0;
+    bottom: 0;
+    width: 6px;
+  }
+  &[data-position='left'] {
+    left: 0;
+  }
+  &[data-position='right'] {
+    right: 0;
+  }
+}
+
+.nx-dock-list {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  [data-position='left'] &,
+  [data-position='right'] & {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.nx-dock-item {
+  --mag: 1;
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  transform: scale(var(--mag));
+  transform-origin: bottom center;
+  transition: transform 90ms ease-out;
+  touch-action: none;
+
+  [data-position='left'] & {
+    transform-origin: left center;
+  }
+  [data-position='right'] & {
+    transform-origin: right center;
+  }
+
+  &:hover .nx-app-icon {
+    filter: brightness(1.1);
+  }
+  &:focus-visible {
+    outline-offset: 3px;
+    border-radius: 12px;
+  }
+  &.is-dragging {
+    z-index: 2;
+    opacity: 0.85;
+    transition: none;
+  }
+}
+
+.nx-dock-dots {
+  position: absolute;
+  bottom: -6px;
+  display: flex;
+  gap: 3px;
+
+  & i {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 6px var(--accent);
+  }
+
+  [data-position='left'] & {
+    bottom: auto;
+    left: -7px;
+    flex-direction: column;
+  }
+  [data-position='right'] & {
+    bottom: auto;
+    right: -7px;
+    flex-direction: column;
+  }
+}
+
+.nx-dock-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+}
+
+.nx-dock-progress {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 4px;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgb(0 0 0 / 0.45);
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: calc(var(--p) * 100%);
+    background: var(--accent);
+  }
+}
+
+.nx-dock-sep {
+  align-self: stretch;
+  width: 1px;
+  margin: 4px 2px;
+  background: var(--border);
+
+  [data-position='left'] &,
+  [data-position='right'] & {
+    width: auto;
+    height: 1px;
+    margin: 2px 4px;
+    align-self: stretch;
+  }
+}
+
+.nx-dock-previews {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.nx-dock-preview {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+  max-width: 200px;
+  padding: var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--accent);
+    color: var(--text-1);
+  }
+  & > span {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.nx-dock-thumb {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+
+  & .nx-window {
+    position: absolute;
+  }
+}
+
+@media (max-width: 767px) {
+  .nx-dock {
+    display: none;
+  }
+}

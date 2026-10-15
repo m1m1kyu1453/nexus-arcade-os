@@ -77,5 +77,58 @@
       "two-thirds-left": "Linke zwei Drittel",
       "two-thirds-right": "Rechte zwei Drittel"
     }
+  },
+  "shell": {
+    "category": "Desktop",
+    "launcher": "Apps",
+    "workspaces": "Arbeitsflächen",
+    "desktop": "Desktop",
+    "workspaceN": "Arbeitsfläche {n} {name}",
+    "online": "Online",
+    "offline": "Offline – Apps funktionieren weiter",
+    "muted": "Ton aus",
+    "volumeLevel": "Lautstärke {level} %",
+    "volume": "Lautstärke",
+    "mute": "Alle Töne stumm",
+    "notificationsCount": {
+      "=0": "Keine neuen Benachrichtigungen",
+      "one": "{count} neue Benachrichtigung",
+      "other": "{count} neue Benachrichtigungen"
+    },
+    "calendar": "Kalender",
+    "previousMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "profileMenu": "Profil",
+    "lock": "Sperren",
+    "switchProfile": "Profil wechseln",
+    "personalize": "Personalisieren",
+    "logOut": "Abmelden",
+    "dock": "Dock",
+    "dockRunning": {
+      "one": "{app}, 1 Fenster",
+      "other": "{app}, {count} Fenster"
+    },
+    "newWindow": "Neues Fenster",
+    "pin": "Im Dock behalten",
+    "unpin": "Aus dem Dock entfernen",
+    "closeAll": "Alle Fenster schließen",
+    "openFailed": "{app} konnte nicht geöffnet werden",
+    "cmd": {
+      "snapLeft": "Fenster links andocken",
+      "snapRight": "Fenster rechts andocken",
+      "snapUp": "Fenster maximieren oder oben andocken",
+      "snapDown": "Fenster wiederherstellen, unten andocken oder minimieren",
+      "minimize": "Fenster minimieren",
+      "maximize": "Fenster maximieren oder wiederherstellen",
+      "close": "Fenster schließen",
+      "workspaceNext": "Nächste Arbeitsfläche",
+      "workspacePrevious": "Vorherige Arbeitsfläche",
+      "workspaceGo": "Zur Arbeitsfläche wechseln",
+      "moveRight": "Fenster auf die nächste Arbeitsfläche verschieben",
+      "moveLeft": "Fenster auf die vorherige Arbeitsfläche verschieben",
+      "workspaceAdd": "Arbeitsfläche hinzufügen",
+      "workspaceRemove": "Letzte Arbeitsfläche entfernen",
+      "launchApp": "App öffnen"
+    }
   }
 }
