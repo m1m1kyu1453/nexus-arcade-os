@@ -2,8 +2,9 @@
 
 ## Status
 
-- **Current phase:** 0 — Foundation
-- **Next step:** owner connects Render (New → Blueprint, repo `m1m1kyu1453/nexus-arcade-os`). Then: verify the live site loads and works offline, push a second deploy to verify the update toast, add the live URL to README (0.5 P2), tag `v0.0.0`.
+- **Current phase:** 1 — Kernel & Services (phase 0 done 2026-10-15, `v0.0.0`)
+- **Next step:** phase 1, in spec order: event bus → logger → storage adapter → app registry/lifecycle → …
+- **Phase 0 verification (live):** `npm run test:live` green (desktop + phone); offline reload works; update toast shown after a second deploy and "Reload" switched to the new build; `nexus-lite.html` downloaded from the live site opens from `file://` with no requests and no errors; Render deploys only after CI passes.
 
 ## Decisions
 
