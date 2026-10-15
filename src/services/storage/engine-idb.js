@@ -270,6 +270,7 @@ export function createIdbEngine(env = {}) {
         kind: 'indexeddb',
         name,
         storeNames: () => [...current.objectStoreNames],
+        keyPathOf: (store) => current.transaction(store, 'readonly').objectStore(store).keyPath ?? null,
         transaction,
         get: read('get'),
         getAll: read('getAll'),

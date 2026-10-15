@@ -51,6 +51,7 @@
  *   kind: 'indexeddb' | 'localstorage' | 'memory',
  *   name: string,
  *   storeNames: () => string[],
+ *   keyPathOf: (store: string) => import('./keys.js').KeyPath | null,
  *   transaction: <T>(stores: string | string[], mode: 'readonly' | 'readwrite', fn: (tx: StoreOps) => Promise<T>) => Promise<T>,
  *   close: () => void,
  * }} Database

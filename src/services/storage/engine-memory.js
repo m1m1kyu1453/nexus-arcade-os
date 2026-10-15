@@ -155,6 +155,7 @@ function createDatabase(name, state, persistence) {
     kind: persistence ? persistence.kind : 'memory',
     name,
     storeNames: () => [...state.stores.keys()],
+    keyPathOf: (store) => state.stores.get(store)?.schema.keyPath ?? null,
     transaction,
     get: read('get'),
     getAll: read('getAll'),

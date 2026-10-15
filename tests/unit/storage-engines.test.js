@@ -49,6 +49,8 @@ describe.each(Object.keys(engines))('%s engine', (kind) => {
     expect(engine.kind).toBe(kind);
     expect(db.kind).toBe(kind);
     expect(db.storeNames().sort()).toEqual(['counter', 'kv', 'log', 'notes']);
+    expect(db.keyPathOf('notes')).toBe('id');
+    expect(db.keyPathOf('kv')).toBeNull();
   });
 
   it('puts and gets copies (no shared references)', async () => {

@@ -37,10 +37,18 @@ const TYPED_ARRAYS = /** @type {const} */ ({
 });
 
 /**
+ * @typedef {object} BinaryHooks
+ * Store Blob/File bytes outside the JSON (e.g. as separate files in a zip) instead of base64.
+ * @property {(bytes: Uint8Array) => string} [put]  store bytes, return a reference
+ * @property {(ref: string) => Uint8Array} [get]    bytes for a reference
+ */
+
+/**
  * @param {unknown} value
+ * @param {BinaryHooks} [hooks]
  * @returns {Promise<unknown>} JSON-safe value
  */
-export async function encode(value) {
+export async function encode(value, hooks = {}) {
   if (value === undefined) return { [TAG]: 'undefined' };
   if (typeof value === 'number') {
     if (Number.isNaN(value)) return { [TAG]: 'NaN' };
@@ -52,34 +60,36 @@ export async function encode(value) {
   if (value === null || typeof value !== 'object') return value;
   if (value instanceof Date) return { [TAG]: 'date', v: value.getTime() };
   if (typeof Blob !== 'undefined' && value instanceof Blob) {
-    const v = bytesToBase64(new Uint8Array(await value.arrayBuffer()));
+    const bytes = new Uint8Array(await value.arrayBuffer());
+    const data = hooks.put ? { ref: hooks.put(bytes) } : { v: bytesToBase64(bytes) };
     if (typeof File !== 'undefined' && value instanceof File) {
-      return { [TAG]: 'file', v, type: value.type, name: value.name, lastModified: value.lastModified };
+      return { [TAG]: 'file', ...data, type: value.type, name: value.name, lastModified: value.lastModified };
     }
-    return { [TAG]: 'blob', v, type: value.type };
+    return { [TAG]: 'blob', ...data, type: value.type };
   }
   if (value instanceof ArrayBuffer) return { [TAG]: 'buffer', v: bytesToBase64(new Uint8Array(value)) };
   if (ArrayBuffer.isView(value)) {
     const bytes = new Uint8Array(value.buffer, value.byteOffset, value.byteLength);
     return { [TAG]: 'view', ctor: value.constructor.name, v: bytesToBase64(bytes) };
   }
-  if (value instanceof Map) return { [TAG]: 'map', v: await encode([...value.entries()]) };
-  if (value instanceof Set) return { [TAG]: 'set', v: await encode([...value.values()]) };
-  if (Array.isArray(value)) return Promise.all(value.map(encode));
+  if (value instanceof Map) return { [TAG]: 'map', v: await encode([...value.entries()], hooks) };
+  if (value instanceof Set) return { [TAG]: 'set', v: await encode([...value.values()], hooks) };
+  if (Array.isArray(value)) return Promise.all(value.map((v) => encode(v, hooks)));
   /** @type {Record<string, unknown>} */
   const out = {};
-  for (const [k, v] of Object.entries(value)) out[k] = await encode(v);
+  for (const [k, v] of Object.entries(value)) out[k] = await encode(v, hooks);
   // A user object that happens to have our tag key is wrapped so it isn't mistaken for a tag.
   return TAG in out ? { [TAG]: 'object', v: out } : out;
 }
 
 /**
  * @param {unknown} value JSON-safe value produced by `encode`
+ * @param {BinaryHooks} [hooks]
  * @returns {any}
  */
-export function decode(value) {
+export function decode(value, hooks = {}) {
   if (value === null || typeof value !== 'object') return value;
-  if (Array.isArray(value)) return value.map(decode);
+  if (Array.isArray(value)) return value.map((v) => decode(v, hooks));
   const obj = /** @type {Record<string, any>} */ (value);
   if (TAG in obj) {
     switch (obj[TAG]) {
@@ -98,9 +108,12 @@ export function decode(value) {
       case 'date':
         return new Date(obj.v);
       case 'blob':
-        return new Blob([base64ToBytes(obj.v)], { type: obj.type });
+        return new Blob([/** @type {BlobPart} */ (binary(obj, hooks))], { type: obj.type });
       case 'file':
-        return new File([base64ToBytes(obj.v)], obj.name, { type: obj.type, lastModified: obj.lastModified });
+        return new File([/** @type {BlobPart} */ (binary(obj, hooks))], obj.name, {
+          type: obj.type,
+          lastModified: obj.lastModified,
+        });
       case 'buffer':
         return base64ToBytes(obj.v).buffer;
       case 'view': {
@@ -111,22 +124,29 @@ export function decode(value) {
         return new /** @type {any} */ (Ctor)(bytes.buffer, 0, bytes.byteLength / size);
       }
       case 'map':
-        return new Map(decode(obj.v));
+        return new Map(decode(obj.v, hooks));
       case 'set':
-        return new Set(decode(obj.v));
+        return new Set(decode(obj.v, hooks));
       case 'object':
-        return decodeObject(obj.v);
+        return decodeObject(obj.v, hooks);
       default:
         throw new Error(`Unknown encoded type "${obj[TAG]}"`);
     }
   }
-  return decodeObject(obj);
+  return decodeObject(obj, hooks);
 }
 
-/** @param {Record<string, unknown>} obj */
-function decodeObject(obj) {
+/** @param {Record<string, any>} obj @param {BinaryHooks} hooks */
+function binary(obj, hooks) {
+  if (obj.ref === undefined) return base64ToBytes(obj.v);
+  if (!hooks.get) throw new Error('Encoded data references external binary content');
+  return hooks.get(obj.ref);
+}
+
+/** @param {Record<string, unknown>} obj @param {BinaryHooks} hooks */
+function decodeObject(obj, hooks) {
   /** @type {Record<string, unknown>} */
   const out = {};
-  for (const [k, v] of Object.entries(obj)) out[k] = decode(v);
+  for (const [k, v] of Object.entries(obj)) out[k] = decode(v, hooks);
   return out;
 }
