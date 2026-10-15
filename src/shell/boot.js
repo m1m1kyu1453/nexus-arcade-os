@@ -4,6 +4,7 @@ import '../styles/base.css';
 import { rememberFastBoot, showBootScreen } from './boot-screen.js';
 import { registerShellCommands } from './commands.js';
 import { createNotificationCenter } from './center/center.js';
+import { createDialogs } from './dialogs/dialogs.js';
 import { createDesktop } from './desktop/desktop.js';
 import { createWallpaper } from './desktop/wallpaper.js';
 import { createDock } from './dock.js';
@@ -32,6 +33,10 @@ export function boot(root) {
   }).then(
     (shell) => {
       const sys = shell.system();
+      // Swap the kernel's native fallbacks for the system dialogs (same object, so ctx.dialog and
+      // the intents picker pick them up).
+      shell.ui.dialogs = createDialogs(shell);
+      Object.assign(sys.dialogs, shell.ui.dialogs);
       shell.ui.wallpaper = createWallpaper(shell);
       shell.ui.desktop = createDesktop(shell);
       shell.ui.topbar = createTopBar(shell);

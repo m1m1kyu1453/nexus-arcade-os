@@ -43,7 +43,32 @@
   "dialog": {
     "unavailable": "Dieser Dialog kommt mit dem Desktop in einer späteren Version.",
     "ok": "OK",
-    "cancel": "Abbrechen"
+    "cancel": "Abbrechen",
+    "notice": "Hinweis",
+    "confirm": "Bitte bestätigen",
+    "location": "Ort",
+    "fileName": "Dateiname",
+    "emptyFolder": "Dieser Ordner ist leer.",
+    "overwrite": "„{name}“ existiert bereits. Ersetzen?",
+    "replace": "Ersetzen",
+    "importFromComputer": "Vom Computer importieren …",
+    "importHere": "Datei hierher importieren …",
+    "openFile": "Datei öffnen",
+    "saveFile": "Datei speichern",
+    "open": "Öffnen",
+    "save": "Speichern",
+    "color": "Farbe wählen",
+    "chooseApp": "App wählen",
+    "openWith": "Öffnen mit",
+    "always": "Diese App immer für diese Dateiart verwenden",
+    "place": {
+      "home": "Persönlicher Ordner",
+      "desktop": "Schreibtisch",
+      "documents": "Dokumente",
+      "downloads": "Downloads",
+      "pictures": "Bilder",
+      "projects": "Projekte"
+    }
   },
   "commands": {
     "category": "System",

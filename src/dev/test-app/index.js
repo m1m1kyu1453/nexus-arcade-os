@@ -15,6 +15,14 @@ export async function mount(container, ctx) {
         <button type="button" data-action="crash"></button>
         <button type="button" data-action="crash-async"></button>
       </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">
+        <button type="button" data-dialog="confirm">confirm</button>
+        <button type="button" data-dialog="prompt">prompt</button>
+        <button type="button" data-dialog="openFile">openFile</button>
+        <button type="button" data-dialog="saveFile">saveFile</button>
+        <button type="button" data-dialog="color">color</button>
+      </div>
+      <output data-testid="devtest-dialog"></output>
     </div>`;
   const $ = (s) => container.querySelector(s);
   const render = async () => {
@@ -50,6 +58,20 @@ export async function mount(container, ctx) {
     await Promise.resolve();
     throw new Error('Deliberate async crash from the kernel test app');
   });
+
+  // Developer-only buttons for every ctx.dialog (labels are the API names on purpose).
+  for (const el of container.querySelectorAll('[data-dialog]')) {
+    const name = el.getAttribute('data-dialog');
+    el.addEventListener(
+      'click',
+      ctx.guard(async () => {
+        const args = { confirm: ['Sure?'], prompt: ['Name?', 'Ada'], saveFile: [{ suggestedName: 'test.txt' }] };
+        const result = await ctx.dialog[name](...(args[name] ?? []));
+        $('[data-testid="devtest-dialog"]').textContent = `${name}: ${JSON.stringify(result)}`;
+      }),
+      { signal: ctx.signal },
+    );
+  }
 
   ctx.storage.collection('items').onChange(() => render());
   ctx.i18n.onChange(() => render());

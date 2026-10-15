@@ -45,7 +45,8 @@ export function trapFocus(root) {
  * @typedef {object} ModalOptions
  * @property {string} title
  * @property {Node | string} [body]
- * @property {{ label: string, value: T, variant?: 'primary' | 'danger' | 'ghost', disabled?: () => boolean }[]} [actions]
+ * @property {{ label: string, value: T, variant?: 'primary' | 'danger' | 'ghost', disabled?: () => boolean, accept?: () => boolean | Promise<boolean> }[]} [actions]
+ *   `accept` runs before closing; returning false keeps the modal open (e.g. after a failed check)
  * @property {T} [dismissValue]        result when closed with Escape / backdrop / ×
  * @property {(close: (value: T) => void) => void} [onOpen]  wire inputs (e.g. Enter submits)
  * @property {string} [className]
@@ -92,7 +93,9 @@ export function openModal({ title, body, actions = [], dismissValue, onOpen, cla
         class: `nx-btn${action.variant ? ` is-${action.variant}` : ''}`,
         type: 'button',
         text: action.label,
-        onclick: () => close(action.value),
+        onclick: async () => {
+          if (!action.accept || (await action.accept())) close(action.value);
+        },
       });
       if (action.disabled) {
         const update = () => (btn.disabled = action.disabled?.() ?? false);

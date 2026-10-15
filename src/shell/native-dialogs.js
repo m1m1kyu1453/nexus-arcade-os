@@ -1,7 +1,7 @@
 // @ts-check
-// Phase 1 dialogs: the browser's own alert/confirm/prompt. Phase 2 replaces them with Nexus
-// dialogs (modal sheets, file pickers, color picker). Dialogs that have no honest native
-// equivalent reject with a clear message instead of pretending.
+// Fallback dialogs for a kernel without the shell (tests, headless use): the browser's own
+// alert/confirm/prompt. The shell replaces them with system dialogs (shell/dialogs). Dialogs
+// that have no honest native equivalent reject with a clear message instead of pretending.
 
 /**
  * @param {{ t: (key: string) => string }} i18n system-scoped translator

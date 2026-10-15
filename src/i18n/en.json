@@ -43,7 +43,32 @@
   "dialog": {
     "unavailable": "This dialog arrives with the desktop in a later version.",
     "ok": "OK",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "notice": "Notice",
+    "confirm": "Please confirm",
+    "location": "Location",
+    "fileName": "File name",
+    "emptyFolder": "This folder is empty.",
+    "overwrite": "“{name}” already exists. Replace it?",
+    "replace": "Replace",
+    "importFromComputer": "Import from computer…",
+    "importHere": "Import a file here…",
+    "openFile": "Open file",
+    "saveFile": "Save file",
+    "open": "Open",
+    "save": "Save",
+    "color": "Choose a color",
+    "chooseApp": "Choose an app",
+    "openWith": "Open with",
+    "always": "Always use this app for this kind of file",
+    "place": {
+      "home": "Home",
+      "desktop": "Desktop",
+      "documents": "Documents",
+      "downloads": "Downloads",
+      "pictures": "Pictures",
+      "projects": "Projects"
+    }
   },
   "commands": {
     "category": "System",
