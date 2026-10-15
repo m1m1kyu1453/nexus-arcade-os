@@ -1,0 +1,75 @@
+.nx-crash {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: var(--space-3);
+  height: 100%;
+  min-height: 220px;
+  padding: var(--space-5);
+  color: var(--text-1);
+  text-align: center;
+}
+
+.nx-crash-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--warning);
+}
+
+.nx-crash-title {
+  margin: 0;
+  font-size: var(--text-lg);
+}
+
+.nx-crash-body {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--text-2);
+  font-size: var(--text-sm);
+}
+
+.nx-crash-details {
+  width: min(100%, 60ch);
+  text-align: start;
+  font-size: var(--text-sm);
+
+  & summary {
+    cursor: pointer;
+    color: var(--text-2);
+  }
+
+  & pre {
+    max-height: 200px;
+    margin: var(--space-2) 0 0;
+    padding: var(--space-3);
+    overflow: auto;
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--text-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    white-space: pre-wrap;
+  }
+}
+
+.nx-crash-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+
+  & button {
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    cursor: pointer;
+  }
+
+  & .nx-crash-primary {
+    border-color: transparent;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+  }
+}
