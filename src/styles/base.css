@@ -53,3 +53,23 @@ button {
   font: inherit;
   color: inherit;
 }
+
+/* Smooth theme switching (the theme engine adds this class for ~0.4 s). */
+.nx-theme-transition,
+.nx-theme-transition * {
+  transition:
+    background-color var(--dur-slow) var(--ease-out),
+    color var(--dur-slow) var(--ease-out),
+    border-color var(--dur-slow) var(--ease-out),
+    fill var(--dur-slow) var(--ease-out),
+    stroke var(--dur-slow) var(--ease-out) !important;
+}
+
+/* Animation level "off". */
+[data-motion='off'] *,
+[data-motion='off'] *::before,
+[data-motion='off'] *::after {
+  animation-duration: 0s !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0s !important;
+}

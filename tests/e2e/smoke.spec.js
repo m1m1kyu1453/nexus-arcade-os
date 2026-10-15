@@ -8,6 +8,8 @@ test('website loads with no console errors', async ({ page }) => {
   await expect(page.getByTestId('edition')).toHaveAttribute('data-edition', 'web');
   await expect(page.getByTestId('network')).toHaveAttribute('data-state', 'online');
   await expect(page.getByTestId('workers')).toHaveAttribute('data-state', 'ok');
+  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
+  await expect(page.locator('html')).toHaveAttribute('data-storage', 'indexeddb');
   await page.evaluate(() => navigator.serviceWorker.ready);
   expect(errors).toEqual([]);
 });
@@ -23,6 +25,8 @@ test('still loads after going offline and reloading', async ({ page, context }) 
   await expect(page.getByRole('heading', { name: 'Nexus Arcade OS' })).toBeVisible();
   await expect(page.getByTestId('network')).toHaveAttribute('data-state', 'offline');
   await expect(page.getByTestId('workers')).toHaveAttribute('data-state', 'ok');
+  // The kernel (incl. lazily loaded chunks like the search worker) boots offline too.
+  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
   // Fonts come from the precache too.
   expect(await page.evaluate(() => document.fonts.check('16px "Inter Variable"'))).toBe(true);
   expect(errors).toEqual([]);

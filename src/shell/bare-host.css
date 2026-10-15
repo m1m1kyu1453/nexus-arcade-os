@@ -1,0 +1,20 @@
+.nx-bare-frame {
+  margin-top: var(--space-2);
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+
+  &.is-focused {
+    border-color: var(--accent);
+    box-shadow: var(--glow-accent);
+  }
+
+  & header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-1) var(--space-2);
+    background: var(--surface-3);
+  }
+}

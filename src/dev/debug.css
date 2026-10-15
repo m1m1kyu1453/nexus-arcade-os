@@ -1,0 +1,147 @@
+.nx-debug {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  overflow: auto;
+  padding: var(--space-4);
+  background: var(--bg);
+  color: var(--text-1);
+  font-size: var(--text-sm);
+
+  & header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+
+    & h1 {
+      margin: 0;
+      font-size: var(--text-lg);
+    }
+
+    & span {
+      flex: 1;
+      color: var(--text-3);
+    }
+  }
+
+  & button,
+  & select,
+  & input {
+    padding: var(--space-1) var(--space-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-2);
+    color: var(--text-1);
+    font: inherit;
+  }
+
+  & button {
+    cursor: pointer;
+  }
+
+  & code {
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+}
+
+.nx-debug-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+  gap: var(--space-3);
+}
+
+.nx-debug-card {
+  min-width: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+
+  & > h2 {
+    margin: 0 0 var(--space-2);
+    color: var(--text-2);
+    font-size: var(--text-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
+
+.nx-debug-list {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  list-style: none;
+
+  & li {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  & small {
+    color: var(--text-3);
+  }
+}
+
+.nx-debug-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.nx-debug-facts {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+
+  & dt {
+    color: var(--text-3);
+  }
+
+  & dd {
+    margin: 0;
+  }
+}
+
+.nx-debug-pre {
+  max-height: 220px;
+  overflow: auto;
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: pre-wrap;
+}
+
+.nx-debug-log {
+  max-height: 340px;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+
+  & li {
+    padding: 2px 0;
+    border-bottom: 1px solid var(--border);
+    overflow-wrap: anywhere;
+  }
+
+  & .is-event {
+    color: var(--text-3);
+  }
+
+  & .is-warn {
+    color: var(--warning);
+  }
+
+  & .is-error {
+    color: var(--danger);
+  }
+}

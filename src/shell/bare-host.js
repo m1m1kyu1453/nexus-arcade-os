@@ -1,6 +1,7 @@
 // @ts-check
 // A minimal app host for phase 1 (debug screen and tests): each instance gets a framed
 // container with its name and a close button. Phase 2 replaces it with the window manager.
+import './bare-host.css';
 import { renderCrashView } from './crash-view.js';
 
 /**

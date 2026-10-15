@@ -1,10 +1,11 @@
-// Minimal toast host for phase 0. The notification service (phase 1) and notification
-// center (phase 2) replace it.
+// Minimal toast host until the phase 2 shell: shows the update prompt and the notification
+// service's toasts (title, body, one action).
 import './toast.css';
 
 /**
  * @typedef {object} ToastOptions
- * @property {string} message
+ * @property {string} message      title line
+ * @property {string} [body]
  * @property {{ label: string, run: () => void }} [action]
  * @property {number} [timeoutMs]  0 = sticky until dismissed
  * @property {string} dismissLabel
@@ -19,11 +20,19 @@ export function createToastHost(root) {
   root.append(host);
 
   /** @param {ToastOptions} options */
-  function show({ message, action, timeoutMs = 6000, dismissLabel }) {
+  function show({ message, body, action, timeoutMs = 6000, dismissLabel }) {
     const toast = document.createElement('div');
     toast.className = 'nx-toast';
     const text = document.createElement('span');
-    text.textContent = message;
+    text.className = 'nx-toast-text';
+    const title = document.createElement('strong');
+    title.textContent = message;
+    text.append(title);
+    if (body) {
+      const detail = document.createElement('span');
+      detail.textContent = body;
+      text.append(detail);
+    }
     toast.append(text);
 
     const close = () => toast.remove();
