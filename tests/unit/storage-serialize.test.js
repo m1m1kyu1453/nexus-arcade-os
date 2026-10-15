@@ -55,7 +55,8 @@ describe('serialize', () => {
   });
 
   it('base64 handles large binary data', () => {
-    const bytes = new Uint8Array(200_000).map((_, i) => i % 256);
+    // Larger than one 32 KB conversion chunk.
+    const bytes = new Uint8Array(80_000).map((_, i) => i % 256);
     expect(base64ToBytes(bytesToBase64(bytes))).toEqual(bytes);
   });
 });

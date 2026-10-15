@@ -39,6 +39,8 @@ async function boot({ engine = createIdbEngine(), manifests = [testApp], languag
   return { system, root, engine };
 }
 
+/** The whole system runs in jsdom; give async steps time under parallel test load. */
+const waitFor = (fn) => vi.waitFor(fn, { timeout: 5000 });
 const click = (root, action) => root.querySelector(`[data-action="${action}"]`).click();
 const text = (root, testid) => root.querySelector(`[data-testid="${testid}"]`)?.textContent;
 
@@ -71,17 +73,17 @@ describe('the test app', () => {
   it('launches in a bare container, stores data, writes files and is found by search', async () => {
     const { system, root } = await boot();
     const id = await system.lifecycle.launch('nexus.dev.test');
-    await vi.waitFor(() => expect(text(root, 'devtest-title')).toBe('Kernel test app — Hello'));
+    await waitFor(() => expect(text(root, 'devtest-title')).toBe('Kernel test app — Hello'));
     expect(text(root, 'devtest-count')).toBe('No items yet');
 
     click(root, 'add');
-    await vi.waitFor(() => expect(text(root, 'devtest-count')).toBe('1 item'));
+    await waitFor(() => expect(text(root, 'devtest-count')).toBe('1 item'));
     const path = '/home/user/Documents/kernel-test-1.nexustest';
     expect(await system.vfs.readFile(path)).toBe('Item 1');
     expect(system.achievements.level().xp).toBe(25);
 
     // Found by search: its file (indexed by name), its provider result, and the app itself.
-    await vi.waitFor(async () => {
+    await waitFor(async () => {
       expect((await system.search.query('kernel-test-1')).map((r) => r.id)).toContain(`file:${path}`);
     });
     expect((await system.search.query('item 1')).map((r) => [r.title, r.app])).toContainEqual([
@@ -102,7 +104,7 @@ describe('the test app', () => {
   it('crashes safely, shows the crash view, logs a report, and restarts', async () => {
     const { system, root } = await boot();
     await system.lifecycle.launch('nexus.dev.test');
-    await vi.waitFor(() => expect(text(root, 'devtest-title')).toBeTruthy());
+    await waitFor(() => expect(text(root, 'devtest-title')).toBeTruthy());
     click(root, 'crash');
     const alert = root.querySelector('[role="alert"]');
     expect(alert.textContent).toContain('Kernel Test stopped working');
@@ -111,21 +113,23 @@ describe('the test app', () => {
     expect(system.logger.entries({ minLevel: 'error' }).some((e) => e.source === 'app:nexus.dev.test')).toBe(true);
 
     alert.querySelector('[data-action="restart"]').click();
-    await vi.waitFor(() => expect(text(root, 'devtest-title')).toBe('Kernel test app — Hello'));
-    expect(system.lifecycle.list().map((i) => [i.id, i.state])).toEqual([['nexus.dev.test#2', 'running']]);
+    await waitFor(() => expect(text(root, 'devtest-title')).toBe('Kernel test app — Hello'));
+    await waitFor(() =>
+      expect(system.lifecycle.list().map((i) => [i.id, i.state])).toEqual([['nexus.dev.test#2', 'running']]),
+    );
 
     // Async errors in guarded handlers crash too, and the OS keeps running.
     click(root, 'crash-async');
-    await vi.waitFor(() => expect(system.lifecycle.list()[0].state).toBe('crashed'));
+    await waitFor(() => expect(system.lifecycle.list()[0].state).toBe('crashed'));
     expect(await system.vfs.exists('/home/user')).toBe(true);
   });
 
   it('follows language switches live', async () => {
     const { system, root } = await boot();
     await system.lifecycle.launch('nexus.dev.test');
-    await vi.waitFor(() => expect(text(root, 'devtest-count')).toBe('No items yet'));
+    await waitFor(() => expect(text(root, 'devtest-count')).toBe('No items yet'));
     await system.settings.set('system', 'language', 'de');
-    await vi.waitFor(() => expect(text(root, 'devtest-count')).toBe('Noch keine Einträge'));
+    await waitFor(() => expect(text(root, 'devtest-count')).toBe('Noch keine Einträge'));
     expect(document.documentElement.lang).toBe('de');
   });
 
@@ -133,9 +137,9 @@ describe('the test app', () => {
     const engine = createIdbEngine();
     const first = await boot({ engine });
     await first.system.lifecycle.launch('nexus.dev.test');
-    await vi.waitFor(() => expect(text(first.root, 'devtest-count')).toBe('No items yet'));
+    await waitFor(() => expect(text(first.root, 'devtest-count')).toBe('No items yet'));
     click(first.root, 'add');
-    await vi.waitFor(() => expect(text(first.root, 'devtest-count')).toBe('1 item'));
+    await waitFor(() => expect(text(first.root, 'devtest-count')).toBe('1 item'));
     const { blob } = await first.system.backup.export({ password: 'pw' });
     const profileId = first.system.profile.id;
     await first.system.stop();
@@ -156,7 +160,7 @@ describe('the test app', () => {
     ]);
     expect(await restored.system.vfs.readFile('/home/user/Documents/kernel-test-1.nexustest')).toBe('Item 1');
     await restored.system.lifecycle.launch('nexus.dev.test');
-    await vi.waitFor(() => expect(text(restored.root, 'devtest-count')).toBe('1 item'));
+    await waitFor(() => expect(text(restored.root, 'devtest-count')).toBe('1 item'));
     expect(restored.system.achievements.level().xp).toBe(25);
   }, 30_000);
 
@@ -173,9 +177,9 @@ describe('the test app', () => {
     const history = await second.system.notifications.history();
     expect(history.map((h) => h.title)).toContain('Kernel Test has data from a newer Nexus');
     await second.system.lifecycle.launch('nexus.dev.test');
-    await vi.waitFor(() => expect(text(second.root, 'devtest-count')).toBe('No items yet'));
+    await waitFor(() => expect(text(second.root, 'devtest-count')).toBe('No items yet'));
     click(second.root, 'add');
-    await vi.waitFor(() => expect(second.system.lifecycle.list()[0].state).toBe('crashed'));
+    await waitFor(() => expect(second.system.lifecycle.list()[0].state).toBe('crashed'));
     expect(second.root.querySelector('[role="alert"] pre').textContent).toMatch(/read-only/);
   });
 });

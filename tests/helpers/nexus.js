@@ -23,14 +23,15 @@ export function collectErrors(page) {
 
 /**
  * Opens Nexus with an empty profile (all IndexedDB databases, localStorage and sessionStorage
- * deleted), runs `seed` in the page, then reloads so the OS boots on exactly that data.
+ * deleted), runs `seed`, then loads the desktop on exactly that data. Storage is cleared from a
+ * same-origin page without the app (the icon), so no open connection blocks the deletion.
  * Service Worker caches are kept: they are the installed app, not user data.
  * @template T
  * @param {import('@playwright/test').Page} page
  * @param {{ url?: string, seed?: (arg: T) => unknown, seedArg?: T }} [options]
  */
 export async function startNexus(page, { url = '/', seed, seedArg } = {}) {
-  await page.goto(url);
+  await page.goto('/icons/icon.svg');
   await page.evaluate(async () => {
     localStorage.clear();
     sessionStorage.clear();
@@ -46,6 +47,6 @@ export async function startNexus(page, { url = '/', seed, seedArg } = {}) {
     );
   });
   if (seed) await page.evaluate(seed, /** @type {T} */ (seedArg));
-  await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
+  await page.goto(url);
+  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready', { timeout: 15_000 });
 }

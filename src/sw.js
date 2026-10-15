@@ -6,8 +6,13 @@ import { NavigationRoute, registerRoute } from 'workbox-routing';
 precacheAndRoute(self.__WB_MANIFEST);
 cleanupOutdatedCaches();
 
-// Serve the app shell for navigations while offline. Lite is a plain download, not the shell.
-registerRoute(new NavigationRoute(createHandlerBoundToURL('index.html'), { denylist: [/\/nexus-lite\.html$/] }));
+// Serve the app shell for navigations while offline. Lite is a plain download, and opening an
+// icon or the manifest directly should show that file, not the desktop.
+registerRoute(
+  new NavigationRoute(createHandlerBoundToURL('index.html'), {
+    denylist: [/\/nexus-lite\.html$/, /\.(?:webmanifest|png|svg|ico)$/],
+  }),
+);
 
 // A new version waits until the user confirms the "Update available" toast.
 self.addEventListener('message', (event) => {

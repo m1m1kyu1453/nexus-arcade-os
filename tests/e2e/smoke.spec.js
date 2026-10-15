@@ -3,7 +3,7 @@ import { collectErrors, startNexus } from '../helpers/nexus.js';
 
 /** The desktop is up: kernel ready, top bar, and the Welcome window on first start. */
 async function expectDesktop(page) {
-  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
+  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready', { timeout: 15_000 });
   await expect(page.getByRole('banner')).toBeVisible();
   await expect(page.getByRole('dialog', { name: /Welcome|Willkommen/ }).first()).toBeVisible();
 }
@@ -16,7 +16,7 @@ test('website loads the desktop with no console errors', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('data-search', 'worker');
   expect(await page.evaluate(() => window.NEXUS_EDITION)).toBe('web');
   await page.evaluate(() => navigator.serviceWorker.ready);
-  expect(errors).toEqual([]);
+  expect(errors, errors.join('\n')).toEqual([]);
 });
 
 test('still loads after going offline and reloading', async ({ page, context }) => {
@@ -32,11 +32,12 @@ test('still loads after going offline and reloading', async ({ page, context }) 
   await expectDesktop(page);
   // Fonts come from the precache too.
   expect(await page.evaluate(() => document.fonts.check('16px "Inter Variable"'))).toBe(true);
-  expect(errors).toEqual([]);
+  expect(errors, errors.join('\n')).toEqual([]);
 });
 
 test('starts with a clean profile and seed data', async ({ page }) => {
   await page.goto('/');
+  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready');
   await page.evaluate(() => localStorage.setItem('leftover', 'from a previous test'));
 
   await startNexus(page, { seed: (value) => localStorage.setItem('seeded', value), seedArg: 'yes' });

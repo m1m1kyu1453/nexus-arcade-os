@@ -20,5 +20,5 @@ test('nexus-lite.html runs the desktop from file:// with no console errors', asy
 
   // Fully self-contained: the only file loaded is the HTML itself.
   expect(requests).toEqual([liteUrl]);
-  expect(errors).toEqual([]);
+  expect(errors, errors.join('\n')).toEqual([]);
 });

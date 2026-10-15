@@ -18,7 +18,7 @@ describe('crypto', () => {
     const record = await hashSecret('1234');
     expect(record.iterations).toBe(PBKDF2_ITERATIONS);
     expect(await verifySecret('1234', record)).toBe(true);
-  });
+  }, 30_000); // full strength is deliberately slow
 
   it('hashes secrets with a random salt and verifies them', async () => {
     const a = await hashSecret('correct horse', FAST);
