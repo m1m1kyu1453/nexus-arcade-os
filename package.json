@@ -17,7 +17,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "lint": "eslint . && prettier --check .",
+    "lint": "eslint . && prettier --check . && node scripts/check-i18n.js",
     "format": "prettier --write .",
     "typecheck": "tsc -p jsconfig.json",
     "icons": "node scripts/build-icons.js",

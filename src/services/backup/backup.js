@@ -36,6 +36,7 @@ export class InvalidBackupError extends Error {
  * @property {Record<string, number>} stores   record count per store
  * @property {number} blobs
  * @property {number} bytes                   uncompressed size of all stores + blobs
+ * @property {boolean} [includesLog]           system log attached as log.json (diagnostics only)
  */
 
 /**
@@ -45,15 +46,16 @@ export class InvalidBackupError extends Error {
  * @param {string} options.nexusVersion
  * @param {{ iterations?: number }} [options.cryptoOptions]   lower only in tests
  * @param {() => Date} [options.now]
+ * @param {() => unknown[]} [options.logEntries]  system log, attached only if the user asks
  */
-export function createBackup({ db, profile, nexusVersion, cryptoOptions, now = () => new Date() }) {
+export function createBackup({ db, profile, nexusVersion, cryptoOptions, now = () => new Date(), logEntries }) {
   const fflate = () => import('fflate');
 
   /**
-   * @param {{ password?: string, onProgress?: (done: number, total: number) => void }} [options]
+   * @param {{ password?: string, includeLog?: boolean, onProgress?: (done: number, total: number) => void }} [options]
    * @returns {Promise<{ blob: Blob, filename: string, manifest: BackupManifest }>}
    */
-  async function exportBackup({ password, onProgress } = {}) {
+  async function exportBackup({ password, includeLog = false, onProgress } = {}) {
     const { zipSync, strToU8 } = await fflate();
     /** @type {Record<string, Uint8Array>} */
     const files = {};
@@ -89,7 +91,9 @@ export function createBackup({ db, profile, nexusVersion, cryptoOptions, now = (
       stores: counts,
       blobs: blobCount,
       bytes,
+      ...(includeLog && logEntries ? { includesLog: true } : {}),
     };
+    if (includeLog && logEntries) files['log.json'] = strToU8(JSON.stringify(logEntries()));
     files[MANIFEST] = strToU8(JSON.stringify(manifest, null, 2));
     // Binary content (images, audio) is usually compressed already: store it as-is.
     const zipped = zipSync(

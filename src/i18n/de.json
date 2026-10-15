@@ -16,6 +16,8 @@
     "memoryBody": "Dieser Browser blockiert Speicher (privater Modus oder blockierte Websitedaten). Alles verschwindet, wenn du den Tab schließt.",
     "quotaTitle": "Speicher ist voll",
     "quotaBody": "Die letzte Änderung konnte nicht gespeichert werden. Schaffe Platz unter Einstellungen → Speicher: Papierkorb leeren oder große Dateien entfernen.",
+    "quotaLargest": "Am größten: {store} ({size}).",
+    "files": "Dateien",
     "evictionHint": "Dein Browser kann Nexus-Daten löschen, die länger nicht genutzt werden. Installiere Nexus als App und exportiere Sicherungen, um sie zu schützen."
   },
   "migration": {

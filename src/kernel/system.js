@@ -22,7 +22,7 @@ import { createKeyValue, KV_STORE_SCHEMA } from '../services/storage/collections
 import { META_STORE_SCHEMA } from '../services/storage/migrations.js';
 import { requestPersistence } from '../services/storage/persist.js';
 import { QUARANTINE_STORE_SCHEMA } from '../services/storage/quarantine.js';
-import { withQuotaReporting } from '../services/storage/quota.js';
+import { storageBreakdown, withQuotaReporting } from '../services/storage/quota.js';
 import { selectEngine } from '../services/storage/select.js';
 import { createThemeService } from '../services/theme/engine.js';
 import { createVfs, VFS_STORE_SCHEMA } from '../services/vfs/vfs.js';
@@ -112,8 +112,10 @@ export async function startSystem(options) {
   const all = await profiles.list();
   let profile = all.find((p) => p.id === lastId && !p.locked) ?? all.find((p) => !p.locked) ?? null;
   if (!profile) {
-    const firstLocale = detectLocale(languages);
-    profile = await profiles.create({ name: firstLocale === 'de' ? 'Benutzer' : 'User' });
+    // Settings (and with them i18n) live in the profile, so read the name straight from the file.
+    const messages =
+      detectLocale(languages) === 'de' ? await import('../i18n/de.json') : await import('../i18n/en.json');
+    profile = await profiles.create({ name: messages.default.profile.defaultName });
     log.info('Created the default profile');
   }
   await profiles.touch(profile.id);
@@ -137,18 +139,38 @@ export async function startSystem(options) {
   );
   const db = withQuotaReporting(rawDb, ({ store }) => {
     bus.emit('storage:quota-exceeded', { store });
-    if (Date.now() - quotaNotifiedAt > 10_000) {
-      quotaNotifiedAt = Date.now();
-      notificationsRef
-        ?.notify({
+    if (Date.now() - quotaNotifiedAt < 10_000) return;
+    quotaNotifiedAt = Date.now();
+    // Tell the user what uses the space, not just that it's full.
+    storageBreakdown(rawDb)
+      .then((rows) => rows[0])
+      .catch(() => undefined)
+      .then((largest) =>
+        notificationsRef?.notify({
           title: i18n.t('system', 'storage.quotaTitle'),
-          body: i18n.t('system', 'storage.quotaBody'),
+          body: [
+            i18n.t('system', 'storage.quotaBody'),
+            largest &&
+              i18n.t('system', 'storage.quotaLargest', {
+                store: describeStore(largest.store),
+                size: i18n.format.bytes(largest.bytes),
+              }),
+          ]
+            .filter(Boolean)
+            .join(' '),
           urgent: true,
           timeoutMs: 0,
-        })
-        .catch(() => {});
-    }
+        }),
+      )
+      .catch(() => {});
   });
+  /** Human name of a store for the quota notice. @param {string} store */
+  const describeStore = (store) => {
+    if (store.startsWith('vfs-')) return i18n.t('system', 'storage.files');
+    const appId = store.match(/^app:([^/]+)\//)?.[1];
+    const m = appId ? registry.get(appId) : undefined;
+    return m ? localize(m.name) : store;
+  };
   const kv = (/** @type {string} */ scope) => createKeyValue({ db, scope, bus });
 
   // 5. Settings, language and theme.
@@ -224,6 +246,9 @@ export async function startSystem(options) {
   for (const m of registry.list({ includeDisabled: true }))
     if (m.achievements?.length) achievements.register(m.id, m.achievements);
   await achievements.load();
+  bus.on('xp:level-up', ({ level }) => {
+    notifications.notify({ title: i18n.t('system', 'achievements.levelUp', { level }), silent: true }).catch(() => {});
+  });
 
   const scheduler = createScheduler({
     db,
@@ -417,6 +442,7 @@ export async function startSystem(options) {
     db: rawDb,
     nexusVersion: version,
     profile: () => /** @type {any} */ (profile),
+    logEntries: () => logger.entries(),
   });
 
   // 9. Startup notices.

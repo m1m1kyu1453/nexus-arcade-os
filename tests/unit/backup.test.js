@@ -95,6 +95,7 @@ describe('backup', () => {
     expect(manifest).toMatchObject({ format: BACKUP_FORMAT, formatVersion: 1, nexusVersion: '0.1.0', blobs: 1 });
     expect(manifest.stores['vfs-nodes']).toBeGreaterThan(10);
     expect(manifest.stores.quarantine).toBeUndefined();
+    expect(manifest.includesLog).toBeUndefined();
 
     original.db.close();
     await engine.deleteDatabase('nexus-profile-p1');

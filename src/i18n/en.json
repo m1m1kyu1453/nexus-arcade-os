@@ -16,6 +16,8 @@
     "memoryBody": "This browser blocks storage (private mode or blocked site data). Everything disappears when you close the tab.",
     "quotaTitle": "Storage is full",
     "quotaBody": "The last change couldn't be saved. Free space in Settings → Storage: empty the trash or remove large files.",
+    "quotaLargest": "Largest: {store} ({size}).",
+    "files": "Files",
     "evictionHint": "Your browser may delete Nexus data that isn't used for a while. Install Nexus as an app and export backups to keep it safe."
   },
   "migration": {
