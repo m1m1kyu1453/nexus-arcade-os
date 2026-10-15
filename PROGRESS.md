@@ -3,7 +3,7 @@
 ## Status
 
 - **Current phase:** 1 — Kernel & Services (phase 0 done 2026-10-15, `v0.0.0`)
-- **Next step:** phase 1, in spec order: event bus → logger → storage adapter → app registry/lifecycle → …
+- **Next step:** phase 1 — done so far: event bus, logger, VFS paths, storage engines/collections/kv/migrations/quota/quarantine, cross-tab relay, manifest validation, registry, lifecycle, error boundary, instance runtime (all unit-tested, not yet wired into boot). Next: intents, global error handlers + crash UI, then services in spec order (VFS, profiles, settings, theme, i18n, commands/shortcuts, notifications, scheduler, search, sound, clipboard, achievements, backup, AI stub), then `src/kernel/system.js` boot wiring, debug screen, docs/events.md.
 - **Phase 0 verification (live):** `npm run test:live` green (desktop + phone); offline reload works; update toast shown after a second deploy and "Reload" switched to the new build; `nexus-lite.html` downloaded from the live site opens from `file://` with no requests and no errors; Render deploys only after CI passes.
 
 ## Decisions
@@ -29,6 +29,11 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-15 | **Node 24 LTS** pinned (`.nvmrc`, `engines`).                                                                                                                                                                                                                                         | Current Active LTS.                                                                                                                                                                     |
 | 2026-10-15 | **PBKDF2 iterations: 600,000** (not 310,000) for all password-based encryption and PIN hashing.                                                                                                                                                                                       | Current OWASP recommendation for PBKDF2-HMAC-SHA256.                                                                                                                                    |
 | 2026-10-15 | **Planned for phase 1:** a global `nexus-system` IndexedDB (profile list, pre-login settings) beside the per-profile databases; Web Locks leader tab for the scheduler; refuse/read-only when stored schema is newer than the code; Safari 7-day eviction warning + backup reminder.  | Risks raised in the phase 0 review and accepted by the owner.                                                                                                                           |
+
+| 2026-10-15 | **App collections are declared in `manifest.storage`** (`{ version, collections: { name: { indexes } }, migrations }`), replacing the proposed `storageVersion`/`migrations` fields; `ctx.storage.collection(name)` takes no options. | IndexedDB creates stores only during a version upgrade; declaring them lets one upgrade at boot cover all apps instead of runtime upgrades that disrupt other tabs. No app used the old shape yet. |
+| 2026-10-15 | **Storage engines share one contract** (`tests/unit/storage-engines.test.js`): IndexedDB, localStorage (whole store as JSON per key, Blobs base64) and memory, all with IndexedDB key ordering. IndexedDB schemas upgrade automatically (version bump when stores/indexes are missing); stores are never deleted. | Fallback engines behave identically; no hand-maintained IDB versions; older tabs/Lite files keep working. |
+| 2026-10-15 | **Migrations are atomic per step** and record the data version in a `meta` store; data newer than the code or a failed migration makes that app's storage **read-only** (reads work, writes rejected). | "Failed migration → keep old data, never wipe" (spec 1.2). |
+| 2026-10-15 | **An uncaught error in an app crashes its window** (first error trips the boundary; crash UI with Restart / Copy report). | Matches how real OSes treat uncaught exceptions; keeps a broken app from running in an inconsistent state. |
 
 ## Cuts
 
