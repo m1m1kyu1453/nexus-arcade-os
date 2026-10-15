@@ -1,5 +1,5 @@
-// Developer debug screen (dev builds only, open with #debug). Shows that the kernel works
-// before the shell exists. Developer tool: English only, never shipped in production builds.
+// Developer debug screen (dev builds only, open with #debug or the "Kernel debug screen"
+// command). An overlay over the shell that inspects the kernel's services directly. Developer tool: English only, never shipped in production builds.
 import { storageBreakdown } from '../services/storage/quota.js';
 import { downloadBlob } from '../services/vfs/transfer.js';
 import './debug.css';
@@ -27,9 +27,9 @@ const section = (title, ...content) => h('section', { class: 'nx-debug-card' }, 
 /**
  * @param {HTMLElement} parent
  * @param {import('../kernel/system.js').System} system
- * @param {HTMLElement} appsHost  where the bare host renders app frames
+ * @param {HTMLElement | null} [appsHost]  where a bare host renders app frames (null: apps open as shell windows)
  */
-export function renderDebugScreen(parent, system, appsHost) {
+export function renderDebugScreen(parent, system, appsHost = null) {
   document.querySelector('.nx-debug')?.remove();
   const { bus, registry, lifecycle, logger, notifications, settings, theme, search, vfs, backup, db } = system;
   const t0 = performance.now();
@@ -289,7 +289,7 @@ export function renderDebugScreen(parent, system, appsHost) {
           onclick: () => {
             for (const u of unsubs) u();
             screen.remove();
-            document.body.append(appsHost);
+            if (appsHost) document.body.append(appsHost);
             history.replaceState(null, '', location.pathname);
           },
         },
@@ -300,7 +300,7 @@ export function renderDebugScreen(parent, system, appsHost) {
       'div',
       { class: 'nx-debug-grid' },
       section('Apps', appList),
-      section('Running', instances, appsHost),
+      section('Running', instances, appsHost ?? ''),
       section('Services', services),
       section('Notifications & scheduler', notifyButtons),
       section('Search', searchInput, searchResults),

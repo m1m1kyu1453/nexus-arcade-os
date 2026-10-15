@@ -61,6 +61,7 @@ export function boot(root) {
       shell.wm.relayout();
       if (!shell.wm.list().length && !shell.session.data.windows.length) void shell.launch('nexus.welcome');
       showNotificationToasts(sys, toasts, t.dismiss);
+      if (import.meta.env.DEV) void wireDebugScreen(sys);
       document.documentElement.dataset.kernel = 'ready';
       document.documentElement.dataset.storage = sys.engine.kind;
       document.documentElement.dataset.search = sys.search.backendKind;
@@ -106,4 +107,18 @@ function showNotificationToasts(system, toasts, dismissLabel) {
     open.get(id)?.();
     open.delete(id);
   });
+}
+
+/**
+ * Dev builds: the kernel debug screen opens over the shell with #debug or a command.
+ * @param {import('../kernel/system.js').System} sys
+ */
+async function wireDebugScreen(sys) {
+  const open = async () => {
+    const { renderDebugScreen } = await import('../dev/debug.js');
+    renderDebugScreen(document.body, sys);
+  };
+  sys.commands.register({ id: 'dev.debug', title: 'Kernel debug screen (dev)', icon: 'flask', run: open });
+  addEventListener('hashchange', () => location.hash === '#debug' && void open());
+  if (location.hash === '#debug') await open();
 }
