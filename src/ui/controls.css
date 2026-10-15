@@ -1,0 +1,225 @@
+/* Shared controls. Native elements with Nexus styling: they keep keyboard, form and
+   screen-reader behavior for free. Created by the helpers in src/ui/dom.js. */
+
+.nx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 34px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+
+  &:hover {
+    background: var(--surface-3);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
+  }
+  &.is-primary {
+    border-color: transparent;
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+    &:hover {
+      filter: brightness(1.08);
+    }
+  }
+  &.is-danger {
+    border-color: transparent;
+    background: var(--danger);
+    color: #000;
+  }
+  &.is-ghost {
+    border-color: transparent;
+    background: transparent;
+    &:hover {
+      background: var(--surface-3);
+    }
+  }
+}
+
+.nx-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-2);
+  cursor: pointer;
+  &:hover {
+    background: var(--surface-3);
+    color: var(--text-1);
+  }
+  &[aria-pressed='true'] {
+    color: var(--accent);
+  }
+}
+
+.nx-input,
+.nx-select,
+.nx-textarea {
+  width: 100%;
+  min-height: 34px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-sm);
+  &::placeholder {
+    color: var(--text-3);
+  }
+  &:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 0;
+    border-color: transparent;
+  }
+}
+
+.nx-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.nx-field {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+  & > span {
+    color: var(--text-2);
+  }
+}
+
+/* Toggle: <label class="nx-toggle"><input type="checkbox" role="switch"><span></span>Label</label> */
+.nx-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  & input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+  & > span {
+    position: relative;
+    flex: none;
+    width: 38px;
+    height: 22px;
+    border-radius: var(--radius-full);
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    transition: background-color var(--dur-med) var(--ease-out);
+    &::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--text-2);
+      transition: transform var(--dur-med) var(--ease-spring);
+    }
+  }
+  & input:checked + span {
+    background: var(--accent);
+    &::after {
+      transform: translateX(16px);
+      background: var(--accent-contrast);
+    }
+  }
+  & input:focus-visible + span {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+.nx-slider {
+  width: 100%;
+  accent-color: var(--accent);
+}
+
+.nx-kbd {
+  display: inline-block;
+  min-width: 1.6em;
+  padding: 1px 6px;
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+.nx-badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-full);
+  background: var(--danger);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.nx-empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  color: var(--text-3);
+  text-align: center;
+  font-size: var(--text-sm);
+}
+
+.nx-glass {
+  background: var(--glass);
+  backdrop-filter: blur(var(--blur-glass)) saturate(140%);
+  -webkit-backdrop-filter: blur(var(--blur-glass)) saturate(140%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-2);
+}
+
+.nx-icon {
+  flex: none;
+  display: block;
+}
+
+.nx-visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

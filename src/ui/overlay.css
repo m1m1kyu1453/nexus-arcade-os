@@ -1,0 +1,99 @@
+.nx-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--z-overlay) + 100);
+  display: grid;
+  place-items: center;
+  padding: var(--space-4);
+  background: rgb(0 0 0 / 0.45);
+  animation: nx-fade-in var(--dur-med) var(--ease-out);
+
+  &.is-closing {
+    opacity: 0;
+    transition: opacity 150ms;
+  }
+}
+
+.nx-modal {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: min(420px, 100%);
+  max-height: min(720px, calc(100vh - 32px));
+  border-radius: var(--radius-lg);
+  color: var(--text-1);
+  animation: nx-pop-in var(--dur-med) var(--ease-spring);
+
+  &.is-md {
+    width: min(620px, 100%);
+  }
+  &.is-lg {
+    width: min(860px, 100%);
+  }
+
+  & header {
+    padding: var(--space-4) var(--space-5) 0;
+    & h2 {
+      margin: 0;
+      font-size: var(--text-lg);
+    }
+  }
+}
+
+.nx-modal-body {
+  min-height: 0;
+  overflow: auto;
+  padding: var(--space-3) var(--space-5);
+  color: var(--text-2);
+  font-size: var(--text-sm);
+
+  & p {
+    margin: 0;
+  }
+}
+
+.nx-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5) var(--space-4);
+}
+
+.nx-popover {
+  position: fixed;
+  z-index: calc(var(--z-overlay) + 40);
+  max-width: calc(100vw - 8px);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--text-1);
+  animation: nx-pop-in var(--dur-fast) var(--ease-out);
+  &:focus {
+    outline: none;
+  }
+}
+
+.nx-tooltip {
+  position: fixed;
+  z-index: calc(var(--z-toast) + 10);
+  max-width: 260px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-3);
+  color: var(--text-1);
+  font-size: var(--text-xs);
+  box-shadow: var(--shadow-1);
+  pointer-events: none;
+}
+
+@keyframes nx-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes nx-pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
