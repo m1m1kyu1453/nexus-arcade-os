@@ -12,7 +12,7 @@ export default [
       globals: { ...globals.browser, __APP_VERSION__: 'readonly', __BUILD_DATE__: 'readonly', __EDITION__: 'readonly' },
     },
     rules: {
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_', ignoreRestSiblings: true }],
       eqeqeq: ['error', 'smart'],
       'no-eval': 'error',
       'no-implied-eval': 'error',
