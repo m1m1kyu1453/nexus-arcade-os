@@ -1,0 +1,8 @@
+dist/
+dev-dist/
+test-results/
+playwright-report/
+package-lock.json
+NEXUS_BRIEF.md
+specs/
+*.txt
