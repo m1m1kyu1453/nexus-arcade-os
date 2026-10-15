@@ -7,8 +7,9 @@ a terminal, and dozens of apps and games that share data with each other. It is 
 Progressive Web App and works **offline** after the first visit. There are no accounts and no
 backend: your data stays in your browser.
 
-> **Status: phase 0 (foundation).** The build, offline support, Nexus Lite, tests and CI are in
-> place; the desktop arrives in phase 2. See [PROGRESS.md](PROGRESS.md) for the full roadmap.
+> **Status: phase 1 (kernel & services).** Storage, file system, profiles, settings, themes,
+> languages, notifications, reminders, search and backups work under the hood; the desktop
+> arrives in phase 2. See [PROGRESS.md](PROGRESS.md) for the full roadmap.
 
 **Live site:** https://nexus-arcade-os.onrender.com · **Nexus Lite:** [download `nexus-lite.html`](https://nexus-arcade-os.onrender.com/nexus-lite.html)
 
@@ -47,8 +48,12 @@ talks to the OS only through a `ctx` object. Details: [docs/architecture.md](doc
 ## Writing an app
 
 Every app is a folder in `src/apps/<name>/` with a data-only `manifest.js` and a lazily loaded
-`index.js` that exports `mount(container, ctx, args)`. The types are in
-[`src/kernel/types.d.ts`](src/kernel/types.d.ts); a full guide follows with the kernel in phase 1.
+`index.js` that exports `mount(container, ctx, args)` and returns `{ unmount, onSuspend, onResume }`.
+Apps reach the OS only through `ctx`: storage collections declared in the manifest, the file
+system, settings, notifications, commands, shortcuts, intents, i18n, theme, scheduler and more.
+
+Types: [`src/kernel/types.d.ts`](src/kernel/types.d.ts) · Events: [docs/events.md](docs/events.md) ·
+A complete example: [`src/dev/test-app`](src/dev/test-app).
 
 ## License
 

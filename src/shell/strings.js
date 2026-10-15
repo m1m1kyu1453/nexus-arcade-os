@@ -2,7 +2,7 @@
 // Phase 0 strings. Moves to the i18n service (JSON per language) in phase 1.
 
 const en = {
-  tagline: 'Phase 0 — foundation ready',
+  tagline: 'Phase 1 — kernel ready',
   version: 'Version',
   built: 'Built',
   edition: 'Edition',
@@ -27,7 +27,7 @@ const en = {
 
 /** @type {typeof en} */
 const de = {
-  tagline: 'Phase 0 — Fundament steht',
+  tagline: 'Phase 1 — Kernel bereit',
   version: 'Version',
   built: 'Erstellt',
   edition: 'Edition',

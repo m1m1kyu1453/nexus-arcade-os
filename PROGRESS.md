@@ -2,9 +2,9 @@
 
 ## Status
 
-- **Current phase:** 1 — Kernel & Services (phase 0 done 2026-10-15, `v0.0.0`)
-- **Next step:** phase 1 — done so far: event bus, logger, VFS paths, storage engines/collections/kv/migrations/quota/quarantine, cross-tab relay, manifest validation, registry, lifecycle, error boundary, instance runtime (all unit-tested, not yet wired into boot). Next: intents, global error handlers + crash UI, then services in spec order (VFS, profiles, settings, theme, i18n, commands/shortcuts, notifications, scheduler, search, sound, clipboard, achievements, backup, AI stub), then `src/kernel/system.js` boot wiring, debug screen, docs/events.md.
-- **Phase 0 verification (live):** `npm run test:live` green (desktop + phone); offline reload works; update toast shown after a second deploy and "Reload" switched to the new build; `nexus-lite.html` downloaded from the live site opens from `file://` with no requests and no errors; Render deploys only after CI passes.
+- **Current phase:** 2 — Shell (phase 1 done 2026-10-15, `v0.1.0`)
+- **Next step:** phase 2 spec (`specs/02-shell.md`): boot screen, lock screen (show the "privacy lock, not encryption" notice for PINs), desktop, window manager (replaces `src/shell/bare-host.js`), dock, launcher, command palette (uses `system.commands`/`system.search`), notification center (uses `notifications.history()`), dialogs (replace `src/shell/native-dialogs.js`).
+- **Phase 1 verification:** 336 unit tests incl. `tests/unit/system.test.js` (whole system in jsdom: launch, storage, VFS, search, crash/restart, language switch, backup → wipe → restore, newer-data read-only); e2e asserts the kernel boots (`<html data-kernel="ready">`) on the website, offline, and in Lite from `file://`.
 
 ## Decisions
 
@@ -34,6 +34,13 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-15 | **Storage engines share one contract** (`tests/unit/storage-engines.test.js`): IndexedDB, localStorage (whole store as JSON per key, Blobs base64) and memory, all with IndexedDB key ordering. IndexedDB schemas upgrade automatically (version bump when stores/indexes are missing); stores are never deleted. | Fallback engines behave identically; no hand-maintained IDB versions; older tabs/Lite files keep working. |
 | 2026-10-15 | **Migrations are atomic per step** and record the data version in a `meta` store; data newer than the code or a failed migration makes that app's storage **read-only** (reads work, writes rejected). | "Failed migration → keep old data, never wipe" (spec 1.2). |
 | 2026-10-15 | **An uncaught error in an app crashes its window** (first error trips the boundary; crash UI with Restart / Copy report). | Matches how real OSes treat uncaught exceptions; keeps a broken app from running in an inconsistent state. |
+
+| 2026-10-15 | **Phase 1 dialogs are the browser's alert/confirm/prompt** (`src/shell/native-dialogs.js`, "Open with…" as a numbered prompt); file/save/color dialogs reject with an honest message until phase 2. | No app needs them before the shell exists; nothing pretends to work. |
+| 2026-10-15 | **Cross-phase P1 "say so in Settings and Calendar/Clock help" (1.10)**: the text exists in EN/DE (`system: scheduler.limits`); the item is completed by phases 3–5 when those screens exist, and stays open here. Likewise the PIN notice ("privacy lock, not real security") is shown by the phase 2 lock screen. | The UI that must show them doesn't exist in phase 1. |
+| 2026-10-15 | **Debug screen (#debug, dev builds only) and the kernel test app (`src/dev/test-app`) are English-only developer tools**, never shipped in production builds. | Spec 1.13: temporary developer page. |
+| 2026-10-15 | **Apps cannot emit OS event namespaces** (`app:`, `vfs:`, `storage:`, … see docs/events.md); `ctx.events.emit` throws for them. | Keeps system events trustworthy (no spoofed `vfs:changed`). |
+| 2026-10-15 | **App messages load together with the app** (lifecycle `prepare` step before mount; also before command handlers and search providers). | Spec 1.7: lazy-loaded with the app. |
+| 2026-10-15 | **An app's search provider gets a relevance floor (score 350)** below exact/prefix matches of indexed items. | Providers filter for relevance themselves; their results shouldn't drown or be drowned by fuzzy matches. |
 
 ## Cuts
 
@@ -92,97 +99,97 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **1.1 Kernel**
 
-- [ ] [P1] **Event bus:** typed events (documented in `docs/events.md`), `on/once/off/emit`, wildcard listeners, auto-unsubscribe when an app unmounts.
-- [ ] [P1] **App registry:** registers manifests, validates them (clear error for a bad manifest), lists by category, enable/disable, lazy-loads the code chunk, tracks instances.
-- [ ] [P1] **Lifecycle:** launch (with launch args), mount, focus/blur, suspend (minimized / other workspace / hidden tab), resume, unmount. Apps can declare `onSuspend`/`onResume`.
-- [ ] [P1] **Intents:** apps declare `handles`; `ctx.intents.open(file)` picks the default app or asks ("Open with…", "Always use this app"); `ctx.intents.share(data, type)` sends text/files/images to any app that accepts them.
-- [ ] [P1] **Error boundary + crash reporter:** catches errors in mount, event handlers and async code of an app; shows the crash UI; logs a report with stack, app id, version and recent log lines.
-- [ ] [P1] **Logger:** levels, per-source tags, ring buffer (last 2,000 entries) persisted across reloads, exported with backups if the user wants.
-- [ ] [P2] **Permissions:** apps declare permissions; built-in apps are trusted; the model is ready for plugins in phase 13 (ask user on first use, revoke in Settings).
+- [x] [P1] **Event bus:** typed events (documented in `docs/events.md`), `on/once/off/emit`, wildcard listeners, auto-unsubscribe when an app unmounts.
+- [x] [P1] **App registry:** registers manifests, validates them (clear error for a bad manifest), lists by category, enable/disable, lazy-loads the code chunk, tracks instances.
+- [x] [P1] **Lifecycle:** launch (with launch args), mount, focus/blur, suspend (minimized / other workspace / hidden tab), resume, unmount. Apps can declare `onSuspend`/`onResume`.
+- [x] [P1] **Intents:** apps declare `handles`; `ctx.intents.open(file)` picks the default app or asks ("Open with…", "Always use this app"); `ctx.intents.share(data, type)` sends text/files/images to any app that accepts them.
+- [x] [P1] **Error boundary + crash reporter:** catches errors in mount, event handlers and async code of an app; shows the crash UI; logs a report with stack, app id, version and recent log lines.
+- [x] [P1] **Logger:** levels, per-source tags, ring buffer (last 2,000 entries) persisted across reloads, exported with backups if the user wants.
+- [x] [P2] **Permissions:** apps declare permissions; built-in apps are trusted; the model is ready for plugins in phase 13 (ask user on first use, revoke in Settings).
 
 **1.2 Storage**
 
-- [ ] [P1] **Storage adapter:** IndexedDB with `localStorage` fallback and in-memory last resort (visible warning). A small promise-based wrapper: stores, get/put/delete/query by index, transactions, cursors for large sets.
-- [ ] [P1] **Collections API** for apps (`ctx.storage.collection('notes')`): CRUD, indexes, simple queries, change events.
-- [ ] [P1] **Key-value API** for small app state (`ctx.storage.kv`).
-- [ ] [P1] **Migrations:** per-store and per-app schema version; ordered migration functions; run at boot with progress shown in the boot log; failed migration → keep old data, report, never wipe.
-- [ ] [P1] **Quota handling:** catch quota errors, notify the user with what is using space and how to free it.
-- [ ] [P2] **Corrupt-data quarantine:** records that fail validation are moved to a quarantine store and listed in Settings → Storage.
+- [x] [P1] **Storage adapter:** IndexedDB with `localStorage` fallback and in-memory last resort (visible warning). A small promise-based wrapper: stores, get/put/delete/query by index, transactions, cursors for large sets.
+- [x] [P1] **Collections API** for apps (`ctx.storage.collection('notes')`): CRUD, indexes, simple queries, change events.
+- [x] [P1] **Key-value API** for small app state (`ctx.storage.kv`).
+- [x] [P1] **Migrations:** per-store and per-app schema version; ordered migration functions; run at boot with progress shown in the boot log; failed migration → keep old data, report, never wipe.
+- [x] [P1] **Quota handling:** catch quota errors, notify the user with what is using space and how to free it.
+- [ ] [P2] **Corrupt-data quarantine:** records that fail validation are moved to a quarantine store and listed in Settings → Storage. — _open: quarantine works (storage layer, tests); listing it in Settings → Storage comes with the Settings app (phase 3)._
 
 **1.3 Virtual File System (VFS)**
 
-- [ ] [P1] Hierarchical file system in IndexedDB: folders and files, paths (`/home/<user>/Documents/...`), mime types, size, created/modified dates, tags, metadata. Blobs stored separately from metadata.
-- [ ] [P1] Default folders per profile: `Desktop`, `Documents`, `Downloads`, `Pictures`, `Music`, `Videos`, `Projects`, `.config`, plus `/system` (read-only) and a Trash.
-- [ ] [P1] Operations: create, read, write (text and binary), rename, move, copy (recursive), delete to trash, restore, empty trash, stat, list, exists, search by name/tag/content (text files).
-- [ ] [P1] Watchers: apps subscribe to changes on a path.
-- [ ] [P1] Import from the real OS (file picker + drag & drop, folders where supported) and export (download a file, or a folder as zip if fflate is approved).
-- [ ] [P1] Path utilities (normalize, join, dirname, basename, extname, relative), safe against `..` escapes.
-- [ ] [P2] File versions: keep the last N versions of text files, restore from history.
-- [ ] [P3] "Mount" a real folder via the File System Access API (Chromium only, honest fallback elsewhere).
+- [x] [P1] Hierarchical file system in IndexedDB: folders and files, paths (`/home/<user>/Documents/...`), mime types, size, created/modified dates, tags, metadata. Blobs stored separately from metadata.
+- [x] [P1] Default folders per profile: `Desktop`, `Documents`, `Downloads`, `Pictures`, `Music`, `Videos`, `Projects`, `.config`, plus `/system` (read-only) and a Trash.
+- [x] [P1] Operations: create, read, write (text and binary), rename, move, copy (recursive), delete to trash, restore, empty trash, stat, list, exists, search by name/tag/content (text files).
+- [x] [P1] Watchers: apps subscribe to changes on a path.
+- [x] [P1] Import from the real OS (file picker + drag & drop, folders where supported) and export (download a file, or a folder as zip if fflate is approved).
+- [x] [P1] Path utilities (normalize, join, dirname, basename, extname, relative), safe against `..` escapes.
+- [ ] [P2] File versions: keep the last N versions of text files, restore from history. — _open (P2)._
+- [ ] [P3] "Mount" a real folder via the File System Access API (Chromium only, honest fallback elsewhere). — _open (P3)._
 
 **1.4 Profiles**
 
-- [ ] [P1] Multiple local profiles, each with its own database: name, avatar (generated identicon or uploaded image), accent color.
-- [ ] [P1] Optional PIN or password per profile (hashed with PBKDF2; this is a privacy lock, not real security, and the UI says so).
-- [ ] [P2] Guest profile that wipes itself on logout.
+- [x] [P1] Multiple local profiles, each with its own database: name, avatar (generated identicon or uploaded image), accent color.
+- [x] [P1] Optional PIN or password per profile (hashed with PBKDF2; this is a privacy lock, not real security, and the UI says so).
+- [ ] [P2] Guest profile that wipes itself on logout. — _open: guest flag exists; wiping on sign-out needs the phase 2 lock screen/sign-out._
 
 **1.5 Settings service**
 
-- [ ] [P1] Typed settings schema (string, number, boolean, enum, color, shortcut, file path), defaults, validation, migration.
-- [ ] [P1] System settings + per-app settings from manifests; change events so changes apply live without reload.
-- [ ] [P1] Reset one setting, one app, or everything.
+- [x] [P1] Typed settings schema (string, number, boolean, enum, color, shortcut, file path), defaults, validation, migration.
+- [x] [P1] System settings + per-app settings from manifests; change events so changes apply live without reload.
+- [x] [P1] Reset one setting, one app, or everything.
 
 **1.6 Theme engine**
 
-- [ ] [P1] Loads token sets, applies them as CSS custom properties on `:root`, live switching with a smooth transition.
-- [ ] [P1] The 8 themes from master brief §6, accent color override, font scale, transparency/blur level, animation level (full, reduced, off).
-- [ ] [P1] Follows system light/dark preference if the user picks "Auto".
-- [ ] [P2] Automatic contrast check of accent color against backgrounds; warns or adjusts if below WCAG AA.
-- [ ] [P2] Time-based theme switching (e.g. light during the day, dark at night).
+- [x] [P1] Loads token sets, applies them as CSS custom properties on `:root`, live switching with a smooth transition.
+- [x] [P1] The 8 themes from master brief §6, accent color override, font scale, transparency/blur level, animation level (full, reduced, off).
+- [x] [P1] Follows system light/dark preference if the user picks "Auto".
+- [x] [P2] Automatic contrast check of accent color against backgrounds; warns or adjusts if below WCAG AA.
+- [ ] [P2] Time-based theme switching (e.g. light during the day, dark at night). — _open (P2)._
 
 **1.7 i18n**
 
-- [ ] [P1] JSON message files per language and app, lazy-loaded with the app; fallback to English; missing keys logged in dev.
-- [ ] [P1] Interpolation, plurals (`Intl.PluralRules`), dates/times/numbers/currencies/relative time via `Intl`.
-- [ ] [P1] Language switch at runtime without reload.
-- [ ] [P2] A dev script that lists missing/unused keys per language; runs in CI.
+- [x] [P1] JSON message files per language and app, lazy-loaded with the app; fallback to English; missing keys logged in dev.
+- [x] [P1] Interpolation, plurals (`Intl.PluralRules`), dates/times/numbers/currencies/relative time via `Intl`.
+- [x] [P1] Language switch at runtime without reload.
+- [x] [P2] A dev script that lists missing/unused keys per language; runs in CI.
 
 **1.8 Commands and shortcuts**
 
-- [ ] [P1] Command registry: id, title, icon, category, `when` condition (e.g. only when an app is focused), run function, optional arguments.
-- [ ] [P1] Shortcut manager: global and app-scoped shortcuts, `Mod` = Ctrl/Cmd, conflict detection, user rebinding, a reset option, ignoring shortcuts inside text inputs where appropriate.
-- [ ] [P2] Chord shortcuts (e.g. `Ctrl+K Ctrl+T`).
+- [x] [P1] Command registry: id, title, icon, category, `when` condition (e.g. only when an app is focused), run function, optional arguments.
+- [x] [P1] Shortcut manager: global and app-scoped shortcuts, `Mod` = Ctrl/Cmd, conflict detection, user rebinding, a reset option, ignoring shortcuts inside text inputs where appropriate.
+- [x] [P2] Chord shortcuts (e.g. `Ctrl+K Ctrl+T`).
 
 **1.9 Notifications**
 
-- [ ] [P1] Toasts with title, body, icon, app source, actions (buttons), progress, timeout or sticky.
-- [ ] [P1] History stored for the notification center (phase 2 UI).
-- [ ] [P1] Do-not-disturb (manual and during Focus sessions), per-app mute.
-- [ ] [P1] Optional browser notifications (system-level) when Nexus is in the background, after asking permission.
+- [x] [P1] Toasts with title, body, icon, app source, actions (buttons), progress, timeout or sticky.
+- [x] [P1] History stored for the notification center (phase 2 UI).
+- [x] [P1] Do-not-disturb (manual and during Focus sessions), per-app mute.
+- [x] [P1] Optional browser notifications (system-level) when Nexus is in the background, after asking permission.
 
 **1.10 Scheduler**
 
-- [ ] [P1] Persistent scheduled jobs (reminders, alarms, recurring tasks): stored in IndexedDB, fired while Nexus is open, and **missed jobs are shown on next start** ("While you were away: 2 reminders").
-- [ ] [P1] Honest about limits: a closed browser tab cannot fire reminders. Say so in Settings and in the Calendar/Clock help.
-- [ ] [P1] Recurrence rules (daily, weekly on days, monthly, yearly, every N, until/count), with unit tests including DST changes.
+- [x] [P1] Persistent scheduled jobs (reminders, alarms, recurring tasks): stored in IndexedDB, fired while Nexus is open, and **missed jobs are shown on next start** ("While you were away: 2 reminders").
+- [ ] [P1] Honest about limits: a closed browser tab cannot fire reminders. Say so in Settings and in the Calendar/Clock help. — _open: the message exists in EN/DE (`scheduler.limits`); it is shown once Settings (phase 3) and Calendar/Clock (phases 4–5) exist._
+- [x] [P1] Recurrence rules (daily, weekly on days, monthly, yearly, every N, until/count), with unit tests including DST changes.
 
 **1.11 Search service**
 
-- [ ] [P1] Index in a Web Worker: apps, commands, settings, files (names + text content), and app-provided providers.
-- [ ] [P1] Fuzzy matching with ranking (exact > prefix > word start > fuzzy; recent and frequent items boosted), highlights of matched characters.
-- [ ] [P1] Incremental updates when files/data change.
+- [x] [P1] Index in a Web Worker: apps, commands, settings, files (names + text content), and app-provided providers.
+- [x] [P1] Fuzzy matching with ranking (exact > prefix > word start > fuzzy; recent and frequent items boosted), highlights of matched characters.
+- [x] [P1] Incremental updates when files/data change.
 
 **1.12 Other services**
 
-- [ ] [P1] **Sound service:** synthesized UI sounds (master brief §6), categories (UI, notifications, games, media), master volume, mute, respects reduced-motion/quiet mode.
-- [ ] [P1] **Clipboard service:** wraps the async Clipboard API with fallbacks; keeps a history of copies made inside Nexus (used by the Clipboard app in phase 5).
-- [ ] [P1] **Achievements & XP service:** register achievements per app, unlock with a notification, progress achievements (e.g. 0/100), secret achievements, global XP and levels (formula documented), stats per app.
-- [ ] [P1] **Backup service:** export the whole profile (all stores + VFS blobs + settings) as one `.nexus-backup` file (zip or JSON), optional password encryption; import with preview (what's inside, which version), merge or replace; restore runs migrations. Round-trip test: backup → wipe → restore → identical data.
-- [ ] [P2] **AI service stub:** just the interface `ctx.ai` that phase 12 fills in. `ctx.ai.isAvailable()` returns false until configured, so apps can hide AI buttons honestly.
+- [x] [P1] **Sound service:** synthesized UI sounds (master brief §6), categories (UI, notifications, games, media), master volume, mute, respects reduced-motion/quiet mode.
+- [x] [P1] **Clipboard service:** wraps the async Clipboard API with fallbacks; keeps a history of copies made inside Nexus (used by the Clipboard app in phase 5).
+- [x] [P1] **Achievements & XP service:** register achievements per app, unlock with a notification, progress achievements (e.g. 0/100), secret achievements, global XP and levels (formula documented), stats per app.
+- [x] [P1] **Backup service:** export the whole profile (all stores + VFS blobs + settings) as one `.nexus-backup` file (zip or JSON), optional password encryption; import with preview (what's inside, which version), merge or replace; restore runs migrations. Round-trip test: backup → wipe → restore → identical data.
+- [x] [P2] **AI service stub:** just the interface `ctx.ai` that phase 12 fills in. `ctx.ai.isAvailable()` returns false until configured, so apps can hide AI buttons honestly.
 
 **1.13 Debug screen**
 
-- [ ] [P1] A temporary developer page (only in dev mode) that shows registered apps, services, storage contents, the event log, and buttons to trigger notifications/crashes. This proves the kernel works before the shell exists.
+- [x] [P1] A temporary developer page (only in dev mode) that shows registered apps, services, storage contents, the event log, and buttons to trigger notifications/crashes. This proves the kernel works before the shell exists.
 
 ### Phase 2 — Shell (the desktop experience) — `specs/02-shell.md`
 

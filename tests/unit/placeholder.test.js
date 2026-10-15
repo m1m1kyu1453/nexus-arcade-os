@@ -17,7 +17,7 @@ describe('placeholder screen', () => {
     const { root, field } = render('lite');
     expect(field('version').textContent).toBe('1.2.3');
     expect(field('edition').dataset.edition).toBe('lite');
-    expect(root.textContent).toContain('Phase 0 — foundation ready');
+    expect(root.textContent).toContain('Phase 1 — kernel ready');
   });
 
   it('updates network, worker and storage state', () => {

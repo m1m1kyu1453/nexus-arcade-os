@@ -64,15 +64,35 @@ instance.unmount() + ctx.signal aborted + timers/listeners cleared
   clicking it sends `SKIP_WAITING`, the new SW takes over and the page reloads.
 - Render serves `/sw.js`, `/` and `/index.html` with `no-cache`, and hashed `/assets/*` as immutable.
 
-## Data (phase 1)
+## Boot sequence (`src/kernel/system.js`)
 
-- One IndexedDB database per profile, plus a small global `nexus-system` database (profile list,
-  settings needed before login).
-- Every store and app has a schema version and ordered migrations. Code that finds data newer than
-  itself (an old Lite file, an old tab) refuses to write instead of corrupting it.
-- Multiple tabs: a leader tab (Web Locks) runs the scheduler so reminders fire once.
-- Storage persistence is requested on first meaningful use; Safari may evict data of
+1. Logger (ring buffer, persisted in `nexus-system`), event bus, global error handlers.
+2. Storage engine: IndexedDB → localStorage → memory (`services/storage/select.js`); a fallback
+   is announced to the user. Every engine passes the same contract tests.
+3. Profile: last used (or a new default profile). Each profile has its own database
+   `nexus-profile-<id>`; the profile list, last profile and log live in `nexus-system`.
+4. Registry validates manifests; the profile database is opened with the stores of all services
+   plus one store per declared app collection (`app:<id>/<name>`). The IndexedDB engine adds
+   missing stores/indexes automatically and never deletes stores.
+5. Settings → i18n → theme → VFS → notifications → sound → clipboard → achievements →
+   scheduler → app migrations → commands/shortcuts → intents → permissions → lifecycle →
+   search (worker) → cross-tab relay.
+6. Startup notices: storage fallback warning, migration problems, missed reminders.
+
+## Data
+
+- **Migrations** (`services/storage/migrations.js`): each app declares `storage.version` and
+  lazy `migrations`; each step runs in one transaction with its version update. A failed step or
+  data from a newer version makes that app's storage read-only (reads work, writes are refused)
+  and the user is told. Data is never wiped.
+- **Quarantine:** records that fail validation on read move to the `quarantine` store.
+- **Other tabs:** collection, kv, settings, VFS, notification-history and scheduler events are
+  mirrored over `BroadcastChannel`; only one tab (Web Locks leader) fires scheduled jobs.
+- **Persistence:** requested on the first real data write. Safari may evict data of
   non-installed sites after 7 days without a visit, so the UI encourages installing and backups.
+- **Backup** (`services/backup/backup.js`): one `.nexus-backup` zip (manifest, per-store JSON,
+  raw binary files), optionally AES-GCM encrypted; restore replaces or merges, and migrations
+  run on the next boot.
 
 ## Testing
 
