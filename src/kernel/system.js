@@ -555,6 +555,7 @@ async function openProfile(options, k, profile) {
   scheduler.start().then(async (missed) => {
     if (!missed.length) return;
     await notifications.notify({
+      group: 'away',
       title: i18n.t('system', 'scheduler.missedTitle'),
       body: i18n.t('system', 'scheduler.missedBody', {
         count: missed.length,

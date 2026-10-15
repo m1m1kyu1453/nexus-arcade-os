@@ -25,6 +25,7 @@ const DEFAULT_TIMEOUT_MS = 6000;
  * @property {boolean} [silent]             no sound
  * @property {boolean} [urgent]             shown even in Do-not-disturb (alarms)
  * @property {boolean} [transient]          not kept in history (e.g. "Copied")
+ * @property {string} [group]                e.g. 'away' for the "While you were away" summary
  */
 
 /**
@@ -41,6 +42,7 @@ const DEFAULT_TIMEOUT_MS = 6000;
  * @property {number} createdAt
  * @property {boolean} read
  * @property {boolean} suppressed           not shown as a toast (DND or muted)
+ * @property {string} [group]
  */
 
 /**
@@ -110,6 +112,7 @@ export function createNotifications({
       createdAt: now(),
       read: false,
       suppressed: !init.urgent && (dndActive() || muted.has(app)),
+      ...(init.group ? { group: init.group } : {}),
     };
     if (!init.transient) {
       try {

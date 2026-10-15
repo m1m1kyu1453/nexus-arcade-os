@@ -188,5 +188,100 @@
       "ai": "KI",
       "system": "System"
     }
+  },
+  "center": {
+    "title": "Benachrichtigungen",
+    "dnd": "Nicht stören",
+    "dark": "Dunkel",
+    "light": "Hell",
+    "batterySaver": "Energiesparen",
+    "mute": "Stumm",
+    "focus": "Fokus {minutes} Min.",
+    "focusLeft": "Fokus: noch {minutes} Min.",
+    "focusDone": "Fokuszeit beendet",
+    "focusCommand": "Fokuszeit starten oder beenden",
+    "screenshot": "Bildschirmfoto",
+    "screenshotSaved": "Bildschirmfoto gespeichert",
+    "screenshotFailed": "Das Bildschirmfoto konnte nicht aufgenommen werden",
+    "screenshotUnsupported": "Dieser Browser kann den Bildschirm nicht aufnehmen",
+    "lock": "Sperren",
+    "clearAll": "Alle löschen",
+    "empty": "Keine Benachrichtigungen",
+    "away": "Während du weg warst",
+    "system": "Nexus",
+    "clearGroup": "{group} löschen",
+    "clear": "Löschen"
+  },
+  "personalize": {
+    "tab": {
+      "appearance": "Darstellung",
+      "wallpaper": "Hintergrund",
+      "dock": "Dock"
+    },
+    "theme": "Design",
+    "accent": "Akzentfarbe",
+    "themeAccent": "Akzent des Designs verwenden",
+    "accentAdjusted": "Dieser Akzent wurde aufgehellt oder abgedunkelt, damit er auf diesem Design lesbar bleibt.",
+    "textSize": "Textgröße",
+    "transparency": "Transparenz und Unschärfe",
+    "animations": "Animationen",
+    "motion": {
+      "auto": "Automatisch (wie System)",
+      "full": "Voll",
+      "reduced": "Reduziert",
+      "off": "Aus"
+    },
+    "batterySaver": "Energiesparmodus (keine Partikel, Unschärfe oder Live-Hintergründe)",
+    "live": {
+      "title": "Live-Hintergründe",
+      "particles": "Partikelnetz",
+      "aurora": "Polarlicht",
+      "synthwave": "Synthwave-Gitter",
+      "matrix": "Matrix-Regen",
+      "starfield": "Sternenfeld",
+      "fluid": "Fließender Verlauf"
+    },
+    "liveBadge": "Live",
+    "gradients": "Verläufe",
+    "gradient": {
+      "nebula": "Nebel",
+      "sunset": "Sonnenuntergang",
+      "ocean": "Ozean",
+      "mint": "Minze",
+      "ember": "Glut",
+      "dawn": "Morgenrot",
+      "paper": "Papier",
+      "graphite": "Graphit"
+    },
+    "pictures": "Deine Bilder",
+    "addPicture": "Bild hinzufügen …",
+    "fit": "Bildposition",
+    "fitMode": {
+      "fill": "Füllen",
+      "fit": "Einpassen",
+      "center": "Zentriert",
+      "tile": "Kacheln"
+    },
+    "dim": "Abdunkeln",
+    "blur": "Weichzeichnen",
+    "slideshow": "Diashow",
+    "slideshowFolder": "Ordner",
+    "slideshowMinutes": "Wechseln alle",
+    "minutes": {
+      "one": "{count} Minute",
+      "other": "{count} Minuten"
+    },
+    "startSlideshow": "Diashow starten",
+    "dockPosition": "Position",
+    "side": {
+      "bottom": "Unten",
+      "left": "Links",
+      "right": "Rechts"
+    },
+    "dockSize": "Symbolgröße",
+    "dockAutoHide": "Dock automatisch ausblenden",
+    "dockMagnification": "Symbole beim Überfahren vergrößern",
+    "done": "Fertig",
+    "changeWallpaper": "Hintergrund ändern"
   }
 }

@@ -1,0 +1,26 @@
+.nx-wallpaper {
+  --wp-blur: 0px;
+}
+
+.nx-wp-canvas,
+.nx-wp-dim {
+  position: absolute;
+  inset: 0;
+}
+
+.nx-wp-canvas {
+  width: 100%;
+  height: 100%;
+  filter: blur(var(--wp-blur));
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+/* Blurred images overscan so the edges don't fade to transparent. */
+.nx-wp-image {
+  position: absolute;
+  inset: calc(var(--wp-blur) * -2);
+  filter: blur(var(--wp-blur));
+}

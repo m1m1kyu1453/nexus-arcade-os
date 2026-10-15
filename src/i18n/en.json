@@ -188,5 +188,100 @@
       "ai": "AI",
       "system": "System"
     }
+  },
+  "center": {
+    "title": "Notifications",
+    "dnd": "Do not disturb",
+    "dark": "Dark",
+    "light": "Light",
+    "batterySaver": "Battery saver",
+    "mute": "Mute",
+    "focus": "Focus {minutes} min",
+    "focusLeft": "Focus: {minutes} min left",
+    "focusDone": "Focus session finished",
+    "focusCommand": "Start or stop a focus session",
+    "screenshot": "Screenshot",
+    "screenshotSaved": "Screenshot saved",
+    "screenshotFailed": "The screenshot couldn't be taken",
+    "screenshotUnsupported": "This browser can't capture the screen",
+    "lock": "Lock",
+    "clearAll": "Clear all",
+    "empty": "No notifications",
+    "away": "While you were away",
+    "system": "Nexus",
+    "clearGroup": "Clear {group}",
+    "clear": "Clear"
+  },
+  "personalize": {
+    "tab": {
+      "appearance": "Appearance",
+      "wallpaper": "Wallpaper",
+      "dock": "Dock"
+    },
+    "theme": "Theme",
+    "accent": "Accent color",
+    "themeAccent": "Use the theme's accent",
+    "accentAdjusted": "This accent was made brighter or darker so it stays readable on this theme.",
+    "textSize": "Text size",
+    "transparency": "Transparency and blur",
+    "animations": "Animations",
+    "motion": {
+      "auto": "Auto (follow system)",
+      "full": "Full",
+      "reduced": "Reduced",
+      "off": "Off"
+    },
+    "batterySaver": "Battery saver (no particles, blur or live wallpapers)",
+    "live": {
+      "title": "Live wallpapers",
+      "particles": "Particle network",
+      "aurora": "Aurora",
+      "synthwave": "Synthwave grid",
+      "matrix": "Matrix rain",
+      "starfield": "Starfield",
+      "fluid": "Fluid gradient"
+    },
+    "liveBadge": "Live",
+    "gradients": "Gradients",
+    "gradient": {
+      "nebula": "Nebula",
+      "sunset": "Sunset",
+      "ocean": "Ocean",
+      "mint": "Mint",
+      "ember": "Ember",
+      "dawn": "Dawn",
+      "paper": "Paper",
+      "graphite": "Graphite"
+    },
+    "pictures": "Your pictures",
+    "addPicture": "Add picture…",
+    "fit": "Picture position",
+    "fitMode": {
+      "fill": "Fill",
+      "fit": "Fit",
+      "center": "Center",
+      "tile": "Tile"
+    },
+    "dim": "Dim",
+    "blur": "Blur",
+    "slideshow": "Slideshow",
+    "slideshowFolder": "Folder",
+    "slideshowMinutes": "Change every",
+    "minutes": {
+      "one": "{count} minute",
+      "other": "{count} minutes"
+    },
+    "startSlideshow": "Start slideshow",
+    "dockPosition": "Position",
+    "side": {
+      "bottom": "Bottom",
+      "left": "Left",
+      "right": "Right"
+    },
+    "dockSize": "Icon size",
+    "dockAutoHide": "Hide the dock automatically",
+    "dockMagnification": "Magnify icons on hover",
+    "done": "Done",
+    "changeWallpaper": "Change wallpaper"
   }
 }

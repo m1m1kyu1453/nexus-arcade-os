@@ -2,9 +2,12 @@
 // (Service Worker) lives in the entry files.
 import '../styles/base.css';
 import { registerShellCommands } from './commands.js';
+import { createNotificationCenter } from './center/center.js';
+import { createWallpaper } from './desktop/wallpaper.js';
 import { createDock } from './dock.js';
 import { createLauncher } from './launcher/launcher.js';
 import { createPalette } from './palette/palette.js';
+import { createPersonalize } from './personalize/personalize.js';
 import { startShell } from './shell.js';
 import { pickStrings } from './strings.js';
 import { createToastHost } from './toast.js';
@@ -19,11 +22,14 @@ export function boot(root) {
   const system = startShell(root).then(
     (shell) => {
       const sys = shell.system();
+      shell.ui.wallpaper = createWallpaper(shell);
       shell.ui.topbar = createTopBar(shell);
       shell.ui.dock = createDock(shell);
       registerShellCommands(shell);
       shell.ui.palette = createPalette(shell);
       shell.ui.launcher = createLauncher(shell);
+      shell.ui.center = createNotificationCenter(shell);
+      shell.ui.personalize = createPersonalize(shell);
       shell.wm.relayout();
       if (!shell.wm.list().length && !shell.session.data.windows.length) void shell.launch('nexus.welcome');
       showNotificationToasts(sys, toasts, t.dismiss);

@@ -1,0 +1,198 @@
+.nx-pz {
+  display: grid;
+  gap: var(--space-3);
+  min-height: 420px;
+  color: var(--text-1);
+}
+
+.nx-pz-tabs {
+  display: flex;
+  gap: var(--space-1);
+  border-bottom: 1px solid var(--border);
+}
+
+.nx-pz-tab {
+  padding: var(--space-2) var(--space-3);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--text-sm);
+  cursor: pointer;
+
+  &[aria-selected='true'] {
+    border-bottom-color: var(--accent);
+    color: var(--text-1);
+    font-weight: 600;
+  }
+}
+
+.nx-pz-section {
+  display: grid;
+  gap: var(--space-3);
+
+  & h3 {
+    margin: var(--space-2) 0 0;
+    color: var(--text-3);
+    font-size: var(--text-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+.nx-pz-row {
+  display: grid;
+  grid-template-columns: minmax(140px, 220px) 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+
+  & output {
+    min-width: 4.5em;
+    color: var(--text-2);
+    font-variant-numeric: tabular-nums;
+    text-align: end;
+  }
+}
+
+.nx-pz-themes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-2);
+}
+
+.nx-pz-theme {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  color: var(--text-1);
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+
+  &.is-selected {
+    border-color: var(--accent);
+  }
+}
+
+.nx-pz-swatch {
+  position: relative;
+  display: block;
+  height: 56px;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+
+  & i {
+    position: absolute;
+    left: 10%;
+    top: 22%;
+    width: 60%;
+    height: 56%;
+    border-radius: 4px;
+  }
+  & b {
+    position: absolute;
+    bottom: 10%;
+    width: 18%;
+    height: 18%;
+    border-radius: 50%;
+  }
+  & b:nth-of-type(1) {
+    right: 28%;
+  }
+  & b:nth-of-type(2) {
+    right: 8%;
+  }
+  &.is-auto {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(90deg, #f3f6fb 50%, #05060d 50%);
+    color: var(--accent);
+  }
+}
+
+.nx-pz-color {
+  width: 48px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: none;
+}
+
+.nx-pz-warning {
+  margin: 0;
+  color: var(--warning);
+  font-size: var(--text-xs);
+}
+
+.nx-pz-wps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-2);
+}
+
+.nx-pz-wp {
+  display: grid;
+  padding: 3px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  color: var(--text-2);
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+
+  &.is-selected {
+    border-color: var(--accent);
+  }
+  &:focus-within {
+    outline: 2px solid var(--accent);
+  }
+}
+
+.nx-pz-wp-preview {
+  position: relative;
+  display: block;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: calc(var(--radius-md) - 3px);
+  background-size: cover;
+  background-position: center;
+
+  & canvas {
+    width: 100%;
+    height: 100%;
+  }
+  & em {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+    background: rgb(0 0 0 / 0.55);
+    color: #fff;
+    font-size: 10px;
+    font-style: normal;
+  }
+}
+
+.nx-pz-add {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: var(--space-1);
+  aspect-ratio: 16 / 10;
+  border: 2px dashed var(--border);
+  background: transparent;
+}
+
+@media (max-width: 600px) {
+  .nx-pz-row {
+    grid-template-columns: 1fr;
+  }
+}
