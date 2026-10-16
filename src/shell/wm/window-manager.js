@@ -666,6 +666,8 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
       get isFocused() {
         return mru[0] === w.id && w.el.classList.contains('is-focused');
       },
+      /** The app's saveState() result changed: save the session soon. */
+      stateChanged: () => changed(),
       /** @param {() => void} fn */
       onResize(fn) {
         const observer = new ResizeObserver(() => fn());

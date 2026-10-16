@@ -435,7 +435,11 @@ async function openProfile(options, k, profile) {
     choose: (request) =>
       dialogs.pickApp({ candidates: request.candidates.map((m) => ({ id: m.id, name: localize(m.name) })) }),
     defaults: kv('system:intents'),
-    onOpened: (path) => recent.add(path),
+    onOpened: (path) => {
+      // Folders are "opened" by navigating; recent files lists files only.
+      void vfs.stat(path).then((n) => n?.type === 'file' && recent.add(path));
+    },
+    storedMime: async (path) => (await vfs.stat(path))?.mime,
   });
 
   const permissions = createPermissions({

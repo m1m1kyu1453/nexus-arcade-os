@@ -404,6 +404,8 @@ export interface WindowHandle {
   readonly isFocused: boolean;
   /** Called when the window's content area changes size. */
   onResize(fn: () => void): Unsub;
+  /** Tells the shell that `saveState()` would now return something new (e.g. another folder), so the session is saved soon. */
+  stateChanged(): void;
 }
 export interface Dialogs {
   [operation: string]: unknown;

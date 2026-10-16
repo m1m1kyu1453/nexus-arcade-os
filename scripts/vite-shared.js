@@ -28,6 +28,9 @@ export function cspPlugin(edition) {
     `script-src 'self'${inline}`,
     `style-src 'self'${inline}`,
     "img-src 'self' data: blob:",
+    // File previews: audio/video and the browser's PDF viewer read VFS files as blob: URLs.
+    "media-src 'self' blob:",
+    "frame-src 'self' blob:",
     "font-src 'self' data:",
     "connect-src 'self'",
     "worker-src 'self' blob: data:",

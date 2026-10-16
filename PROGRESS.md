@@ -3,7 +3,7 @@
 ## Status
 
 - **Current phase:** 3 — System apps (phase 2 done 2026-10-16, `v0.2.0`)
-- **Next step:** phase 3 (`specs/03-system-apps.md`): file explorer, settings, terminal, system monitor and the other system apps. Phase 2 shipped the whole shell: boot/lock/login, desktop icons, wallpapers, widgets, window manager, workspaces, overview/switcher, dock, top bar, launcher, command palette, notification center, system dialogs, shortcut overlay and the mobile shell.
+- **Next step:** phase 3, Explorer is mostly done (see checklist; "drag to other apps" waits for Nexus Edit to accept drops, "Open terminal here" for the Terminal). Next: Terminal (3.2), then Nexus Edit (3.3), Settings (3.4), System Monitor (3.5), App Center (3.6), Help (3.7, incl. F1).
 - **Phase 2 verification:** 516 unit tests; e2e `tests/e2e/shell.spec.js` runs the done-when flows with keyboard only, mouse and touch, each restored after a reload; smoke tests (website, offline reload, Lite on `file://`).
 - **Phase 1 verification:** 336 unit tests incl. `tests/unit/system.test.js` (whole system in jsdom: launch, storage, VFS, search, crash/restart, language switch, backup → wipe → restore, newer-data read-only); e2e asserts the kernel boots (`<html data-kernel="ready">`) on the website, offline, and in Lite from `file://`.
 
@@ -55,6 +55,11 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-16 | **Phase 3 libraries approved by owner:** CodeMirror 6 (`codemirror` + `@codemirror/*`, MIT) for Nexus Edit and code previews; `marked` (MIT) for Markdown; DOMPurify (MPL-2.0/Apache-2.0) to sanitize rendered Markdown. All lazy-loaded. | Brief §3.2 candidates; an editor and a sanitizer are not worth writing ourselves. |
 | 2026-10-16 | **`ctx.system`**: a privileged facade for built-in apps that declare the new `system` permission (plugins can never get it): apps, windows, system settings, storage, backup, log, shortcuts, profiles. All apps also get `ctx.fs.importFiles/download/recent`, `ctx.intents.openersFor/getDefault/setDefault/clearDefault` and a shared file clipboard (`ctx.clipboard.files/setFiles`). Approved by owner. | System apps must stay real apps (spec 3: "prove the app framework") but need OS-level access that normal ctx must not give plugins. |
 | 2026-10-16 | **Recent files** = files handed to an app through an intent (`services/vfs/recent.js`, last 30); they follow renames/moves and drop out on trash/delete. | One system-wide definition for Explorer's sidebar and later apps. |
+| 2026-10-16 | **`AppInstance.canClose()`** lets an app veto a normal close (unsaved changes); `lifecycle.close(id, { force })` / "End task" skip it. **`ctx.window.stateChanged()`** asks the shell to save the session soon after the app's `saveState()` changed (e.g. Explorer navigated). | Spec 3.3 "protection on close"; in-app navigation was otherwise lost on reload. |
+| 2026-10-16 | **Explorer path editing is F4** (click on the empty path bar too), not Ctrl+L. | Ctrl+L is the system lock shortcut; Alt+D belongs to the browser's address bar. |
+| 2026-10-16 | **Intents use the VFS's stored mime type** when a caller passes only a path; folders (`inode/directory`) open in the File Explorer. | Imported files keep their real type; folders had no handler. |
+| 2026-10-16 | **CSP: `media-src 'self' blob:` and `frame-src 'self' blob:`** for Explorer previews (audio/video, the browser's PDF viewer). PDFs are framed only as `application/pdf` Blobs. | Previews read VFS files as blob: URLs. |
+| 2026-10-16 | **Drag & drop between Nexus apps uses `application/x-nexus-paths`** (JSON array of VFS paths, `ui/file-icons.js` `PATHS_MIME`/`draggedPaths`). The desktop accepts it (move, Ctrl = copy). | One format for Explorer → desktop / other apps. |
 
 ## Cuts
 
@@ -292,13 +297,13 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **3.1 File Explorer**
 
-- [ ] [P1] Sidebar: favorites (Desktop, Documents, Downloads, Pictures, Music, Videos, Projects), Trash, tags, recent files; storage usage bar.
-- [ ] [P1] Views: icons (with thumbnails for images), list, details (sortable columns: name, size, type, modified), and column view.
-- [ ] [P1] Breadcrumb path bar (click to navigate, click empty space to type a path), back/forward/up, search within the current folder and below.
+- [x] [P1] Sidebar: favorites (Desktop, Documents, Downloads, Pictures, Music, Videos, Projects), Trash, tags, recent files; storage usage bar.
+- [x] [P1] Views: icons (with thumbnails for images), list, details (sortable columns: name, size, type, modified), and column view.
+- [x] [P1] Breadcrumb path bar (click to navigate, click empty space to type a path), back/forward/up, search within the current folder and below.
 - [ ] [P1] Operations: new folder/file, rename (F2), copy/cut/paste, drag & drop (within Explorer, to the desktop, to other apps, from the real OS), delete to trash, restore, permanent delete with confirm, properties dialog (size, dates, type, tags, default app).
-- [ ] [P1] Multi-select (Ctrl/Shift, box select), keyboard navigation (type-ahead), undo for the last operation.
+- [x] [P1] Multi-select (Ctrl/Shift, box select), keyboard navigation (type-ahead), undo for the last operation.
 - [ ] [P1] "Open with…", "Set default app", "Download", "Copy path", "Open terminal here".
-- [ ] [P1] Preview pane: images, text/code (highlighted), Markdown (rendered), audio/video players, PDF (browser's built-in viewer if available).
+- [x] [P1] Preview pane: images, text/code (highlighted), Markdown (rendered), audio/video players, PDF (browser's built-in viewer if available).
 - [ ] [P2] Tabs and split view (two folders side by side).
 - [ ] [P2] Zip: compress selection, extract archive (if fflate is approved).
 - [ ] [P2] Tags with colors, filter by tag.
@@ -349,7 +354,7 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **3.8 Trash and recovery**
 
-- [ ] [P1] Trash in Explorer with original paths, restore, empty, auto-empty after N days (setting).
+- [x] [P1] Trash in Explorer with original paths, restore, empty, auto-empty after N days (setting).
 
 ### Phase 4 — Productivity core — `specs/04-productivity.md`
 

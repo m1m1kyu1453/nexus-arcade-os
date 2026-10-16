@@ -1,0 +1,219 @@
+{
+  "title": "File Explorer",
+  "places": {
+    "label": "Places",
+    "favorites": "Favorites",
+    "home": "Home",
+    "Desktop": "Desktop",
+    "Documents": "Documents",
+    "Downloads": "Downloads",
+    "Pictures": "Pictures",
+    "Music": "Music",
+    "Videos": "Videos",
+    "Projects": "Projects",
+    "trash": "Trash",
+    "recent": "Recent",
+    "tags": "Tags",
+    "noTags": "No tags yet. Add them in Properties.",
+    "root": "Computer"
+  },
+  "storage": {
+    "label": "Storage",
+    "used": "{used} of {total} used",
+    "usedNoQuota": "{used} used",
+    "files": "{count} files in Nexus"
+  },
+  "toolbar": {
+    "back": "Back",
+    "forward": "Forward",
+    "up": "Up",
+    "refresh": "Refresh",
+    "newFolder": "New folder",
+    "newFile": "New file",
+    "upload": "Upload files",
+    "view": "View",
+    "icons": "Icons",
+    "list": "List",
+    "details": "Details",
+    "columns": "Columns",
+    "preview": "Preview pane",
+    "search": "Search in this folder",
+    "searchPlaceholder": "Search {folder}",
+    "path": "Path",
+    "editPath": "Type a path",
+    "more": "More",
+    "showHidden": "Show hidden files",
+    "sort": "Sort by"
+  },
+  "columns": {
+    "name": "Name",
+    "size": "Size",
+    "type": "Type",
+    "modified": "Modified",
+    "location": "Location",
+    "originalPath": "Original location",
+    "deleted": "Deleted"
+  },
+  "type": {
+    "folder": "Folder",
+    "file": "File",
+    "withExt": "{ext} file"
+  },
+  "menu": {
+    "open": "Open",
+    "openWith": "Open with…",
+    "openInNewWindow": "Open in new window",
+    "setDefault": "Always open with",
+    "cut": "Cut",
+    "copy": "Copy",
+    "paste": "Paste",
+    "pasteInto": "Paste into folder",
+    "rename": "Rename",
+    "trash": "Move to trash",
+    "deleteForever": "Delete permanently",
+    "restore": "Restore",
+    "emptyTrash": "Empty trash",
+    "download": "Download",
+    "copyPath": "Copy path",
+    "terminalHere": "Open terminal here",
+    "properties": "Properties",
+    "selectAll": "Select all",
+    "undo": "Undo {action}",
+    "newFolder": "New folder",
+    "newFile": "New text file",
+    "showInFolder": "Show in folder",
+    "upload": "Upload files here"
+  },
+  "names": {
+    "folder": "New folder",
+    "file": "New file"
+  },
+  "status": {
+    "items": {
+      "one": "{count} item",
+      "other": "{count} items"
+    },
+    "selected": {
+      "one": "{count} selected",
+      "other": "{count} selected"
+    },
+    "selectedSize": {
+      "one": "{count} selected ({size})",
+      "other": "{count} selected ({size})"
+    },
+    "loading": "Loading…",
+    "searching": "Searching…",
+    "results": {
+      "one": "{count} result for “{query}”",
+      "other": "{count} results for “{query}”"
+    },
+    "readOnly": "Read-only",
+    "cut": {
+      "one": "{count} item ready to move",
+      "other": "{count} items ready to move"
+    },
+    "copied": {
+      "one": "{count} item ready to paste",
+      "other": "{count} items ready to paste"
+    }
+  },
+  "empty": {
+    "folder": "This folder is empty",
+    "folderHint": "Drop files here, or press Ctrl+Shift+N for a new folder.",
+    "trash": "The trash is empty",
+    "search": "Nothing found",
+    "recent": "Files you open appear here",
+    "tag": "Nothing is tagged “{tag}”"
+  },
+  "undo": {
+    "create": "create",
+    "rename": "rename",
+    "copy": "copy",
+    "move": "move",
+    "trash": "move to trash",
+    "restore": "restore",
+    "done": "Undone: {action}",
+    "nothing": "Nothing to undo"
+  },
+  "confirm": {
+    "deleteTitle": "Delete permanently?",
+    "delete": {
+      "one": "“{name}” will be deleted for good. This cannot be undone.",
+      "other": "{count} items will be deleted for good. This cannot be undone."
+    },
+    "deleteOk": "Delete",
+    "emptyTitle": "Empty the trash?",
+    "empty": {
+      "one": "{count} item will be deleted for good. This cannot be undone.",
+      "other": "{count} items will be deleted for good. This cannot be undone."
+    },
+    "emptyOk": "Empty trash",
+    "trashTitle": "Move to trash?",
+    "trash": {
+      "one": "Move “{name}” to the trash?",
+      "other": "Move {count} items to the trash?"
+    },
+    "trashOk": "Move to trash"
+  },
+  "errors": {
+    "title": "Couldn't complete that",
+    "some": {
+      "one": "{count} item failed: {reason}",
+      "other": "{count} items failed: {reason}"
+    },
+    "notFound": "“{path}” doesn't exist",
+    "notFolder": "“{path}” is not a folder",
+    "noApp": "No app can open “{name}” yet",
+    "clipboard": "Couldn't copy to the clipboard"
+  },
+  "done": {
+    "pathCopied": "Path copied",
+    "imported": {
+      "one": "{count} file added",
+      "other": "{count} files added"
+    },
+    "trashed": {
+      "one": "Moved to trash",
+      "other": "{count} items moved to trash"
+    }
+  },
+  "props": {
+    "title": "Properties of “{name}”",
+    "name": "Name",
+    "type": "Type",
+    "location": "Location",
+    "size": "Size",
+    "contains": "Contains",
+    "created": "Created",
+    "modified": "Modified",
+    "tags": "Tags",
+    "tagsHint": "Separate tags with commas",
+    "defaultApp": "Opens with",
+    "askEveryTime": "Ask every time",
+    "noApp": "No app installed for this type",
+    "readOnly": "This item is read-only",
+    "save": "Save",
+    "close": "Close",
+    "calculating": "Calculating…",
+    "files": {
+      "one": "{count} file",
+      "other": "{count} files"
+    },
+    "folders": {
+      "one": "{count} folder",
+      "other": "{count} folders"
+    }
+  },
+  "preview": {
+    "label": "Preview",
+    "none": "Select a file to preview it",
+    "unavailable": "No preview for this type",
+    "tooLarge": "This file is too large to preview",
+    "multiple": "{count} items selected",
+    "pdfUnavailable": "This browser can't show PDFs inline. Use Download or Open with…",
+    "open": "Open"
+  },
+  "drop": {
+    "here": "Drop to add files to {folder}"
+  }
+}

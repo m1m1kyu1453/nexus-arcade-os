@@ -1,0 +1,186 @@
+{
+  "title": "Datei-Explorer",
+  "places": {
+    "label": "Orte",
+    "favorites": "Favoriten",
+    "home": "Persönlicher Ordner",
+    "Desktop": "Schreibtisch",
+    "Documents": "Dokumente",
+    "Downloads": "Downloads",
+    "Pictures": "Bilder",
+    "Music": "Musik",
+    "Videos": "Videos",
+    "Projects": "Projekte",
+    "trash": "Papierkorb",
+    "recent": "Zuletzt verwendet",
+    "tags": "Tags",
+    "noTags": "Noch keine Tags. Füge sie unter Eigenschaften hinzu.",
+    "root": "Computer"
+  },
+  "storage": {
+    "label": "Speicher",
+    "used": "{used} von {total} belegt",
+    "usedNoQuota": "{used} belegt",
+    "files": "{count} Dateien in Nexus"
+  },
+  "toolbar": {
+    "back": "Zurück",
+    "forward": "Vorwärts",
+    "up": "Nach oben",
+    "refresh": "Aktualisieren",
+    "newFolder": "Neuer Ordner",
+    "newFile": "Neue Datei",
+    "upload": "Dateien hochladen",
+    "view": "Ansicht",
+    "icons": "Symbole",
+    "list": "Liste",
+    "details": "Details",
+    "columns": "Spalten",
+    "preview": "Vorschaubereich",
+    "search": "In diesem Ordner suchen",
+    "searchPlaceholder": "{folder} durchsuchen",
+    "path": "Pfad",
+    "editPath": "Pfad eingeben",
+    "more": "Mehr",
+    "showHidden": "Versteckte Dateien anzeigen",
+    "sort": "Sortieren nach"
+  },
+  "columns": {
+    "name": "Name",
+    "size": "Größe",
+    "type": "Typ",
+    "modified": "Geändert",
+    "location": "Ort",
+    "originalPath": "Ursprünglicher Ort",
+    "deleted": "Gelöscht"
+  },
+  "type": {
+    "folder": "Ordner",
+    "file": "Datei",
+    "withExt": "{ext}-Datei"
+  },
+  "menu": {
+    "open": "Öffnen",
+    "openWith": "Öffnen mit …",
+    "openInNewWindow": "In neuem Fenster öffnen",
+    "setDefault": "Immer öffnen mit",
+    "cut": "Ausschneiden",
+    "copy": "Kopieren",
+    "paste": "Einfügen",
+    "pasteInto": "In Ordner einfügen",
+    "rename": "Umbenennen",
+    "trash": "In den Papierkorb",
+    "deleteForever": "Endgültig löschen",
+    "restore": "Wiederherstellen",
+    "emptyTrash": "Papierkorb leeren",
+    "download": "Herunterladen",
+    "copyPath": "Pfad kopieren",
+    "terminalHere": "Terminal hier öffnen",
+    "properties": "Eigenschaften",
+    "selectAll": "Alles auswählen",
+    "undo": "{action} rückgängig machen",
+    "newFolder": "Neuer Ordner",
+    "newFile": "Neue Textdatei",
+    "showInFolder": "Im Ordner zeigen",
+    "upload": "Dateien hierher hochladen"
+  },
+  "names": {
+    "folder": "Neuer Ordner",
+    "file": "Neue Datei"
+  },
+  "status": {
+    "items": { "one": "{count} Element", "other": "{count} Elemente" },
+    "selected": { "one": "{count} ausgewählt", "other": "{count} ausgewählt" },
+    "selectedSize": { "one": "{count} ausgewählt ({size})", "other": "{count} ausgewählt ({size})" },
+    "loading": "Wird geladen …",
+    "searching": "Suche läuft …",
+    "results": { "one": "{count} Treffer für „{query}“", "other": "{count} Treffer für „{query}“" },
+    "readOnly": "Schreibgeschützt",
+    "cut": { "one": "{count} Element bereit zum Verschieben", "other": "{count} Elemente bereit zum Verschieben" },
+    "copied": { "one": "{count} Element bereit zum Einfügen", "other": "{count} Elemente bereit zum Einfügen" }
+  },
+  "empty": {
+    "folder": "Dieser Ordner ist leer",
+    "folderHint": "Lege Dateien hier ab oder drücke Strg+Umschalt+N für einen neuen Ordner.",
+    "trash": "Der Papierkorb ist leer",
+    "search": "Nichts gefunden",
+    "recent": "Dateien, die du öffnest, erscheinen hier",
+    "tag": "Nichts hat den Tag „{tag}“"
+  },
+  "undo": {
+    "create": "Erstellen",
+    "rename": "Umbenennen",
+    "copy": "Kopieren",
+    "move": "Verschieben",
+    "trash": "In den Papierkorb",
+    "restore": "Wiederherstellen",
+    "done": "Rückgängig gemacht: {action}",
+    "nothing": "Nichts rückgängig zu machen"
+  },
+  "confirm": {
+    "deleteTitle": "Endgültig löschen?",
+    "delete": {
+      "one": "„{name}“ wird endgültig gelöscht. Das kann nicht rückgängig gemacht werden.",
+      "other": "{count} Elemente werden endgültig gelöscht. Das kann nicht rückgängig gemacht werden."
+    },
+    "deleteOk": "Löschen",
+    "emptyTitle": "Papierkorb leeren?",
+    "empty": {
+      "one": "{count} Element wird endgültig gelöscht. Das kann nicht rückgängig gemacht werden.",
+      "other": "{count} Elemente werden endgültig gelöscht. Das kann nicht rückgängig gemacht werden."
+    },
+    "emptyOk": "Papierkorb leeren",
+    "trashTitle": "In den Papierkorb verschieben?",
+    "trash": {
+      "one": "„{name}“ in den Papierkorb verschieben?",
+      "other": "{count} Elemente in den Papierkorb verschieben?"
+    },
+    "trashOk": "In den Papierkorb"
+  },
+  "errors": {
+    "title": "Das hat nicht geklappt",
+    "some": { "one": "{count} Element fehlgeschlagen: {reason}", "other": "{count} Elemente fehlgeschlagen: {reason}" },
+    "notFound": "„{path}“ existiert nicht",
+    "notFolder": "„{path}“ ist kein Ordner",
+    "noApp": "Noch keine App kann „{name}“ öffnen",
+    "clipboard": "Konnte nicht in die Zwischenablage kopieren"
+  },
+  "done": {
+    "pathCopied": "Pfad kopiert",
+    "imported": { "one": "{count} Datei hinzugefügt", "other": "{count} Dateien hinzugefügt" },
+    "trashed": { "one": "In den Papierkorb verschoben", "other": "{count} Elemente in den Papierkorb verschoben" }
+  },
+  "props": {
+    "title": "Eigenschaften von „{name}“",
+    "name": "Name",
+    "type": "Typ",
+    "location": "Ort",
+    "size": "Größe",
+    "contains": "Enthält",
+    "created": "Erstellt",
+    "modified": "Geändert",
+    "tags": "Tags",
+    "tagsHint": "Tags mit Kommas trennen",
+    "defaultApp": "Öffnen mit",
+    "askEveryTime": "Jedes Mal fragen",
+    "noApp": "Keine App für diesen Typ installiert",
+    "readOnly": "Dieses Element ist schreibgeschützt",
+    "save": "Speichern",
+    "close": "Schließen",
+    "calculating": "Wird berechnet …",
+    "files": { "one": "{count} Datei", "other": "{count} Dateien" },
+    "folders": { "one": "{count} Ordner", "other": "{count} Ordner" }
+  },
+  "preview": {
+    "label": "Vorschau",
+    "none": "Wähle eine Datei für die Vorschau",
+    "unavailable": "Keine Vorschau für diesen Typ",
+    "tooLarge": "Diese Datei ist zu groß für die Vorschau",
+    "multiple": "{count} Elemente ausgewählt",
+    "pdfUnavailable": "Dieser Browser kann PDFs nicht direkt anzeigen. Nutze Herunterladen oder Öffnen mit …",
+    "open": "Öffnen"
+  },
+  "drop": {
+    "here": "Ablegen, um Dateien zu {folder} hinzuzufügen"
+  }
+}

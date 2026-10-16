@@ -5,7 +5,7 @@
 // arrow-key navigation, and a context menu for the desktop and for icons.
 import { entriesFromDataTransfer, importEntries } from '../../services/vfs/transfer.js';
 import { capturePointer, h, icon } from '../../ui/dom.js';
-import { fileIconName, SHORTCUT_EXT } from '../../ui/file-icons.js';
+import { draggedPaths, fileIconName, PATHS_MIME, SHORTCUT_EXT } from '../../ui/file-icons.js';
 import { attachContextMenu } from '../../ui/menu.js';
 import { appIcon } from '../app-icon.js';
 import { appName } from '../util.js';
@@ -570,22 +570,27 @@ export function createDesktop(shell) {
     { label: t('desktop.menu') },
   );
 
-  // ─── Drop files from the real OS ───────────────────────────────────────
+  // ─── Drop files from the real OS, or VFS items dragged from the File Explorer ─────
   layer.addEventListener('dragover', (e) => {
-    if (e.dataTransfer?.types.includes('Files')) {
+    const types = e.dataTransfer?.types ?? [];
+    if (types.includes('Files') || types.includes(PATHS_MIME)) {
       e.preventDefault();
+      if (e.dataTransfer && types.includes(PATHS_MIME))
+        e.dataTransfer.dropEffect = e.ctrlKey || e.altKey ? 'copy' : 'move';
       layer.classList.add('is-drop-target');
     }
   });
   layer.addEventListener('dragleave', () => layer.classList.remove('is-drop-target'));
   layer.addEventListener('drop', async (e) => {
     layer.classList.remove('is-drop-target');
-    if (!e.dataTransfer?.types.includes('Files')) return;
+    const types = e.dataTransfer?.types ?? [];
+    if (!e.dataTransfer || !(types.includes('Files') || types.includes(PATHS_MIME))) return;
     e.preventDefault();
     const origin = layer.getBoundingClientRect();
     const at = cellAt(e.clientX - origin.left, e.clientY - origin.top);
-    const entries = await entriesFromDataTransfer(e.dataTransfer);
-    const written = await importEntries(sys.vfs, entries, dir);
+    const written = types.includes(PATHS_MIME)
+      ? await dropPaths(e.dataTransfer.getData(PATHS_MIME), e.ctrlKey || e.altKey)
+      : await importEntries(sys.vfs, await entriesFromDataTransfer(e.dataTransfer), dir);
     const tops = [...new Set(written.map((p) => p.slice(dir.length + 1).split('/')[0]))];
     const taken = new Set(Object.values(positions).map(key));
     tops.forEach((name, i) => {
@@ -596,6 +601,27 @@ export function createDesktop(shell) {
     });
     await render();
   });
+
+  /** Moves (or copies) VFS paths dragged from an app onto the desktop. @param {string} json @param {boolean} copy */
+  async function dropPaths(json, copy) {
+    /** @type {string[]} */
+    const written = [];
+    for (const from of draggedPaths(json)) {
+      if (from.slice(0, from.lastIndexOf('/')) === dir) continue;
+      try {
+        const target = await sys.vfs.uniquePath(`${dir}/${from.split('/').pop()}`);
+        if (copy) await sys.vfs.copy(from, target);
+        else await sys.vfs.move(from, target);
+        written.push(target);
+      } catch (error) {
+        await sys.notifications.notify({
+          title: t('desktop.pasteFailed'),
+          body: String(/** @type {Error} */ (error).message),
+        });
+      }
+    }
+    return written;
+  }
 
   sys.vfs.watch(dir, () => void render());
   addEventListener('resize', () => void render());

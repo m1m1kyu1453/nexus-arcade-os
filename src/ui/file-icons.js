@@ -16,3 +16,16 @@ export function fileIconName(mime, name) {
   if (mime.startsWith('text/')) return 'file-text';
   return 'file';
 }
+
+/** Drag & drop type for VFS paths dragged between Nexus apps (value: JSON array of paths). */
+export const PATHS_MIME = 'application/x-nexus-paths';
+
+/** Paths from a PATHS_MIME drag payload (invalid data → none). @param {string} json @returns {string[]} */
+export function draggedPaths(json) {
+  try {
+    const value = JSON.parse(json);
+    return Array.isArray(value) ? value.filter((p) => typeof p === 'string' && p.startsWith('/')) : [];
+  } catch {
+    return [];
+  }
+}

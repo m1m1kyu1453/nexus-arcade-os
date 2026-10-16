@@ -31,8 +31,9 @@ export class NoHandlerError extends Error {
  * @param {(request: ChooseRequest) => Promise<Choice | null>} options.choose   null = cancelled
  * @param {{ get(key: string): Promise<string | undefined>, set(key: string, appId: string): Promise<void>, delete(key: string): Promise<void> }} options.defaults
  * @param {(path: string) => void} [options.onOpened]  a file was handed to an app (recent files)
+ * @param {(path: string) => Promise<string | undefined>} [options.storedMime]  the VFS's mime for a path (folders, imports)
  */
-export function createIntents({ registry, lifecycle, choose, defaults, onOpened = () => {} }) {
+export function createIntents({ registry, lifecycle, choose, defaults, onOpened = () => {}, storedMime }) {
   /**
    * @param {'open' | 'share'} action
    * @param {{ mime: string, path?: string }} file
@@ -71,7 +72,10 @@ export function createIntents({ registry, lifecycle, choose, defaults, onOpened 
    */
   async function openWith(target, options) {
     const path = typeof target === 'string' ? target : target.path;
-    const mime = (typeof target === 'object' && target.mime) || mimeFromPath(path);
+    const mime =
+      (typeof target === 'object' && target.mime) ||
+      (await storedMime?.(path).catch(() => undefined)) ||
+      mimeFromPath(path);
     const file = { mime, path };
     const intent = { action: /** @type {const} */ ('open'), type: mime, path };
 
