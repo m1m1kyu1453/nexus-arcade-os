@@ -75,10 +75,18 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-16 | **`ctx.dialog.openFolder()`** picks a folder (Settings path settings such as the slideshow folder). | The file dialog could only pick files. |
 | 2026-10-16 | **System Monitor numbers:** "CPU" per window = time spent in the window's guarded callbacks (error boundary, outermost call only) per second; "memory estimate" = the window's DOM elements (browsers can't measure memory per window; JS heap shown where `performance.memory` exists). Workers are counted by wrapping `Worker` at boot (`kernel/workers.js`); workers that close themselves aren't seen (said in the UI). | Spec 3.5 "where possible": honest numbers instead of guesses. |
 | 2026-10-16 | **Network log service** (`services/network/network.js`, in memory, last 200): apps that go online (HTTP client phase 7, AI phase 12) record each request; the Monitor shows them. No such app exists yet, so the tab explains that and lists nothing. | Spec 3.5 Network tab; Nexus itself never makes requests. |
+| 2026-10-16 | **Uninstalled apps are remembered per profile** (`kv system:apps`); their commands become unavailable (`commands` `sourceEnabled`), so they vanish from the launcher, dock, search, palette and shortcuts. The App Center can't uninstall itself. | Spec 3.6 "hide them everywhere"; otherwise nothing could bring apps back. |
+| 2026-10-16 | **Manifest fields `changelog` (Markdown) and `screenshots` (module exporting image URLs).** Screenshots are taken with `npm run build && npm run screenshots` (Playwright, JPEG ~40–75 KB each) and committed. App code size in the App Center comes from `virtual:nexus-app-sizes` (each app's source folder at build time). | Spec 3.6 "screenshots (taken by you during development and bundled)". |
+| 2026-10-16 | **Help pages of apps and their changelogs are English for now**; Help says so in German. The general guides (getting started, shortcuts, offline, backups, privacy, FAQ) exist in English and German. | Translating every app's help would double the docs for each new app; tracked as an open item. |
+| 2026-10-16 | **Function keys count as "strong" shortcuts** (work while typing, like Ctrl/Alt combos), so F1 opens Help from any text field. | Spec 3.7 "F1 in any app". |
 
 ## Cuts
 
 None yet.
+
+## Open items outside the checklist
+
+- German versions of the apps' help pages (`src/apps/*/help.md`) and changelogs; Help shows a note until then.
 
 ## Known issues
 
@@ -357,15 +365,15 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **3.6 App Center**
 
-- [ ] [P1] Lists all built-in apps by category with icon, description, version, size estimate and permissions.
-- [ ] [P1] "Uninstall" built-in apps = hide them everywhere (launcher, dock, search) and optionally delete their data; "Install" = show again.
-- [ ] [P1] Per-app page: screenshots (taken by you during development and bundled), changelog, settings shortcut, "Clear data".
+- [x] [P1] Lists all built-in apps by category with icon, description, version, size estimate and permissions.
+- [x] [P1] "Uninstall" built-in apps = hide them everywhere (launcher, dock, search) and optionally delete their data; "Install" = show again.
+- [x] [P1] Per-app page: screenshots (taken by you during development and bundled), changelog, settings shortcut, "Clear data".
 - [ ] [P2] Plugin section (filled in phase 13).
 
 **3.7 Help**
 
-- [ ] [P1] Help app that renders every app's `help.md` plus general docs (getting started, keyboard shortcuts, offline, backups, privacy, FAQ), with search and a table of contents.
-- [ ] [P1] `F1` in any app opens Help for that app.
+- [x] [P1] Help app that renders every app's `help.md` plus general docs (getting started, keyboard shortcuts, offline, backups, privacy, FAQ), with search and a table of contents.
+- [x] [P1] `F1` in any app opens Help for that app.
 
 **3.8 Trash and recovery**
 

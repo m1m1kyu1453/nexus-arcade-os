@@ -31,13 +31,16 @@ export class CommandUnavailableError extends Error {
  * @param {import('../../kernel/logger.js').Logger} options.log
  * @param {() => import('./when.js').WhenContext} options.context
  * @param {(text: string | import('../../kernel/types').L10n) => string} options.localize
+ * @param {(source: string) => boolean} [options.sourceEnabled]  false for commands of hidden apps
  */
-export function createCommands({ bus, log, context, localize }) {
+export function createCommands({ bus, log, context, localize, sourceEnabled = () => true }) {
   /** @type {Map<string, Command>} */
   const commands = new Map();
   /** @type {((id: string) => unknown) | null} */
   let picker = null;
   const changed = () => bus.emit('commands:changed', {});
+  /** @param {Command} c */
+  const usable = (c) => !c.source || sourceEnabled(c.source);
 
   return {
     /**
@@ -64,7 +67,7 @@ export function createCommands({ bus, log, context, localize }) {
     /** @param {string} id */
     isAvailable(id) {
       const command = commands.get(id);
-      return !!command && evaluateWhen(command.when, context());
+      return !!command && usable(command) && evaluateWhen(command.when, context());
     },
 
     /**
@@ -74,7 +77,7 @@ export function createCommands({ bus, log, context, localize }) {
     list({ all = false } = {}) {
       const ctx = context();
       return [...commands.values()]
-        .filter((c) => all || (!c.hidden && evaluateWhen(c.when, ctx)))
+        .filter((c) => all || (!c.hidden && usable(c) && evaluateWhen(c.when, ctx)))
         .map((c) => ({
           ...c,
           title: localize(c.title),
@@ -90,7 +93,7 @@ export function createCommands({ bus, log, context, localize }) {
     async execute(id, args) {
       const command = commands.get(id);
       if (!command) throw new CommandUnavailableError(`Unknown command "${id}"`);
-      if (!evaluateWhen(command.when, context()))
+      if (!usable(command) || !evaluateWhen(command.when, context()))
         throw new CommandUnavailableError(`Command "${id}" is not available here`);
       // A command that needs a choice, run without one (e.g. from a shortcut): let the user pick.
       if (command.pick && args === undefined && picker) return picker(id);

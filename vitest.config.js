@@ -1,9 +1,9 @@
 import { defineConfig } from 'vitest/config';
-import { defineConstants, licensesPlugin } from './scripts/vite-shared.js';
+import { appSizesPlugin, defineConstants, licensesPlugin } from './scripts/vite-shared.js';
 
 export default defineConfig({
   define: defineConstants('web'),
-  plugins: [licensesPlugin()],
+  plugins: [licensesPlugin(), appSizesPlugin()],
   test: {
     include: ['tests/unit/**/*.test.js'],
     // Node by default (real Blob + structuredClone for IndexedDB tests).

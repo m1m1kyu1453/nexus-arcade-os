@@ -326,6 +326,24 @@ export function createPalette(shell) {
       },
       { id: 'help:tour', title: t('palette.help.tour'), icon: 'sparkles', run: () => shell.launch('nexus.welcome') },
       { id: 'help:palette', title: t('palette.help.prefixes'), icon: 'command', run: () => open('') },
+      // Pages of the Help app (when it is installed).
+      ...(sys.registry.isEnabled('nexus.help')
+        ? [
+            { id: 'help:open', title: t('palette.help.open'), icon: 'help', run: () => shell.launch('nexus.help') },
+            ...sys.registry
+              .list()
+              .filter((m) => m.help)
+              .map((m) => ({
+                id: `help:app:${m.id}`,
+                title: t('palette.help.app', { app: sys.localize(m.name) }),
+                icon: m.icon,
+                run: () =>
+                  shell.launch('nexus.help', {
+                    intent: { action: 'open', type: 'application/x-nexus-help', data: { page: `app/${m.id}` } },
+                  }),
+              })),
+          ]
+        : []),
     ].map(
       (x) =>
         /** @type {Item} */ ({

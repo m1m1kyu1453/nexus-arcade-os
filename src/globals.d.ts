@@ -14,3 +14,7 @@ declare module 'virtual:nexus-licenses' {
   const list: { name: string; version: string; license: string; kind: 'library' | 'font'; text: string }[];
   export default list;
 }
+declare module 'virtual:nexus-app-sizes' {
+  const sizes: Record<string, number>;
+  export default sizes;
+}

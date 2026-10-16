@@ -21,7 +21,8 @@
     "format": "prettier --write .",
     "typecheck": "tsc -p jsconfig.json",
     "icons": "node scripts/build-icons.js",
-    "test:live": "node scripts/test-live.js"
+    "test:live": "node scripts/test-live.js",
+    "screenshots": "node scripts/screenshots.js"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

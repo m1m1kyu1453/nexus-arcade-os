@@ -27,6 +27,8 @@ function load() {
         USE_PROFILES: { html: true },
         FORBID_TAGS: ['style', 'form', 'input', 'button', 'textarea', 'select'],
         FORBID_ATTR: ['style'],
+        // DOMPurify's default list plus `help:` (links between Help pages).
+        ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|help):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
       });
   });
   return renderer;

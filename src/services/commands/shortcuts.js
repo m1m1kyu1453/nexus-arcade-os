@@ -111,7 +111,8 @@ export function createShortcuts({ commands, log, store, activeScope, bus, apple 
     const combo = comboFromEvent(event);
     if (!combo) return false;
     const inInput = isEditable(event.target);
-    const strong = /(^|\+)(Ctrl|Alt|Meta)\+/.test(combo);
+    // Combos with Ctrl/Alt/Meta and function keys (F1 = help) can't be typing, so they work in text fields too.
+    const strong = /(^|\+)(Ctrl|Alt|Meta)\+/.test(combo) || /^(Shift\+)?F\d{1,2}$/.test(combo);
 
     /** @type {string} */
     let full = combo;

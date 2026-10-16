@@ -1,5 +1,5 @@
 // Build settings shared by the website (vite.config.js) and Nexus Lite (vite.lite.config.js).
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
@@ -103,6 +103,45 @@ export function licensesPlugin() {
         ...FONTS.map(({ file, ...f }) => ({ ...f, kind: 'font', text: read(file).trim() })),
       ].sort((a, b) => a.name.localeCompare(b.name));
       return `export default ${JSON.stringify(list)};`;
+    },
+  };
+}
+
+/**
+ * `virtual:nexus-app-sizes`: approximate code size per app id (bytes of its source folder:
+ * scripts, styles, messages, images), for the App Center. Shared libraries are not included.
+ */
+export function appSizesPlugin() {
+  const id = 'virtual:nexus-app-sizes';
+  const resolved = `\0${id}`;
+  const appsDir = new URL('../src/apps/', import.meta.url);
+  /** @param {URL} dir @returns {number} */
+  const folderSize = (dir) => {
+    let total = 0;
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const url = new URL(entry.name + (entry.isDirectory() ? '/' : ''), dir);
+      total += entry.isDirectory() ? folderSize(url) : statSync(url).size;
+    }
+    return total;
+  };
+  return {
+    name: 'nexus-app-sizes',
+    /** @param {string} source */
+    resolveId: (source) => (source === id ? resolved : null),
+    /** @param {string} loadId */
+    load(loadId) {
+      if (loadId !== resolved) return null;
+      /** @type {Record<string, number>} */
+      const sizes = {};
+      for (const entry of readdirSync(appsDir, { withFileTypes: true })) {
+        if (!entry.isDirectory()) continue;
+        const dir = new URL(`${entry.name}/`, appsDir);
+        const manifest = new URL('manifest.js', dir);
+        if (!existsSync(manifest)) continue;
+        const appId = /id:\s*'([^']+)'/.exec(readFileSync(manifest, 'utf8'))?.[1];
+        if (appId) sizes[appId] = folderSize(dir);
+      }
+      return `export default ${JSON.stringify(sizes)};`;
     },
   };
 }

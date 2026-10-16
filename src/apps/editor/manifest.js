@@ -32,5 +32,7 @@ export default {
   commands: [{ id: 'editor.new', title: { en: 'New text file', de: 'Neue Textdatei' }, icon: 'file-plus' }],
   messages: { en: () => import('./i18n/en.json'), de: () => import('./i18n/de.json') },
   help: () => import('./help.md?raw'),
+  changelog: () => import('./changelog.md?raw'),
+  screenshots: () => import('./screenshots/index.js'),
   load: () => import('./index.js'),
 };

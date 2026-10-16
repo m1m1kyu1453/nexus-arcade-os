@@ -4,7 +4,7 @@ import { readFileSync, renameSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig } from 'vite';
 import { viteSingleFile } from 'vite-plugin-singlefile';
-import { cspPlugin, defineConstants, licensesPlugin } from './scripts/vite-shared.js';
+import { appSizesPlugin, cspPlugin, defineConstants, licensesPlugin } from './scripts/vite-shared.js';
 
 /** Size budget for dist/nexus-lite.html. Change only with the owner's OK (see CLAUDE.md). */
 const LITE_BUDGET_BYTES = 8 * 1024 * 1024;
@@ -69,6 +69,7 @@ export default defineConfig({
   worker: { format: 'iife' },
   plugins: [
     licensesPlugin(),
+    appSizesPlugin(),
     cspPlugin('lite'),
     inlineFavicon(),
     inlineWorkers(),

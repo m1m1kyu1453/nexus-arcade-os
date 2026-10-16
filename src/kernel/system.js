@@ -420,6 +420,8 @@ async function openProfile(options, k, profile) {
     bus,
     log: logger.child('commands'),
     localize,
+    // Commands of apps hidden in the App Center are unavailable (system sources always work).
+    sourceEnabled: (source) => !registry.has(source) || registry.isEnabled(source),
     context: () => ({
       appFocused: !!lifecycle?.focusedId,
       focusedApp: focusedAppId(),
@@ -523,6 +525,12 @@ async function openProfile(options, k, profile) {
     }
   }
   registerSystemCommands({ commands, settings, i18n, theme });
+
+  // Apps hidden in the App Center stay hidden (per profile).
+  const appState = kv('system:apps');
+  const hidden = /** @type {unknown} */ (await appState.get('hidden'));
+  if (Array.isArray(hidden)) for (const id of hidden) if (registry.has(id)) registry.setEnabled(id, false);
+  bus.on('app:enabled-changed', () => void appState.set('hidden', registry.disabledIds()));
 
   lifecycle = createLifecycle({
     registry,

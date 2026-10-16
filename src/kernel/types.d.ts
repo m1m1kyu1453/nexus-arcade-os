@@ -43,6 +43,10 @@ export interface AppManifest {
   terminal?: TerminalCommandDecl[];
   /** Lazy help page (Markdown), shown by the Help app and on F1. */
   help?: () => Promise<{ default: string } | string>;
+  /** Lazy version history (Markdown), shown in the App Center. */
+  changelog?: () => Promise<{ default: string } | string>;
+  /** Lazy list of screenshot image URLs (a module exporting them), shown in the App Center. */
+  screenshots?: () => Promise<{ default: string[] }>;
   /** Lazy search provider, loaded when the search service first needs it. */
   search?: () => Promise<{ default: SearchProvider }>;
   /** Stored data: collections (one IndexedDB store each) and the data schema version. */

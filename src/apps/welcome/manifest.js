@@ -9,5 +9,7 @@ export default {
   keywords: ['tour', 'help', 'start', 'shortcuts', 'hilfe'],
   window: { width: 640, height: 520, minWidth: 360, minHeight: 320 },
   messages: { en: () => import('./i18n/en.json'), de: () => import('./i18n/de.json') },
+  changelog: () => import('./changelog.md?raw'),
+  screenshots: () => import('./screenshots/index.js'),
   load: () => import('./index.js'),
 };

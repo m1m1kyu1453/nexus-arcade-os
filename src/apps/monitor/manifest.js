@@ -17,5 +17,7 @@ export default {
   ],
   messages: { en: () => import('./i18n/en.json'), de: () => import('./i18n/de.json') },
   help: () => import('./help.md?raw'),
+  changelog: () => import('./changelog.md?raw'),
+  screenshots: () => import('./screenshots/index.js'),
   load: () => import('./index.js'),
 };

@@ -122,6 +122,10 @@ export function validateManifest(manifest) {
   });
   if (m.help !== undefined && typeof m.help !== 'function')
     fail('help', 'must be a function returning import("./help.md?raw")');
+  if (m.changelog !== undefined && typeof m.changelog !== 'function')
+    fail('changelog', 'must be a function returning import("./changelog.md?raw")');
+  if (m.screenshots !== undefined && typeof m.screenshots !== 'function')
+    fail('screenshots', 'must be a function returning import("./screenshots/index.js")');
 
   const settingKeys = new Set();
   optionalArray(m, 'settings', fail, (s, path) => {

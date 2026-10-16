@@ -44,6 +44,7 @@ function describe(m) {
     collections: Object.keys(m.storage?.collections ?? {}),
     terminal: m.terminal ?? [],
     hasHelp: typeof m.help === 'function',
+    hasChangelog: typeof m.changelog === 'function',
   };
 }
 
@@ -111,6 +112,20 @@ export function createSystemApi(deps) {
       const loaded = await m.help();
       return typeof loaded === 'string' ? loaded : loaded.default;
     },
+    /** An app's version history (Markdown), or null. @param {string} id */
+    async changelog(id) {
+      const m = registry.get(id);
+      if (!m?.changelog) return null;
+      const loaded = await m.changelog();
+      return typeof loaded === 'string' ? loaded : loaded.default;
+    },
+    /** Image URLs of an app's screenshots (may be empty). @param {string} id */
+    async screenshots(id) {
+      const m = registry.get(id);
+      return m?.screenshots ? [...(await m.screenshots()).default] : [];
+    },
+    /** Approximate code size per app id (its own source folder), from the build. */
+    codeSizes: async () => (await import('virtual:nexus-app-sizes')).default,
   };
 
   const windows = {

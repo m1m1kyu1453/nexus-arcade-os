@@ -195,7 +195,9 @@
     "help": {
       "shortcuts": "Tastenkürzel",
       "tour": "Willkommenstour",
-      "prefixes": "So nutzt du die Befehlspalette"
+      "prefixes": "So nutzt du die Befehlspalette",
+      "open": "Hilfe öffnen",
+      "app": "Hilfe: {app}"
     },
     "openInSettings": "In den Einstellungen öffnen"
   },

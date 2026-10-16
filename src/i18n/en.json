@@ -195,7 +195,9 @@
     "help": {
       "shortcuts": "Keyboard shortcuts",
       "tour": "Welcome tour",
-      "prefixes": "How to use the command palette"
+      "prefixes": "How to use the command palette",
+      "open": "Open Help",
+      "app": "Help: {app}"
     },
     "openInSettings": "Open in Settings"
   },

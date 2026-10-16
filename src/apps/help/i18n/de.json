@@ -1,0 +1,20 @@
+{
+  "title": "Hilfe",
+  "search": "Hilfe durchsuchen",
+  "results": "Suchergebnisse",
+  "noResults": "Nichts gefunden",
+  "pages": "Hilfeseiten",
+  "toc": "Auf dieser Seite",
+  "nexus": "Nexus",
+  "apps": "Apps",
+  "missing": "Diese Seite gibt es nicht.",
+  "english": "Diese Seite gibt es bisher nur auf Englisch.",
+  "general": {
+    "getting-started": "Erste Schritte",
+    "shortcuts": "Tastenkürzel",
+    "offline": "Offline und installieren",
+    "backups": "Backups",
+    "privacy": "Datenschutz",
+    "faq": "Fragen und Antworten"
+  }
+}
