@@ -48,5 +48,15 @@ export async function startNexus(page, { url = '/', seed, seedArg } = {}) {
   });
   if (seed) await page.evaluate(seed, /** @type {T} */ (seedArg));
   await page.goto(url);
+  await waitForDesktop(page);
+}
+
+/**
+ * Waits until the kernel is ready and the boot screen has gone. The boot screen stays up for a
+ * minimum time after the kernel is ready; a click while it is up only skips it.
+ * @param {import('@playwright/test').Page} page
+ */
+export async function waitForDesktop(page) {
   await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready', { timeout: 15_000 });
+  await expect(page.locator('.nx-boot')).toHaveCount(0, { timeout: 10_000 });
 }

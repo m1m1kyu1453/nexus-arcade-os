@@ -1,7 +1,7 @@
 // Phase 2 "done when": the shell works entirely with the keyboard, with the mouse and with touch,
 // and everything is restored after a reload.
 import { expect, test } from '@playwright/test';
-import { collectErrors, startNexus } from '../helpers/nexus.js';
+import { collectErrors, startNexus, waitForDesktop } from '../helpers/nexus.js';
 
 const windows = (/** @type {import('@playwright/test').Page} */ page) => page.locator('.nx-windows .nx-window');
 const appBar = (/** @type {import('@playwright/test').Page} */ page) =>
@@ -13,7 +13,7 @@ const welcome = (/** @type {import('@playwright/test').Page} */ page) =>
 async function reloadDesktop(/** @type {import('@playwright/test').Page} */ page) {
   await page.waitForTimeout(1200);
   await page.reload();
-  await expect(page.locator('html')).toHaveAttribute('data-kernel', 'ready', { timeout: 15_000 });
+  await waitForDesktop(page);
 }
 
 test.describe('desktop', () => {
