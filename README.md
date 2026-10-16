@@ -7,9 +7,11 @@ a terminal, and dozens of apps and games that share data with each other. It is 
 Progressive Web App and works **offline** after the first visit. There are no accounts and no
 backend: your data stays in your browser.
 
-> **Status: phase 1 (kernel & services).** Storage, file system, profiles, settings, themes,
-> languages, notifications, reminders, search and backups work under the hood; the desktop
-> arrives in phase 2. See [PROGRESS.md](PROGRESS.md) for the full roadmap.
+> **Status: phase 2 (shell).** The desktop works: windows with snapping and workspaces, dock,
+> launcher, command palette, notification center, widgets, live wallpapers, lock screen, and a
+> phone layout. Apps arrive from phase 3 on. See [PROGRESS.md](PROGRESS.md) for the full roadmap.
+
+![The Nexus desktop: a Welcome window snapped left, clock, Pomodoro, calendar and system status widgets on the right](docs/screenshot.png)
 
 **Live site:** https://nexus-arcade-os.onrender.com · **Nexus Lite:** [download `nexus-lite.html`](https://nexus-arcade-os.onrender.com/nexus-lite.html)
 
@@ -36,7 +38,7 @@ npm run build        # dist/ (website) + dist/nexus-lite.html
 npm run preview      # serve the production build
 npm test             # unit tests
 npx playwright install chromium   # once
-npm run test:e2e     # smoke tests against the build (run `npm run build` first)
+npm run test:e2e     # end-to-end tests against the build (run `npm run build` first)
 ```
 
 ## Architecture

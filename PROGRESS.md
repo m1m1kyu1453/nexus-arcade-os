@@ -2,8 +2,9 @@
 
 ## Status
 
-- **Current phase:** 2 — Shell (phase 1 done 2026-10-15, `v0.1.0`)
-- **Next step:** phase 2 in progress. Done and live in the shell: two-stage kernel boot, icon set (140), UI kit, window manager (drag/resize/snap/layouts/keyboard, workspaces, session restore), top bar, dock, Welcome app, command palette (prefix modes, pickers with live preview, calculator), launcher (Mod+Space / Mod tap), notification center + quick settings (Focus, screenshot), wallpapers (6 live + 8 gradients + pictures + slideshow), Personalize panel, desktop icons, overview + hot corner, Alt+` switcher. NEXT: boot screen + lock/login screen (src/shell/lock), system dialogs for ctx.dialog (replace native-dialogs.js), shortcut overlay (Mod+/), widgets (2.3), mobile shell (2.10), e2e for the done-when list, docs/decisions (shortcut defaults, deferred widgets/menu entries), then v0.2.0.
+- **Current phase:** 3 — System apps (phase 2 done 2026-10-16, `v0.2.0`)
+- **Next step:** phase 3 (`specs/03-system-apps.md`): file explorer, settings, terminal, system monitor and the other system apps. Phase 2 shipped the whole shell: boot/lock/login, desktop icons, wallpapers, widgets, window manager, workspaces, overview/switcher, dock, top bar, launcher, command palette, notification center, system dialogs, shortcut overlay and the mobile shell.
+- **Phase 2 verification:** 516 unit tests; e2e `tests/e2e/shell.spec.js` runs the done-when flows with keyboard only, mouse and touch, each restored after a reload; smoke tests (website, offline reload, Lite on `file://`).
 - **Phase 1 verification:** 336 unit tests incl. `tests/unit/system.test.js` (whole system in jsdom: launch, storage, VFS, search, crash/restart, language switch, backup → wipe → restore, newer-data read-only); e2e asserts the kernel boots (`<html data-kernel="ready">`) on the website, offline, and in Lite from `file://`.
 
 ## Decisions
@@ -41,6 +42,16 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-15 | **Apps cannot emit OS event namespaces** (`app:`, `vfs:`, `storage:`, … see docs/events.md); `ctx.events.emit` throws for them. | Keeps system events trustworthy (no spoofed `vfs:changed`). |
 | 2026-10-15 | **App messages load together with the app** (lifecycle `prepare` step before mount; also before command handlers and search providers). | Spec 1.7: lazy-loaded with the app. |
 | 2026-10-15 | **An app's search provider gets a relevance floor (score 350)** below exact/prefix matches of indexed items. | Providers filter for relevance themselves; their results shouldn't drown or be drowned by fuzzy matches. |
+
+| 2026-10-15 | **Browser-safe default shortcuts, spec combos kept as hidden aliases.** Close is `Alt+W` (plus hidden `Mod+W`, `Alt+F4`), switcher ``Alt+` `` (backtick) (plus hidden `Alt+Tab`), overview `Mod+Shift+Space` (plus hidden `Mod+Tab`). `Mod+Arrows` only act when a window is focused and no text field is. | Browsers reserve `Ctrl+W`, `Ctrl+Tab`, `Alt+Tab`; the spec combos still work where the browser lets them through (installed PWA, fullscreen). |
+| 2026-10-15 | **Desktop context menu entries appear only when their app exists** ("New note", "Open terminal here" come with Notes and Terminal). | No fake features: a menu entry must work. |
+| 2026-10-15 | **A Welcome app** (`src/apps/welcome`) opens on first start: a short tour and quick actions. | The shell needs a real window on first boot; it doubles as the onboarding until the P2 first-boot setup. |
+| 2026-10-16 | **System dialogs replace the native ones at boot** (`src/shell/dialogs`): the kernel keeps `native-dialogs.js` as the fallback for headless use and tests; the shell swaps its implementations into the same `dialogs` object, so `ctx.dialog` and the intents "Open with…" picker use them. Modal actions can veto closing (`accept`). | Kernel stays independent of the shell. |
+| 2026-10-16 | **Widgets get a `WidgetContext`**: the headless ctx plus `signal`, `timers`, `guard` (from `system.widgetContext`) and `ctx.widget` (id, size, onResize, config). Widget decls may declare `settings` (same `SettingDecl` schema, new `date` type) and `minSize`; the shell renders the settings form and stores values per placed widget. Built-in widgets use the same decl shape (`src/shell/widgets/builtin`). Only the current workspace's widgets are mounted. | Widgets need a lifetime like windows (timers must stop on removal); per-instance settings were otherwise unspecified. |
+| 2026-10-16 | **"Today's tasks" and "Now playing" widgets are deferred to Tasks (phase 4) and Music (phase 11)** as manifest widgets. | They need those apps' data; an empty placeholder widget would be a fake feature. |
+| 2026-10-16 | **Pomodoro widget end-of-phase is a scheduler job**; the running state (end time) lives in the widget config. | The notification arrives even if the widget is on another workspace, and the timer survives reloads. |
+| 2026-10-16 | **Mobile shell is CSS + a small module** (`src/shell/mobile`): `<html data-mobile>` below 768 px, the most recently focused window is the sheet, window drag/snap/maximize off; the app bar's Switcher reuses the overview. | One window manager for both layouts; session data stays compatible when the viewport changes. |
+| 2026-10-16 | **E2E covers the phase 2 "done when"** (`tests/e2e/shell.spec.js`): keyboard-only, mouse and touch (Pixel 7) flows, each ending with a reload that must restore windows, workspaces, theme and widgets. | Spec "Done when". |
 
 ## Cuts
 
@@ -131,7 +142,7 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 - [x] [P1] Multiple local profiles, each with its own database: name, avatar (generated identicon or uploaded image), accent color.
 - [x] [P1] Optional PIN or password per profile (hashed with PBKDF2; this is a privacy lock, not real security, and the UI says so).
-- [ ] [P2] Guest profile that wipes itself on logout. — _open: guest flag exists; wiping on sign-out needs the phase 2 lock screen/sign-out._
+- [x] [P2] Guest profile that wipes itself on logout. — _done in phase 2 (log out from the profile menu or lock screen)._
 
 **1.5 Settings service**
 
@@ -189,44 +200,44 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **1.13 Debug screen**
 
-- [x] [P1] A temporary developer page (only in dev mode) that shows registered apps, services, storage contents, the event log, and buttons to trigger notifications/crashes. This proves the kernel works before the shell exists.
+- [x] [P1] A temporary developer page (only in dev mode) that shows registered apps, services, storage contents, the event log, and buttons to trigger notifications/crashes. This proves the kernel works before the shell exists. — _since phase 2 an overlay over the shell (`#debug` or the dev command)._
 
 ### Phase 2 — Shell (the desktop experience) — `specs/02-shell.md`
 
 **2.1 Boot and login**
 
-- [ ] [P1] **Boot sequence:** animated Nexus logo, a progress bar tied to real init steps (storage, migrations, settings, theme, app registry, search index), a scrolling system log with real messages, and a smooth transition to the lock screen or desktop.
-- [ ] [P1] Skippable with any key/click; "Fast boot" setting; much shorter on later visits.
-- [ ] [P1] **Lock screen:** large clock and date, wallpaper with blur, profile picker, PIN/password field, "Switch profile", "Create profile". Lock with `Mod+L` and after an idle time (setting).
+- [x] [P1] **Boot sequence:** animated Nexus logo, a progress bar tied to real init steps (storage, migrations, settings, theme, app registry, search index), a scrolling system log with real messages, and a smooth transition to the lock screen or desktop.
+- [x] [P1] Skippable with any key/click; "Fast boot" setting; much shorter on later visits.
+- [x] [P1] **Lock screen:** large clock and date, wallpaper with blur, profile picker, PIN/password field, "Switch profile", "Create profile". Lock with `Mod+L` and after an idle time (setting).
 - [ ] [P2] First-boot setup: name, avatar, language, theme, accent. Done in under 30 seconds.
 - [ ] [P3] A BIOS-style "boot menu" easter egg when holding a key during boot (safe mode = start without restoring windows).
 
 **2.2 Desktop**
 
-- [ ] [P1] **Desktop icons:** files and app shortcuts from the `Desktop` folder; drag with grid snap; multi-select (box select, Ctrl/Shift click); rename; delete; open; drag files in from the real OS.
-- [ ] [P1] **Desktop context menu:** new folder, new text file, new note, paste, sort icons, change wallpaper, display settings, open terminal here — all functional.
-- [ ] [P1] **Wallpapers:** · static gradient and image wallpapers (a set of generated ones built into the app, plus user images from the VFS), · **live wallpapers** on canvas/WebGL: particle network (reacts to cursor), aurora, synthwave grid, matrix rain, starfield, and a slow fluid gradient, · fit modes (fill, fit, center, tile), dimming and blur sliders, slideshow from a folder with an interval.
-- [ ] [P1] Live wallpapers pause when windows are maximized or the tab is hidden, and fall back to static in battery-saver/reduced-motion.
+- [x] [P1] **Desktop icons:** files and app shortcuts from the `Desktop` folder; drag with grid snap; multi-select (box select, Ctrl/Shift click); rename; delete; open; drag files in from the real OS.
+- [x] [P1] **Desktop context menu:** new folder, new text file, new note, paste, sort icons, change wallpaper, display settings, open terminal here — all functional.
+- [x] [P1] **Wallpapers:** · static gradient and image wallpapers (a set of generated ones built into the app, plus user images from the VFS), · **live wallpapers** on canvas/WebGL: particle network (reacts to cursor), aurora, synthwave grid, matrix rain, starfield, and a slow fluid gradient, · fit modes (fill, fit, center, tile), dimming and blur sliders, slideshow from a folder with an interval.
+- [x] [P1] Live wallpapers pause when windows are maximized or the tab is hidden, and fall back to static in battery-saver/reduced-motion.
 - [ ] [P2] Time-of-day wallpaper (colors shift from morning to night).
 - [ ] [P2] Desktop sticky notes (stored as notes, so they also appear in Nexus Notes).
 
 **2.3 Widgets**
 
-- [ ] [P1] Widget host: add from a widget gallery, drag to place, resize in grid steps, remove, per-widget settings, layout saved per workspace.
-- [ ] [P1] Built-in widgets: clock (analog/digital/world), calendar month, system status (FPS, storage, online/offline, battery where supported), quick note, today's tasks, now playing, Pomodoro, countdown to a date, app launcher grid.
+- [x] [P1] Widget host: add from a widget gallery, drag to place, resize in grid steps, remove, per-widget settings, layout saved per workspace.
+- [x] [P1] Built-in widgets: clock (analog/digital/world), calendar month, system status (FPS, storage, online/offline, battery where supported), quick note, today's tasks, now playing, Pomodoro, countdown to a date, app launcher grid. — _today's tasks and now playing ship as manifest widgets of Tasks (phase 4) and Music (phase 11), see Decisions._
 - [ ] [P2] Quote/tip of the day (from a bundled list), habit streaks, upcoming events, XP/level progress.
-- [ ] [P1] Apps can provide widgets through their manifest (master brief §5.2).
+- [x] [P1] Apps can provide widgets through their manifest (master brief §5.2).
 
 **2.4 Window manager**
 
-- [ ] [P1] Windows: title bar with icon, title, and min/max/close buttons; drag; resize from all edges and corners; minimum sizes; z-order; focus with a visual focused state (cursor-following glow on the border).
-- [ ] [P1] Open/close/minimize/maximize/restore animations (with reduced-motion fallback), minimize animates into the dock icon.
-- [ ] [P1] Double-click title bar to maximize; drag a maximized window to restore it.
-- [ ] [P1] **Snapping:** drag to left/right edge (halves), corners (quarters), top (maximize), with a preview overlay. **Snap layouts** menu when hovering the maximize button (halves, thirds, quarters, 2/3 + 1/3). Resizing snapped neighbours together.
-- [ ] [P1] Window state (position, size, snap, workspace, app state where the app supports it) restored after reload.
-- [ ] [P1] Keyboard: `Mod+Arrows` to snap, `Mod+M` minimize, `Mod+W` close, `Alt+F4` style close where possible, `Mod+Shift+Arrows` move between workspaces.
-- [ ] [P1] Multiple instances of the same app where the manifest allows it.
-- [ ] [P1] Windows stay within the viewport on browser resize; nothing gets lost off-screen.
+- [x] [P1] Windows: title bar with icon, title, and min/max/close buttons; drag; resize from all edges and corners; minimum sizes; z-order; focus with a visual focused state (cursor-following glow on the border).
+- [x] [P1] Open/close/minimize/maximize/restore animations (with reduced-motion fallback), minimize animates into the dock icon.
+- [x] [P1] Double-click title bar to maximize; drag a maximized window to restore it.
+- [x] [P1] **Snapping:** drag to left/right edge (halves), corners (quarters), top (maximize), with a preview overlay. **Snap layouts** menu when hovering the maximize button (halves, thirds, quarters, 2/3 + 1/3). Resizing snapped neighbours together.
+- [x] [P1] Window state (position, size, snap, workspace, app state where the app supports it) restored after reload.
+- [x] [P1] Keyboard: `Mod+Arrows` to snap, `Mod+M` minimize, `Mod+W` close, `Alt+F4` style close where possible, `Mod+Shift+Arrows` move between workspaces.
+- [x] [P1] Multiple instances of the same app where the manifest allows it.
+- [x] [P1] Windows stay within the viewport on browser resize; nothing gets lost off-screen.
 - [ ] [P2] **Tiling mode** toggle per workspace: windows auto-arrange in a master/stack layout, keyboard-driven (like a tiling WM).
 - [ ] [P2] Always-on-top, window opacity, "roll up" (title bar only), pin to all workspaces.
 - [ ] [P2] App menu bar inside windows (File, Edit, View …) provided by apps through `ctx.window.setMenu`.
@@ -234,45 +245,45 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **2.5 Workspaces and overview**
 
-- [ ] [P1] At least 4 virtual workspaces (user can add/remove/rename), switch with `Ctrl+Alt+Arrows` or `Mod+1..9`, slide animation, move windows between them by drag or shortcut.
-- [ ] [P1] **Overview** (`Mod+Tab` or hot corner): all windows of the current workspace as live-ish thumbnails, workspaces strip on top, drag windows between workspaces, type to search apps.
-- [ ] [P1] **Alt+Tab switcher:** window list with icons and titles, cycling with Tab/Shift+Tab, release to switch.
+- [x] [P1] At least 4 virtual workspaces (user can add/remove/rename), switch with `Ctrl+Alt+Arrows` or `Mod+1..9`, slide animation, move windows between them by drag or shortcut.
+- [x] [P1] **Overview** (`Mod+Tab` or hot corner): all windows of the current workspace as live-ish thumbnails, workspaces strip on top, drag windows between workspaces, type to search apps.
+- [x] [P1] **Alt+Tab switcher:** window list with icons and titles, cycling with Tab/Shift+Tab, release to switch.
 
 **2.6 Dock, top bar, launcher**
 
-- [ ] [P1] **Dock:** pinned apps, running indicators (dot per instance), badges (unread count), progress bars (e.g. downloads, exports), right-click menu (new window, pin/unpin, close all, app settings), drag to reorder, position bottom/left/right, auto-hide option.
-- [ ] [P1] Hover magnification (macOS-like), configurable or off.
-- [ ] [P1] Window previews on hover for running apps with multiple windows.
-- [ ] [P1] **Top bar / system tray:** launcher button, active app name, workspace indicator, clock (click opens calendar popover), online/offline state, volume, notifications bell with count, profile menu (lock, switch profile, settings, log out).
-- [ ] [P1] **Launcher / start menu:** search box, pinned apps, all apps by category, recent files, recent apps; fully keyboard-operable; opens with `Mod` key tap or `Mod+Space`.
+- [x] [P1] **Dock:** pinned apps, running indicators (dot per instance), badges (unread count), progress bars (e.g. downloads, exports), right-click menu (new window, pin/unpin, close all, app settings), drag to reorder, position bottom/left/right, auto-hide option.
+- [x] [P1] Hover magnification (macOS-like), configurable or off.
+- [x] [P1] Window previews on hover for running apps with multiple windows.
+- [x] [P1] **Top bar / system tray:** launcher button, active app name, workspace indicator, clock (click opens calendar popover), online/offline state, volume, notifications bell with count, profile menu (lock, switch profile, settings, log out).
+- [x] [P1] **Launcher / start menu:** search box, pinned apps, all apps by category, recent files, recent apps; fully keyboard-operable; opens with `Mod` key tap or `Mod+Space`.
 - [ ] [P2] Dock folders/stacks (e.g. "Games").
 
 **2.7 Command palette (`Ctrl+K`)**
 
-- [ ] [P1] Fuzzy search across apps, commands, settings, files and app search providers (phase 1 search service), with icons, categories, highlighted matches, keyboard navigation, recent items on empty input.
-- [ ] [P1] Prefix modes: `>` commands only, `/` files, `@` settings, `=` calculator (inline result, Enter copies), `?` help topics, `#` tags.
-- [ ] [P1] Commands can ask for arguments in the palette (e.g. "Change theme → pick theme" with live preview).
+- [x] [P1] Fuzzy search across apps, commands, settings, files and app search providers (phase 1 search service), with icons, categories, highlighted matches, keyboard navigation, recent items on empty input.
+- [x] [P1] Prefix modes: `>` commands only, `/` files, `@` settings, `=` calculator (inline result, Enter copies), `?` help topics, `#` tags.
+- [x] [P1] Commands can ask for arguments in the palette (e.g. "Change theme → pick theme" with live preview).
 - [ ] [P2] Unit and currency-free conversion inline (`= 5 km in miles`, `= 0xff in dec`).
 
 **2.8 Notification center and quick settings**
 
-- [ ] [P1] Slide-out panel: notifications grouped by app, clear one/all, actions on notifications, "While you were away" section from the scheduler.
-- [ ] [P1] Quick settings tiles: Do not disturb, theme light/dark, battery saver, sound mute, volume slider, focus session start, screenshot, lock.
+- [x] [P1] Slide-out panel: notifications grouped by app, clear one/all, actions on notifications, "While you were away" section from the scheduler.
+- [x] [P1] Quick settings tiles: Do not disturb, theme light/dark, battery saver, sound mute, volume slider, focus session start, screenshot, lock.
 - [ ] [P2] Media controls tile when something is playing.
 
 **2.9 Context menus, dialogs, misc**
 
-- [ ] [P1] One context menu system used everywhere: keyboard navigation, submenus, icons, shortcuts shown, disabled states, separators, checkable items, positioned within the viewport.
-- [ ] [P1] System dialogs via `ctx.dialog`: alert, confirm, prompt, file open/save (using the VFS with a mini file browser), color picker, app picker.
-- [ ] [P1] **Keyboard shortcut overlay:** hold `Mod+/` to see all shortcuts available right now.
-- [ ] [P2] **Screenshot tool:** capture the screen via `getDisplayMedia` (with permission), select a region, save PNG to `Pictures/Screenshots`, copy to clipboard.
+- [x] [P1] One context menu system used everywhere: keyboard navigation, submenus, icons, shortcuts shown, disabled states, separators, checkable items, positioned within the viewport.
+- [x] [P1] System dialogs via `ctx.dialog`: alert, confirm, prompt, file open/save (using the VFS with a mini file browser), color picker, app picker.
+- [x] [P1] **Keyboard shortcut overlay:** hold `Mod+/` to see all shortcuts available right now.
+- [ ] [P2] **Screenshot tool:** capture the screen via `getDisplayMedia` (with permission), select a region, save PNG to `Pictures/Screenshots`, copy to clipboard. — _open: capture, save and copy work (quick settings tile); region selection is missing._
 - [ ] [P2] **Screensaver** after idle time: a few canvas screensavers (starfield, pipes-like, clock bounce), disabled during media playback.
 - [ ] [P3] Konami code easter egg.
 
 **2.10 Mobile shell**
 
-- [ ] [P1] Below ~768 px: one window at a time as a full-screen sheet, bottom app bar instead of dock, swipe up for the app switcher, swipe down from the top for notifications/quick settings, launcher as a full-screen grid.
-- [ ] [P1] Touch: long-press = context menu, large hit targets, no hover-only features.
+- [x] [P1] Below ~768 px: one window at a time as a full-screen sheet, bottom app bar instead of dock, swipe up for the app switcher, swipe down from the top for notifications/quick settings, launcher as a full-screen grid.
+- [x] [P1] Touch: long-press = context menu, large hit targets, no hover-only features.
 
 ### Phase 3 — System apps — `specs/03-system-apps.md`
 

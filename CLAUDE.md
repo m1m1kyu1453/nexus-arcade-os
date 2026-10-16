@@ -29,7 +29,9 @@ As in NEXUS_BRIEF.md §5.1, plus:
 - `src/kernel/system.js` — boots everything (order in docs/architecture.md); `context.js` builds each app's `ctx`.
 - `src/apps/index.js` — collects `src/apps/*/manifest.js`. `src/i18n/{en,de}.json` — system messages.
 - `src/dev/` — debug screen and the kernel test app (dev builds and tests only; a complete app example).
-- `src/shell/bare-host.js`, `native-dialogs.js` — phase 1 stand-ins that the phase 2 shell replaces.
+- `src/shell/boot.js` creates the shell parts in order; `shell.js` builds the layers and the window manager (`shell.ui.*` holds each part: dock, palette, launcher, center, widgets, dialogs, shortcuts, mobile …). `bare-host.js` (tests) and `native-dialogs.js` (headless fallback) remain from phase 1.
+- `src/shell/wm/` — window manager (`geometry.js` is pure and tested), overview, switcher. `src/shell/widgets/` — widget host, grid math, built-in widgets. `src/shell/dialogs/` — `ctx.dialog`. `src/shell/mobile/` — `<html data-mobile>` layout below 768 px.
+- `src/ui/` — shared UI kit for shell and apps: `dom.js` (`h`, `icon`, `capturePointer` …), `menu.js` (context menus), `overlay.js` (modals, popovers, tooltips), `icons/`.
 - `scripts/` — build helpers (shared Vite settings, icon renderer).
 - `tests/helpers/` — `setup-unit.js` (fresh fake IndexedDB per test), `nexus.js` (Playwright: `startNexus` clean profile + seed, `collectErrors`, `liteUrl`).
 - Empty folders carry a short `README.md` instead of an empty `index.js` (no dead code).
@@ -40,7 +42,7 @@ As in NEXUS_BRIEF.md §5.1, plus:
 - `// @ts-check` + JSDoc on public APIs in kernel/services. Types shared across apps go in `src/kernel/types.d.ts`.
 - Apps/games: import only own files, `ui/`, `styles/` (games: also `games/engine/`). ESLint enforces it.
 - App modules do nothing at import time — Lite evaluates every module on load.
-- All user-visible strings in EN + DE: system strings in `src/i18n/`, app strings in `src/apps/<name>/i18n/` (declared as `manifest.messages`). The phase 0 placeholder still uses `src/shell/strings.js` until phase 2 replaces it.
+- All user-visible strings in EN + DE: system strings in `src/i18n/`, app strings in `src/apps/<name>/i18n/` (declared as `manifest.messages`). `src/shell/strings.js` holds only the few strings needed before the kernel loads (boot screen, update toast).
 - Apps declare collections in `manifest.storage.collections` (undeclared ones throw). Bump `storage.version` with every data-shape change and add a migration.
 - `ctx` subscriptions (events, settings, collection/i18n/theme changes, shortcuts, `fs.watch`) end on unmount; anything else must use `ctx.signal` / `ctx.timers`. Apps can't emit OS event namespaces (docs/events.md).
 - Mark testable elements with `data-testid`; expose state with `data-state`.
@@ -72,8 +74,7 @@ Ask before adding anything else (brief §2.4).
 - Python edits on Prettier-formatted files: match the formatted text (tables are padded, long lines wrapped) or use the Edit tool.
 
 - Live site: https://nexus-arcade-os.onrender.com (Render static site, deploys after CI passes).
-- Playwright persistent profiles on Windows need a **short path** (e.g. `%TEMP%
-xp`): under the long scratchpad path Cache Storage fails with "Unexpected internal error" (MAX_PATH), so the SW never installs.
+- Playwright persistent profiles on Windows need a **short path** (e.g. `%TEMP%/nxp`): under the long scratchpad path Cache Storage fails with "Unexpected internal error" (MAX_PATH), so the SW never installs.
 
 - Vite 8 uses Rolldown; vite-plugin-pwa prints an `inlineDynamicImports` deprecation warning while building the SW. Harmless.
 - ESLint `no-restricted-imports` glob negations can't re-include paths under an excluded parent (`../*` swallows `../..`), hence regex patterns.
@@ -81,3 +82,7 @@ xp`): under the long scratchpad path Cache Storage fails with "Unexpected intern
 - The Service Worker navigation fallback must deny `/nexus-lite.html`, or downloading Lite returns the app shell.
 - CSP is build-only; check new libraries for inline `<style>` injection (would need `style-src 'unsafe-inline'`).
 - `context.setOffline(true)` tests need `navigator.serviceWorker.ready` first; the reload is then SW-controlled.
+- E2E runs against the production build: `npm run build` before `npx playwright test`, or the tests exercise stale code.
+- Chain checks with `set -o pipefail` (`npm test | grep …` otherwise hides failures).
+- The overview's thumbnails are clones of `.nx-window`: scope window selectors (CSS and tests) to `.nx-windows .nx-window`.
+- Session saves are debounced (600 ms): tests wait ~1 s before a reload that must restore state.
