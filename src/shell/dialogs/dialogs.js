@@ -5,7 +5,7 @@ import { entriesFromFileList, importEntries } from '../../services/vfs/transfer.
 import { h, icon, replace } from '../../ui/dom.js';
 import { openModal } from '../../ui/overlay.js';
 import { appIcon } from '../app-icon.js';
-import { fileIconName } from '../desktop/desktop.js';
+import { fileIconName } from '../../ui/file-icons.js';
 import { appName } from '../util.js';
 import './dialogs.css';
 

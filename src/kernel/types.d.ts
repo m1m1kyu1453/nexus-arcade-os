@@ -224,11 +224,20 @@ export interface AppContext {
   intents: {
     open(target: string | VfsEntry, options?: { with?: string }): Promise<void>;
     share(data: unknown, type: string): Promise<void>;
+    /** Ids of the apps that can open this file (for "Open with…" menus). */
+    openersFor(path: string): string[];
+    /** The app remembered with "Always use this app" for this file type, if any. */
+    getDefault(path: string): Promise<string | undefined>;
+    setDefault(path: string, appId: string): Promise<void>;
+    clearDefault(path: string): Promise<void>;
   };
   clipboard: {
     readText(): Promise<string>;
     writeText(text: string): Promise<void>;
     write(items: ClipboardItem[]): Promise<void>;
+    /** Files copied or cut inside Nexus (shared by Explorer and the desktop). */
+    files(): { paths: string[]; cut: boolean };
+    setFiles(paths: string[], options?: { cut?: boolean }): void;
   };
   sound: { play(name: UiSound): void };
   i18n: I18n;
@@ -357,6 +366,16 @@ export interface CommandDef extends CommandDecl {
 
 // Phase 1 (VFS, notifications, scheduler) and phase 2 (window, dialogs) specify these fully.
 export interface VFS {
+  /** Imports files from the real OS (drop or file picker) into a folder. */
+  importFiles(
+    source: DataTransfer | FileList | File[],
+    dest: string,
+    options?: { onProgress?: (done: number, total: number) => void },
+  ): Promise<string[]>;
+  /** Downloads a file, or a folder as .zip. */
+  download(path: string): Promise<void>;
+  /** Recently opened files that still exist, newest first. */
+  recent(): Promise<Array<VfsEntry & { name: string; size: number; modified: number; openedAt: number }>>;
   [operation: string]: unknown;
 }
 export interface VfsEntry {

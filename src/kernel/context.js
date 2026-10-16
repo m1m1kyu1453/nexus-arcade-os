@@ -3,6 +3,13 @@
 // app: its own storage, settings, scheduler jobs and log tag. Subscriptions made through ctx
 // are tracked by the instance runtime and removed on unmount. Apps cannot emit system events.
 import { createAppStorage } from '../services/storage/app-storage.js';
+import {
+  entriesFromDataTransfer,
+  entriesFromFileList,
+  exportFile,
+  exportFolder,
+  importEntries,
+} from '../services/vfs/transfer.js';
 
 /** Event namespaces only the OS may emit. Apps use their own, e.g. 'notes:saved'. */
 const RESERVED_EVENTS = [
@@ -36,6 +43,7 @@ const RESERVED_EVENTS = [
  * @property {import('./logger.js').SystemLogger} logger
  * @property {import('../services/storage/types.js').Database} db
  * @property {import('../services/vfs/vfs.js').Vfs} vfs
+ * @property {import('../services/vfs/recent.js').RecentFiles} recent
  * @property {import('../services/settings/settings.js').Settings} settings
  * @property {import('../services/i18n/i18n.js').I18nService} i18n
  * @property {import('../services/theme/engine.js').ThemeService} theme
@@ -80,9 +88,10 @@ const FS_METHODS = /** @type {const} */ ([
 
 /**
  * @param {import('../services/vfs/vfs.js').Vfs} vfs
+ * @param {import('../services/vfs/recent.js').RecentFiles} recent
  * @param {(unsub: () => void) => () => void} track
  */
-function appFs(vfs, track) {
+function appFs(vfs, recent, track) {
   /** @type {Record<string, unknown>} */
   const fs = { home: vfs.home };
   for (const name of FS_METHODS) {
@@ -97,6 +106,33 @@ function appFs(vfs, track) {
   }
   fs.watch = (/** @type {string} */ path, /** @type {any} */ fn, /** @type {any} */ options) =>
     track(vfs.watch(path, fn, options));
+  /** Files from the real OS (drop or file picker) into a VFS folder; returns the paths written. */
+  fs.importFiles = async (
+    /** @type {DataTransfer | FileList | File[]} */ source,
+    /** @type {string} */ dest,
+    /** @type {{ onProgress?: (done: number, total: number) => void }} */ options,
+  ) => {
+    const entries =
+      typeof DataTransfer !== 'undefined' && source instanceof DataTransfer
+        ? await entriesFromDataTransfer(source)
+        : entriesFromFileList(/** @type {FileList | File[]} */ (source));
+    return importEntries(vfs, entries, dest, options);
+  };
+  /** Downloads a file to the real OS, or a folder as .zip. */
+  fs.download = async (/** @type {string} */ path) => {
+    const node = await vfs.stat(path);
+    if (!node) throw new Error(`No such file or folder: ${path}`);
+    return node.type === 'folder' ? exportFolder(vfs, path) : exportFile(vfs, path);
+  };
+  /** Recently opened files that still exist, newest first. */
+  fs.recent = async () => {
+    const out = [];
+    for (const item of recent.list()) {
+      const node = await vfs.stat(item.path);
+      if (node && node.type === 'file') out.push({ ...node, openedAt: item.at });
+    }
+    return out;
+  };
   return fs;
 }
 
@@ -157,7 +193,7 @@ export function createAppContext(manifest, services, extras = {}) {
           };
         },
       },
-      fs: appFs(services.vfs, track),
+      fs: appFs(services.vfs, services.recent, track),
       settings: {
         get: (/** @type {string} */ key) => settings.get(appId, key),
         set: (/** @type {string} */ key, /** @type {unknown} */ value) => settings.set(appId, key, value),
@@ -201,12 +237,19 @@ export function createAppContext(manifest, services, extras = {}) {
         open: (/** @type {any} */ target, /** @type {any} */ options) => intents.open(target, options),
         share: (/** @type {unknown} */ data, /** @type {string} */ type, /** @type {any} */ options) =>
           intents.share(data, type, options),
+        openersFor: (/** @type {string} */ path) => intents.openersFor(path).map((m) => m.id),
+        getDefault: (/** @type {string} */ path) => intents.getDefault(path),
+        setDefault: (/** @type {string} */ path, /** @type {string} */ appId) => intents.setDefault(path, appId),
+        clearDefault: (/** @type {string} */ path) => intents.clearDefault(path),
       },
       clipboard: {
         readText: () => clipboard.readText(),
         writeText: (/** @type {string} */ text, /** @type {{ sensitive?: boolean }} */ options = {}) =>
           clipboard.writeText(text, { ...options, app: appId }),
         writeImage: (/** @type {Blob} */ image) => clipboard.writeImage(image, { app: appId }),
+        files: () => clipboard.files(),
+        setFiles: (/** @type {string[]} */ paths, /** @type {{ cut?: boolean }} */ options) =>
+          clipboard.setFiles(paths, options),
       },
       sound: {
         play: (/** @type {any} */ name) => sound.play(name, 'ui'),

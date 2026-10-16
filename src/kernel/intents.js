@@ -30,8 +30,9 @@ export class NoHandlerError extends Error {
  * @param {{ launch(appId: string, args: import('./types').LaunchArgs): Promise<string> }} options.lifecycle
  * @param {(request: ChooseRequest) => Promise<Choice | null>} options.choose   null = cancelled
  * @param {{ get(key: string): Promise<string | undefined>, set(key: string, appId: string): Promise<void>, delete(key: string): Promise<void> }} options.defaults
+ * @param {(path: string) => void} [options.onOpened]  a file was handed to an app (recent files)
  */
-export function createIntents({ registry, lifecycle, choose, defaults }) {
+export function createIntents({ registry, lifecycle, choose, defaults, onOpened = () => {} }) {
   /**
    * @param {'open' | 'share'} action
    * @param {{ mime: string, path?: string }} file
@@ -58,6 +59,17 @@ export function createIntents({ registry, lifecycle, choose, defaults }) {
    * @returns {Promise<string | null>} instance id, or null if the user cancelled
    */
   async function open(target, options = {}) {
+    const instance = await openWith(target, options);
+    if (instance) onOpened(typeof target === 'string' ? target : target.path);
+    return instance;
+  }
+
+  /**
+   * @param {string | { path: string, mime?: string }} target
+   * @param {{ with?: string }} options
+   * @returns {Promise<string | null>}
+   */
+  async function openWith(target, options) {
     const path = typeof target === 'string' ? target : target.path;
     const mime = (typeof target === 'object' && target.mime) || mimeFromPath(path);
     const file = { mime, path };
@@ -108,6 +120,12 @@ export function createIntents({ registry, lifecycle, choose, defaults }) {
     shareTargetsFor: (/** @type {string} */ type) => candidates('share', { mime: type }),
     /** @param {string} path */
     getDefault: (path) => defaults.get(defaultKey({ mime: mimeFromPath(path), path })),
+    /** "Always open this file type with …". @param {string} path @param {string} appId */
+    async setDefault(path, appId) {
+      if (!candidates('open', { mime: mimeFromPath(path), path }).some((m) => m.id === appId))
+        throw new Error(`"${appId}" cannot open this file`);
+      await defaults.set(defaultKey({ mime: mimeFromPath(path), path }), appId);
+    },
     /** @param {string} path */
     clearDefault: (path) => defaults.delete(defaultKey({ mime: mimeFromPath(path), path })),
   };

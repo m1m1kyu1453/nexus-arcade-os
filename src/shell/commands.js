@@ -156,6 +156,6 @@ export function registerShellCommands(shell) {
     id: 'shell.launchApp',
     title: 'shell.cmd.launchApp',
     hidden: true,
-    run: (args) => args?.appId && shell.launch(args.appId),
+    run: (args) => args?.appId && shell.launch(args.appId, args.args),
   });
 }

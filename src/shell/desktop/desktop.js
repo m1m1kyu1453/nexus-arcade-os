@@ -5,28 +5,15 @@
 // arrow-key navigation, and a context menu for the desktop and for icons.
 import { entriesFromDataTransfer, importEntries } from '../../services/vfs/transfer.js';
 import { capturePointer, h, icon } from '../../ui/dom.js';
+import { fileIconName, SHORTCUT_EXT } from '../../ui/file-icons.js';
 import { attachContextMenu } from '../../ui/menu.js';
 import { appIcon } from '../app-icon.js';
 import { appName } from '../util.js';
 import './desktop.css';
 
-export const SHORTCUT_EXT = '.nexus-app';
 const CELL_W = 92;
 const CELL_H = 100;
 const PAD = 12;
-
-/** @param {string} mime @param {string} name */
-export function fileIconName(mime, name) {
-  if (name.endsWith(SHORTCUT_EXT)) return 'rocket';
-  if (mime === 'inode/directory') return 'folder';
-  if (mime.startsWith('image/')) return 'file-image';
-  if (mime.startsWith('audio/')) return 'file-audio';
-  if (mime.startsWith('video/')) return 'file-video';
-  if (mime === 'application/zip') return 'file-zip';
-  if (/javascript|typescript|json|x-python|x-c|x-rust|x-go|sql|html|css|x-sh/.test(mime)) return 'file-code';
-  if (mime.startsWith('text/')) return 'file-text';
-  return 'file';
-}
 
 /** @param {import('../shell.js').ShellContext} shell */
 export function createDesktop(shell) {
@@ -46,8 +33,9 @@ export function createDesktop(shell) {
   let anchor = '';
   /** @type {string[]} */
   let thumbUrls = [];
-  /** File clipboard for copy/cut between desktop and (later) the file explorer. */
-  const fileClipboard = shell.ui.fileClipboard ?? (shell.ui.fileClipboard = { paths: [], cut: false });
+  /** File clipboard shared with the File Explorer. */
+  const clip = sys.clipboard;
+  const copyFiles = (/** @type {boolean} */ cut) => clip.setFiles([...selected], { cut });
 
   const columns = () => Math.max(1, Math.floor((layer.clientWidth - PAD * 2) / CELL_W));
   const rows = () => Math.max(1, Math.floor((layer.clientHeight - PAD * 2 - 80) / CELL_H));
@@ -245,10 +233,11 @@ export function createDesktop(shell) {
   }
 
   async function paste() {
-    for (const from of fileClipboard.paths) {
+    const { paths, cut } = clip.files();
+    for (const from of paths) {
       const target = await sys.vfs.uniquePath(`${dir}/${from.split('/').pop()}`);
       try {
-        if (fileClipboard.cut) await sys.vfs.move(from, target);
+        if (cut) await sys.vfs.move(from, target);
         else await sys.vfs.copy(from, target);
       } catch (error) {
         await sys.notifications.notify({
@@ -257,7 +246,7 @@ export function createDesktop(shell) {
         });
       }
     }
-    if (fileClipboard.cut) fileClipboard.paths = [];
+    if (cut) clip.setFiles([]);
   }
 
   /** @param {'name' | 'type' | 'modified'} by */
@@ -430,9 +419,8 @@ export function createDesktop(shell) {
       paintSelection();
     } else if (mod && (e.key.toLowerCase() === 'c' || e.key.toLowerCase() === 'x') && selected.size) {
       e.preventDefault();
-      fileClipboard.paths = [...selected];
-      fileClipboard.cut = e.key.toLowerCase() === 'x';
-    } else if (mod && e.key.toLowerCase() === 'v' && fileClipboard.paths.length) {
+      copyFiles(e.key.toLowerCase() === 'x');
+    } else if (mod && e.key.toLowerCase() === 'v' && clip.files().paths.length) {
       e.preventDefault();
       void paste();
     } else if (e.key.startsWith('Arrow')) {
@@ -502,13 +490,13 @@ export function createDesktop(shell) {
             label: t('desktop.copy'),
             icon: 'copy',
             shortcut: 'Mod+C',
-            run: () => ((fileClipboard.paths = [...selected]), (fileClipboard.cut = false)),
+            run: () => copyFiles(false),
           },
           {
             label: t('desktop.cut'),
             icon: 'cut',
             shortcut: 'Mod+X',
-            run: () => ((fileClipboard.paths = [...selected]), (fileClipboard.cut = true)),
+            run: () => copyFiles(true),
           },
           {
             label: t('desktop.rename'),
@@ -549,7 +537,7 @@ export function createDesktop(shell) {
           label: t('desktop.paste'),
           icon: 'paste',
           shortcut: 'Mod+V',
-          disabled: !fileClipboard.paths.length,
+          disabled: !clip.files().paths.length,
           run: () => void paste(),
         },
         'separator',

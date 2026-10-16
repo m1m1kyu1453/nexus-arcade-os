@@ -64,7 +64,9 @@ As in NEXUS_BRIEF.md §5.1, plus:
 | @playwright/test                                             | e2e + renders PNG icons                                                                   |
 | eslint, @eslint/js, globals, prettier                        | lint/format                                                                               |
 | typescript                                                   | `tsc --noEmit` only (TypeScript 7, the Go compiler; JSDoc checking works)                 |
-| fflate _(approved, add in phase 1)_                          | zip for backups/folder export, lazy chunk                                                 |
+| fflate                                                       | zip for backups/folder export, lazy chunk                                                 |
+| codemirror, @codemirror/* _(approved 2026-10-16)_            | Nexus Edit, code previews; lazy chunk                                                     |
+| marked, dompurify _(approved 2026-10-16)_                    | Markdown rendering (Help, previews, later Notes), always sanitized                        |
 
 Ask before adding anything else (brief §2.4).
 

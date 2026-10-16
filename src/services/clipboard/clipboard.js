@@ -34,6 +34,8 @@ export function createClipboard({
 }) {
   /** @type {ClipEntry[]} */
   let history = [];
+  /** Files copied/cut inside Nexus (Explorer, desktop). VFS paths only; never persisted. */
+  let files = { paths: /** @type {string[]} */ ([]), cut: false };
 
   /** @param {ClipEntry} entry */
   async function remember(entry) {
@@ -114,6 +116,15 @@ export function createClipboard({
       history = history.filter((h) => h.id !== id);
       await store.set('history', history);
       bus.emit('clipboard:changed', {});
+    },
+
+    /** @returns {{ paths: string[], cut: boolean }} */
+    files: () => ({ paths: files.paths.slice(), cut: files.cut }),
+
+    /** @param {string[]} paths @param {{ cut?: boolean }} [options] */
+    setFiles(paths, { cut = false } = {}) {
+      files = { paths: [...paths], cut };
+      bus.emit('clipboard:files-changed', { count: paths.length, cut });
     },
 
     async clearHistory() {

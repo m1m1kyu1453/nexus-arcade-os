@@ -28,6 +28,7 @@ import { QUARANTINE_STORE_SCHEMA } from '../services/storage/quarantine.js';
 import { storageBreakdown, withQuotaReporting } from '../services/storage/quota.js';
 import { selectEngine } from '../services/storage/select.js';
 import { createThemeService } from '../services/theme/engine.js';
+import { createRecentFiles } from '../services/vfs/recent.js';
 import { createVfs, VFS_STORE_SCHEMA } from '../services/vfs/vfs.js';
 import { createNativeDialogs } from '../shell/native-dialogs.js';
 import { createEventBus } from './bus.js';
@@ -296,6 +297,8 @@ async function openProfile(options, k, profile) {
   // 6. Files, notifications, sound and the other services.
   const vfs = createVfs({ db, bus, user: profile.username });
   await vfs.init();
+  const recent = createRecentFiles({ store: kv('system:recent'), bus });
+  await recent.load();
   progress('files');
 
   /** @type {ReturnType<typeof createSound>} */
@@ -422,6 +425,7 @@ async function openProfile(options, k, profile) {
     choose: (request) =>
       dialogs.pickApp({ candidates: request.candidates.map((m) => ({ id: m.id, name: localize(m.name) })) }),
     defaults: kv('system:intents'),
+    onOpened: (path) => recent.add(path),
   });
 
   const permissions = createPermissions({
@@ -441,6 +445,7 @@ async function openProfile(options, k, profile) {
     logger,
     db,
     vfs,
+    recent,
     settings,
     i18n,
     theme,
