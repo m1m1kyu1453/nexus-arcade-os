@@ -1,0 +1,150 @@
+/* Rendered content shared by apps: Markdown (ui/markdown.js) and highlighted code (ui/highlight.js).
+   Colours come from theme tokens, so every theme (incl. light and high contrast) works. */
+
+.nx-markdown {
+  line-height: 1.6;
+  color: var(--text-1);
+  overflow-wrap: anywhere;
+
+  & > :first-child {
+    margin-top: 0;
+  }
+  & h1,
+  & h2,
+  & h3,
+  & h4 {
+    line-height: 1.25;
+    margin: 1.4em 0 0.5em;
+  }
+  & h1 {
+    font-size: var(--text-xl);
+  }
+  & h2 {
+    font-size: var(--text-lg);
+    padding-bottom: 0.25em;
+    border-bottom: 1px solid var(--border);
+  }
+  & h3 {
+    font-size: var(--text-md);
+  }
+  & p,
+  & ul,
+  & ol,
+  & pre,
+  & table,
+  & blockquote {
+    margin: 0 0 0.9em;
+  }
+  & a {
+    color: var(--accent);
+  }
+  & code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.35em;
+  }
+  & pre {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    overflow: auto;
+    & code {
+      background: none;
+      padding: 0;
+    }
+  }
+  & blockquote {
+    border-left: 3px solid var(--accent);
+    padding-left: var(--space-3);
+    color: var(--text-2);
+  }
+  & table {
+    border-collapse: collapse;
+  }
+  & th,
+  & td {
+    border: 1px solid var(--border);
+    padding: var(--space-1) var(--space-2);
+    text-align: left;
+  }
+  & img {
+    max-width: 100%;
+  }
+  & img:not([src]) {
+    display: none;
+  }
+  & kbd {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    border: 1px solid var(--border);
+    border-bottom-width: 2px;
+    border-radius: var(--radius-sm);
+    padding: 0 0.35em;
+  }
+  & hr {
+    border: 0;
+    border-top: 1px solid var(--border);
+  }
+}
+
+.nx-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  white-space: pre;
+  tab-size: 4;
+  margin: 0;
+}
+
+.tok-keyword,
+.tok-operatorKeyword {
+  color: var(--accent-2);
+}
+.tok-string,
+.tok-string2 {
+  color: var(--success);
+}
+.tok-number,
+.tok-bool,
+.tok-atom {
+  color: var(--warning);
+}
+.tok-comment {
+  color: var(--text-3);
+  font-style: italic;
+}
+.tok-typeName,
+.tok-className,
+.tok-namespace {
+  color: var(--info);
+}
+.tok-definition,
+.tok-function,
+.tok-propertyName {
+  color: var(--accent);
+}
+.tok-heading {
+  color: var(--accent);
+  font-weight: 700;
+}
+.tok-link,
+.tok-url {
+  color: var(--info);
+  text-decoration: underline;
+}
+.tok-invalid {
+  color: var(--danger);
+}
+.tok-meta,
+.tok-punctuation {
+  color: var(--text-2);
+}
+.tok-emphasis {
+  font-style: italic;
+}
+.tok-strong {
+  font-weight: 700;
+}
