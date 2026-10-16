@@ -75,7 +75,8 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
   const motion = () => sys().theme.motion;
   const t = (/** @type {string} */ key, /** @type {Record<string, unknown>} */ vars = {}) =>
     sys().i18n.t('system', key, vars);
-  const emit = (/** @type {string} */ type, /** @type {unknown} */ payload) => sys().bus.emit(type, payload);
+  // Layout events can fire (e.g. a resize) while the profile is still opening: nothing listens yet.
+  const emit = (/** @type {string} */ type, /** @type {unknown} */ payload) => sys()?.bus.emit(type, payload);
 
   /** @param {number} count */
   function setWorkspaces(count, names = []) {
