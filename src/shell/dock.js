@@ -1,7 +1,7 @@
 // @ts-check
 // Dock: pinned apps plus running ones, with running dots, badges, progress bars, previews of
 // multiple windows, a context menu, drag-to-reorder, hover magnification and auto-hide.
-import { h, replace } from '../ui/dom.js';
+import { capturePointer, h, replace } from '../ui/dom.js';
 import { attachContextMenu } from '../ui/menu.js';
 import { openPopover } from '../ui/overlay.js';
 import { appIcon } from './app-icon.js';
@@ -174,7 +174,7 @@ export function createDock(shell) {
         if (!dragging && Math.hypot(ev.clientX - start.x, ev.clientY - start.y) < 8) return;
         if (!dragging) {
           dragging = true;
-          btn.setPointerCapture(ev.pointerId);
+          capturePointer(btn, ev.pointerId);
           btn.classList.add('is-dragging');
         }
         const horizontal = position() === 'bottom';

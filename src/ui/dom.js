@@ -98,3 +98,17 @@ export function clampToViewport(x, y, w, h, margin = 4) {
     y: Math.max(margin, Math.min(y, vh - h - margin)),
   };
 }
+
+/**
+ * Captures a pointer for a drag. Ignores pointers that are already gone (released before the
+ * handler ran, or synthetic events), which would otherwise throw.
+ * @param {Element} el
+ * @param {number} pointerId
+ */
+export function capturePointer(el, pointerId) {
+  try {
+    el.setPointerCapture(pointerId);
+  } catch {
+    // No active pointer with this id: nothing to capture.
+  }
+}

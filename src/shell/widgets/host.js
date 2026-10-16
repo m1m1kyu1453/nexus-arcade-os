@@ -3,7 +3,7 @@
 // title bar, resize from the corner in grid steps, per-widget settings, remove. Keyboard: Alt+Arrows
 // move, Alt+Shift+Arrows resize, Delete removes, the context-menu key opens the widget's menu.
 // Built-in widgets and widgets declared in app manifests use the same WidgetDecl shape.
-import { h, icon, iconButton, replace, toggle } from '../../ui/dom.js';
+import { capturePointer, h, icon, iconButton, replace, toggle } from '../../ui/dom.js';
 import { attachContextMenu } from '../../ui/menu.js';
 import { openModal } from '../../ui/overlay.js';
 import { registerCommand } from '../util.js';
@@ -187,7 +187,7 @@ export function createWidgetHost(shell) {
       e.preventDefault();
       const start = { x: e.clientX, y: e.clientY, ...p };
       el.classList.add('is-dragging');
-      el.setPointerCapture(e.pointerId);
+      capturePointer(el, e.pointerId);
       let next = { col: p.col, row: p.row, w: p.w, h: p.h };
       const onMove = (/** @type {PointerEvent} */ ev) => {
         const dc = Math.round((ev.clientX - start.x) / STEP);

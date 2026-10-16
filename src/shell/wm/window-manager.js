@@ -7,7 +7,7 @@
 // minimized. Snapping happens by dragging to screen edges/corners (with a preview), by the
 // snap layouts flyout on the maximize button, or with Mod+Arrows. The layout is saved and
 // restored after a reload by the shell (see `snapshot()` / `queueRestore()`).
-import { h, icon } from '../../ui/dom.js';
+import { capturePointer, h, icon } from '../../ui/dom.js';
 import { renderCrashView } from '../crash-view.js';
 import { clampRect, placeWindow, sharedEdgeNeighbours, SNAP_LAYOUTS, zoneAt, zoneRect } from './geometry.js';
 import './wm.css';
@@ -290,7 +290,7 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
     /** @type {Zone | null} */
     let zone = null;
     const target = /** @type {HTMLElement} */ (e.currentTarget);
-    target.setPointerCapture(e.pointerId);
+    capturePointer(target, e.pointerId);
     /** @param {PointerEvent} ev */
     const move = (ev) => {
       const dx = ev.clientX - startX;
@@ -377,7 +377,7 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
       }
     }
     const handle = /** @type {HTMLElement} */ (e.currentTarget);
-    handle.setPointerCapture(e.pointerId);
+    capturePointer(handle, e.pointerId);
     w.el.classList.add('is-resizing');
     /** @param {PointerEvent} ev */
     const move = (ev) => {

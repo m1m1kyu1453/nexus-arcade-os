@@ -4,7 +4,7 @@
 // or Enter), rename (F2), delete to trash (Delete), copy/cut/paste, drop files from the real OS,
 // arrow-key navigation, and a context menu for the desktop and for icons.
 import { entriesFromDataTransfer, importEntries } from '../../services/vfs/transfer.js';
-import { h, icon } from '../../ui/dom.js';
+import { capturePointer, h, icon } from '../../ui/dom.js';
 import { attachContextMenu } from '../../ui/menu.js';
 import { appIcon } from '../app-icon.js';
 import { appName } from '../util.js';
@@ -300,7 +300,7 @@ export function createDesktop(shell) {
       if (!e.ctrlKey && !e.shiftKey) selected.clear();
       const start = { x: e.clientX - origin.left, y: e.clientY - origin.top };
       const base = new Set(selected);
-      grid.setPointerCapture(e.pointerId);
+      capturePointer(grid, e.pointerId);
       grid.focus({ preventScroll: true });
       /** @param {PointerEvent} ev */
       const move = (ev) => {
@@ -356,7 +356,7 @@ export function createDesktop(shell) {
       .filter(Boolean);
     const startPos = moving.map((m) => ({ left: m.el.offsetLeft, top: m.el.offsetTop }));
     let dragging = false;
-    iconEl.setPointerCapture(e.pointerId);
+    capturePointer(iconEl, e.pointerId);
     /** @param {PointerEvent} ev */
     const move = (ev) => {
       const dx = ev.clientX - start.x;

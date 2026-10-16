@@ -44,6 +44,11 @@
     touch-action: none;
   }
 
+  /* The app bar has its own Apps button. */
+  & .nx-tb-launcher {
+    display: none;
+  }
+
   /* One window at a time, as a full-screen sheet between the top bar and the app bar. */
   & .nx-windows .nx-window {
     top: 36px !important;
