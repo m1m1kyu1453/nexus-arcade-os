@@ -69,7 +69,10 @@
       "pictures": "Pictures",
       "projects": "Projects"
     },
-    "close": "Close"
+    "close": "Close",
+    "chooseFolder": "Choose a folder",
+    "selectFolder": "Use this folder",
+    "noSubfolders": "No folders inside"
   },
   "commands": {
     "category": "System",

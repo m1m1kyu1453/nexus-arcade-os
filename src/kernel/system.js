@@ -601,6 +601,7 @@ async function openProfile(options, k, profile) {
       return headless(/** @type {AppManifest} */ (registry.get(appId)));
     },
     host: systemHost,
+    systemText: (key, vars) => i18n.t('system', key, vars),
     admin: {
       db: rawDb,
       registry,

@@ -1,0 +1,379 @@
+{
+  "title": "Einstellungen",
+  "search": "Einstellungen durchsuchen",
+  "searchResults": "Suchergebnisse",
+  "noResults": "Keine Einstellung passt",
+  "pageLabel": "Seite",
+  "back": "Alle Einstellungen",
+  "pages": {
+    "personalization": {
+      "title": "Personalisierung",
+      "intro": "Design, Farben, Hintergrund, Textgröße, Transparenz, Animationen und Töne.",
+      "keywords": "aussehen design farbe akzent hintergrund hintergrundbild schrift textgröße unschärfe transparenz animation ton lautstärke"
+    },
+    "desktop": {
+      "title": "Schreibtisch & Dock",
+      "intro": "Wo das Dock sitzt und wie es sich verhält, Widgets und Arbeitsbereiche.",
+      "keywords": "dock taskleiste widgets arbeitsbereiche schreibtisch desktop"
+    },
+    "windows": {
+      "title": "Fenster",
+      "intro": "Andocken, Layouts und Fensteranimationen.",
+      "keywords": "fenster andocken kacheln layout maximieren"
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "intro": "Nicht stören, Benachrichtigungen jeder App und außerhalb von Nexus.",
+      "keywords": "benachrichtigungen hinweise nicht stören stumm"
+    },
+    "shortcuts": {
+      "title": "Tastenkürzel",
+      "intro": "Alle Tastenkürzel. Ändere eines, indem du die neuen Tasten drückst.",
+      "keywords": "tastatur tastenkürzel tasten shortcuts belegung"
+    },
+    "language": {
+      "title": "Sprache & Region",
+      "intro": "Die Sprache von Nexus und wie Datum, Uhrzeit und Zahlen aussehen.",
+      "keywords": "sprache region format datum uhrzeit zahl währung deutsch englisch"
+    },
+    "profiles": {
+      "title": "Profile & Sperre",
+      "intro": "Dein Profil, eine PIN- oder Passwortsperre und andere Personen auf diesem Gerät.",
+      "keywords": "profil benutzer konto sperre pin passwort anmelden wechseln abmelden start"
+    },
+    "storage": {
+      "title": "Speicher",
+      "intro": "Was Nexus in diesem Browser speichert, je App und je Ordner.",
+      "keywords": "speicher platz nutzung kontingent daten löschen cache quarantäne dauerhaft papierkorb"
+    },
+    "apps": {
+      "title": "Apps",
+      "intro": "Einstellungen jeder App und welche App welchen Dateityp öffnet.",
+      "keywords": "apps standard-apps dateitypen öffnen mit app-einstellungen"
+    },
+    "privacy": {
+      "title": "Datenschutz",
+      "intro": "Was über deine Aktivität gespeichert wird und wie du es löschst.",
+      "keywords": "datenschutz verlauf zwischenablage zuletzt dateien protokoll tracking löschen"
+    },
+    "accessibility": {
+      "title": "Barrierefreiheit",
+      "intro": "Weniger Bewegung, hoher Kontrast, Textgröße, Fokusrahmen, Screenreader und größere Flächen.",
+      "keywords": "barrierefreiheit kontrast bewegung screenreader fokus großer text töne"
+    },
+    "backup": {
+      "title": "Sichern & Wiederherstellen",
+      "intro": "Alles in einer Datei sichern und hier oder auf einem anderen Gerät zurückholen.",
+      "keywords": "backup sicherung wiederherstellen export import datei passwort"
+    },
+    "updates": {
+      "title": "Updates",
+      "intro": "Die installierte Version, neue Versionen und was sich geändert hat.",
+      "keywords": "update aktualisierung version änderungen neu"
+    },
+    "about": {
+      "title": "Über",
+      "intro": "Diese Kopie von Nexus, Links und Lizenzen.",
+      "keywords": "über version lizenz lizenzen mitwirkende github website lite herunterladen"
+    }
+  },
+  "group": {
+    "theme": "Design",
+    "wallpaper": "Hintergrund",
+    "text": "Text",
+    "sound": "Töne",
+    "dock": "Dock",
+    "desktop": "Schreibtisch",
+    "snapping": "Andocken",
+    "motion": "Bewegung",
+    "windowKeys": "Tastatur",
+    "notifications": "Benachrichtigungen",
+    "perApp": "Benachrichtigungen erlauben von",
+    "history": "Verlauf",
+    "language": "Sprache",
+    "preview": "Vorschau",
+    "vision": "Sehen",
+    "hearing": "Hören",
+    "screenReader": "Screenreader",
+    "thisProfile": "Dieses Profil",
+    "lock": "Sperre",
+    "startup": "Start",
+    "otherProfiles": "Andere Profile",
+    "browserStorage": "Browserspeicher",
+    "files": "Dateien",
+    "appData": "App-Daten",
+    "quarantine": "Unlesbare Einträge",
+    "defaults": "Standard-Apps",
+    "whatIsStored": "Was gespeichert wird",
+    "export": "Sichern",
+    "import": "Wiederherstellen",
+    "version": "Version",
+    "changelog": "Neuigkeiten",
+    "thisCopy": "Diese Kopie",
+    "links": "Links",
+    "licenses": "Lizenzen"
+  },
+  "form": {
+    "reset": "Zurücksetzen",
+    "resetLabel": "{name} zurücksetzen",
+    "themeColor": "Farbe des Designs",
+    "none": "Keiner",
+    "choose": "Wählen …",
+    "clear": "Entfernen"
+  },
+  "wallpaper": {
+    "current": "Aktueller Hintergrund",
+    "gallery": "Galerie …",
+    "image": "Eigenes Bild …",
+    "kind": {
+      "live": "Animiert: {id}",
+      "gradient": "Verlauf: {id}",
+      "slideshow": "Diashow"
+    }
+  },
+  "desktop": {
+    "widgets": "Widgets",
+    "widgetsHint": "Kleine Live-Werkzeuge direkt auf dem Schreibtisch: Uhr, Kalender, Notizen und mehr.",
+    "addWidget": "Widget hinzufügen",
+    "workspaces": "Arbeitsbereiche",
+    "workspacesHint": "Arbeitsbereiche in der Übersicht hinzufügen, umbenennen und wechseln.",
+    "overview": "Übersicht öffnen"
+  },
+  "keys": {
+    "snapLeft": "An die linke Hälfte andocken",
+    "snapRight": "An die rechte Hälfte andocken",
+    "maximize": "Maximieren",
+    "restore": "Wiederherstellen oder minimieren",
+    "switcher": "Fenster wechseln",
+    "overview": "Übersicht aller Fenster",
+    "filter": "Tastenkürzel filtern",
+    "general": "Allgemein",
+    "none": "Kein Kürzel",
+    "change": "Ändern",
+    "remove": "Entfernen",
+    "removeLabel": "Kürzel von {name} entfernen",
+    "nothing": "Kein Befehl passt",
+    "recordTitle": "Neues Kürzel für „{name}“",
+    "recordHint": "Drücke jetzt die Tasten. Esc bricht ab.",
+    "conflict": "{combo} wird von mehreren Befehlen genutzt: {names}",
+    "nowShared": "{combo} wird jetzt auch von {names} genutzt",
+    "resetAll": "Alle zurücksetzen",
+    "resetAllConfirm": "Alle Tastenkürzel auf ihre Standardwerte zurücksetzen?"
+  },
+  "notify": {
+    "permissionLabel": "Browser-Berechtigung",
+    "permission": {
+      "granted": "Erlaubt",
+      "denied": "Im Browser blockiert. Erlaube Benachrichtigungen für diese Seite in den Browser-Einstellungen.",
+      "default": "Noch nicht entschieden",
+      "unsupported": "Dieser Browser kann keine Systembenachrichtigungen zeigen"
+    },
+    "allow": "Erlauben …",
+    "allowFrom": "Benachrichtigungen von {app}",
+    "noApps": "Noch keine App sendet Benachrichtigungen.",
+    "history": "Benachrichtigungsverlauf",
+    "historyHint": "Frühere Benachrichtigungen in der Mitteilungszentrale.",
+    "clear": "Verlauf leeren"
+  },
+  "format": {
+    "date": "Datum",
+    "short": "Kurzes Datum und Uhrzeit",
+    "number": "Zahl",
+    "currency": "Währung"
+  },
+  "a11y": {
+    "highContrast": "Hoher Kontrast",
+    "highContrastHint": "Ein Design mit dem stärksten Kontrast. Beim Ausschalten kommt dein Design zurück.",
+    "keyboard": "Alles in Nexus funktioniert mit der Tastatur. Strg+/ zeigt alle Tastenkürzel."
+  },
+  "profile": {
+    "name": "Name",
+    "color": "Farbe",
+    "colorHint": "Wird auf dem Anmeldebildschirm gezeigt.",
+    "user": "Benutzername (persönlicher Ordner)",
+    "delete": "Löschen",
+    "deleteConfirm": "Das Profil „{name}“ mit allen Daten löschen? Das kann nicht rückgängig gemacht werden.",
+    "add": "Profil hinzufügen",
+    "addHint": "Jedes Profil hat eigene Dateien, Einstellungen und App-Daten.",
+    "addButton": "Hinzufügen",
+    "added": "Profil „{name}“ hinzugefügt. Wechsle auf dem Anmeldebildschirm dorthin.",
+    "switch": "Profil wechseln",
+    "switchButton": "Wechseln …",
+    "logOut": "Abmelden"
+  },
+  "lock": {
+    "title": "PIN oder Passwort",
+    "off": "Keine Sperre: Jeder, der diesen Browser nutzt, kann dieses Profil öffnen.",
+    "on": {
+      "pin": "Mit PIN gesperrt",
+      "password": "Mit Passwort gesperrt"
+    },
+    "set": "PIN oder Passwort festlegen",
+    "change": "Ändern",
+    "remove": "Sperre entfernen",
+    "notice": "Das ist ein Sichtschutz, keine echte Sicherheit: Deine Daten werden dadurch nicht verschlüsselt. Nutze verschlüsselte Backups für sensible Daten.",
+    "kind": "Art",
+    "pin": "PIN (4–12 Ziffern)",
+    "password": "Passwort",
+    "current": "Aktuelle PIN oder aktuelles Passwort",
+    "new": "Neue PIN oder neues Passwort",
+    "repeat": "Wiederholen",
+    "save": "Speichern",
+    "saved": "Sperre gespeichert",
+    "mismatch": "Die beiden Eingaben stimmen nicht überein",
+    "now": "Jetzt sperren",
+    "nowButton": "Sperren"
+  },
+  "storage": {
+    "used": "Belegter Speicher",
+    "usedOf": "{used} von {total} belegt",
+    "noEstimate": "Dieser Browser gibt nicht an, wie viel Platz verfügbar ist.",
+    "engine": "Gespeichert in {engine}.",
+    "engines": {
+      "indexeddb": "IndexedDB (normal)",
+      "localstorage": "localStorage (eingeschränkter Ersatz: etwa 5 MB)",
+      "memory": "nur im Arbeitsspeicher (nach dem Schließen des Tabs ist alles weg)"
+    },
+    "persistence": "Daten dauerhaft behalten",
+    "persist": {
+      "persistent": "Ein: Der Browser löscht keine Nexus-Daten, um Platz zu schaffen.",
+      "best-effort": "Aus: Der Browser darf Daten löschen, wenn der Platz knapp wird oder die Seite länger nicht genutzt wird.",
+      "unsupported": "Von diesem Browser nicht unterstützt."
+    },
+    "persistAsk": "Browser fragen",
+    "caches": "Caches",
+    "cachesHint": "Heruntergeladene Extras für die Offline-Nutzung. Nexus selbst bleibt installiert.",
+    "clearCaches": "Caches leeren",
+    "cachesCleared": {
+      "=0": "Es gab keine Caches zu leeren",
+      "one": "{count} Cache geleert",
+      "other": "{count} Caches geleert"
+    },
+    "trash": "Papierkorb",
+    "show": "Zeigen",
+    "noFiles": "Noch keine Dateien.",
+    "records": { "one": "{size} in {count} Eintrag", "other": "{size} in {count} Einträgen" },
+    "clearApp": "Daten löschen",
+    "clearAppConfirm": "Alle Daten von {app} löschen (Dokumente, Verlauf und Einstellungen)? Dateien in deinen Ordnern bleiben. Das kann nicht rückgängig gemacht werden.",
+    "clearedApp": "Die Daten von {app} wurden gelöscht",
+    "noAppData": "Noch keine App hat etwas gespeichert.",
+    "system": "System",
+    "systemHint": "Einstellungen, Benachrichtigungen, Suchindex, Protokoll und mehr.",
+    "quarantined": "{reason} · {date} · {size}",
+    "discard": "Verwerfen",
+    "discardConfirm": "Diesen unlesbaren Eintrag endgültig löschen?",
+    "quarantineEmpty": "Nichts hier: Alle gespeicherten Daten konnten gelesen werden."
+  },
+  "apps": {
+    "askAgain": "Wieder fragen",
+    "noDefaults": "Noch keine Standards. Wähle beim Öffnen einer Datei „Immer diese App verwenden“.",
+    "center": "Apps installieren und ausblenden",
+    "centerHint": "Im App Center.",
+    "openCenter": "App Center öffnen"
+  },
+  "privacy": {
+    "local": "Alles in Nexus bleibt in diesem Browser. Es gibt kein Konto und keinen Server.",
+    "noTracking": "Keine Analyse, kein Tracking, keine Werbung.",
+    "network": "Nexus geht nur für Dinge online, die du selbst einrichtest, zum Beispiel einen KI-Server.",
+    "count": { "=0": "Leer", "one": "{count} Eintrag", "other": "{count} Einträge" },
+    "clipboard": "Verlauf der Zwischenablage",
+    "recent": "Zuletzt verwendete Dateien",
+    "notifications": "Benachrichtigungsverlauf",
+    "search": "Suchverlauf",
+    "searchHint": "Was du aus der Suche geöffnet hast, um es weiter oben zu zeigen.",
+    "log": "Systemprotokoll",
+    "clear": "Leeren"
+  },
+  "backup": {
+    "exportHint": "Eine .nexus-backup-Datei mit allen Dateien, Einstellungen und App-Daten. Bewahre sie sicher auf.",
+    "password": "Passwort (optional)",
+    "repeat": "Passwort wiederholen",
+    "passwordWarning": "Mit Passwort wird das Backup verschlüsselt. Wenn du das Passwort vergisst, kann niemand das Backup öffnen.",
+    "includeLog": "Systemprotokoll beifügen (zur Fehlersuche)",
+    "export": "Backup herunterladen",
+    "exported": "Backup heruntergeladen ({size})",
+    "mismatch": "Die Passwörter stimmen nicht überein",
+    "last": "Letztes Backup",
+    "never": "Hier noch nie erstellt",
+    "importHint": "Vor dem Wiederherstellen siehst du, was in der Datei ist. „Ersetzen“ löscht die Daten dieses Profils und lädt das Backup; „Zusammenführen“ ergänzt, was fehlt.",
+    "choose": "Backup-Datei wählen …",
+    "reading": "Backup wird gelesen …",
+    "encrypted": "Dieses Backup ist verschlüsselt. Gib sein Passwort ein.",
+    "wrongPassword": "Das Passwort ist falsch. Versuche es noch einmal.",
+    "unlock": "Öffnen",
+    "created": "Erstellt",
+    "profile": "Profil",
+    "version": "Erstellt mit",
+    "contents": "Inhalt",
+    "contentsValue": "{records} Einträge, {files} Dateien, {size}",
+    "encryption": "Verschlüsselt",
+    "yes": "Ja",
+    "no": "Nein",
+    "unknownStores": {
+      "one": "{count} Teil stammt aus einem neueren Nexus und wird übersprungen.",
+      "other": "{count} Teile stammen aus einem neueren Nexus und werden übersprungen."
+    },
+    "mode": "Wie wiederherstellen",
+    "replace": "Alles in diesem Profil ersetzen",
+    "merge": "In dieses Profil zusammenführen",
+    "modeHint": "Nexus lädt nach dem Wiederherstellen neu.",
+    "restore": "Wiederherstellen",
+    "replaceConfirm": "Alle Daten dieses Profils durch das Backup ersetzen? Was nicht im Backup ist, geht verloren.",
+    "mergeConfirm": "Die Daten des Backups zu diesem Profil hinzufügen? Vorhandene Einträge mit gleichem Namen bleiben erhalten.",
+    "restoredNotice": {
+      "=0": "Das Backup wurde wiederhergestellt.",
+      "one": "Das Backup wurde wiederhergestellt. {count} Eintrag blieb, weil er schon vorhanden war.",
+      "other": "Das Backup wurde wiederhergestellt. {count} Einträge blieben, weil sie schon vorhanden waren."
+    }
+  },
+  "updates": {
+    "installed": "Installiert",
+    "installedValue": "Nexus {version}, erstellt am {date}",
+    "how": "Neue Versionen werden im Hintergrund geladen. Du entscheidest, wann neu geladen wird.",
+    "check": "Nach Updates suchen",
+    "checking": "Suche läuft …",
+    "apply": "Mit der neuen Version neu laden",
+    "status": {
+      "available": "Eine neue Version ist bereit.",
+      "current": "Du hast die neueste Version.",
+      "offline": "Du bist offline. Verbinde dich, um nach Updates zu suchen.",
+      "unavailable": "Hier kann nicht nach Updates gesucht werden."
+    },
+    "unavailable": "Diese Kopie von Nexus kann nicht nach Updates suchen (kein Service Worker).",
+    "lite": "Nexus Lite aktualisiert sich nicht selbst. Lade die neueste Datei von der Website."
+  },
+  "about": {
+    "tagline": "Ein futuristischer Desktop im Browser. Open Source, offline, privat.",
+    "version": "Version",
+    "edition": "Ausgabe",
+    "editions": {
+      "web": "Website (installierbar, funktioniert offline)",
+      "lite": "Nexus Lite (eine Datei)"
+    },
+    "built": "Erstellt",
+    "profile": "Profil",
+    "website": "Website",
+    "source": "Quellcode",
+    "open": "Öffnen",
+    "lite": "Nexus Lite",
+    "liteHint": "Ganz Nexus in einer HTML-Datei, die auf einen USB-Stick passt.",
+    "downloadLite": "Nexus Lite herunterladen",
+    "youUseLite": "Du nutzt Nexus Lite.",
+    "openWebsite": "Website öffnen",
+    "changelog": "Änderungsprotokoll",
+    "showChangelog": "Zeigen",
+    "licensesHint": {
+      "one": "Nexus nutzt {count} Open-Source-Komponente:",
+      "other": "Nexus nutzt {count} Open-Source-Komponenten:"
+    },
+    "noText": "Lizenztext ist im Paket nicht enthalten.",
+    "nexusLicense": "Nexus Arcade OS selbst steht unter der MIT-Lizenz."
+  },
+  "confirm": {
+    "cancel": "Abbrechen"
+  },
+  "done": {
+    "saved": "Gespeichert",
+    "cleared": "Geleert"
+  }
+}

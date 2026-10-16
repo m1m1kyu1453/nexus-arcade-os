@@ -3,7 +3,7 @@
 ## Status
 
 - **Current phase:** 3 — System apps (phase 2 done 2026-10-16, `v0.2.0`)
-- **Next step:** phase 3: File Explorer, Terminal and Nexus Edit P1s done. Next: Settings (3.4) on `ctx.system.settings` (+ storage, backup, shortcuts, profiles parts of ctx.system still to add), then System Monitor (3.5), App Center (3.6), Help (3.7: render `manifest.help` via `ctx.system.apps.help`; F1 opens the focused app's page).
+- **Next step:** phase 3: Explorer, Terminal, Nexus Edit and Settings P1s done. Next: System Monitor (3.5; Processes/Performance/Storage/Log/Network tabs on `ctx.system.windows`, `storage.usage`, a new log/network facet), App Center (3.6: `ctx.system.apps.setEnabled/clearData`; screenshots must be taken and bundled), Help (3.7: `ctx.system.apps.help(id)`; F1 opens the focused app's help).
 - **Phase 2 verification:** 516 unit tests; e2e `tests/e2e/shell.spec.js` runs the done-when flows with keyboard only, mouse and touch, each restored after a reload; smoke tests (website, offline reload, Lite on `file://`).
 - **Phase 1 verification:** 336 unit tests incl. `tests/unit/system.test.js` (whole system in jsdom: launch, storage, VFS, search, crash/restart, language switch, backup → wipe → restore, newer-data read-only); e2e asserts the kernel boots (`<html data-kernel="ready">`) on the website, offline, and in Lite from `file://`.
 
@@ -67,6 +67,12 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-16 | **CodeMirror views live in a shadow root** (`src/apps/editor/editor.js`): CodeMirror (style-mod) then uses constructed style sheets, which the strict CSP allows; it would otherwise inject `<style>` tags that `style-src 'self'` blocks. Token colours (`ui/content.css`) are adopted into the shadow root. `isEditable` and the new `ui/dom.js` `focusedElement()` look into shadow roots (shortcuts in the editor, focus restore after overlays). | Keeps the website CSP without `'unsafe-inline'`. |
 | 2026-10-16 | **Nexus Edit keeps unsaved text as drafts** (app kv, per tab, flushed on `pagehide`) and restores them after a reload; closing a tab or the window with changes asks Save / Don't save / Cancel (`canClose`). Files changed elsewhere reload when clean, otherwise a notice offers both versions. | Spec 3.3 "protection on close"; nothing typed is lost to a reload. |
 | 2026-10-16 | **Edit window shortcuts** override system ones while it is focused: Ctrl+W (close tab), Ctrl+/ (comment), Ctrl+Space (completion). New file is Ctrl+Alt+N (Ctrl+N/Ctrl+T belong to the browser). | App-scoped shortcuts win; browser-reserved keys can't be used. |
+| 2026-10-16 | **New system settings for Settings:** `region` (date/number formats separate from the language; plural rules follow the language), `windowSnapping`, `windowSnapLayouts`, `focusRing` (standard/strong), `largeTargets` (44 px), `screenReaderHints` (shell live region announces windows and notifications), `backupReminderDays` (default 14; notification with a "Back up now" action, at most daily). | Spec 3.4 sections Windows, Language & Region, Accessibility, Backup. |
+| 2026-10-16 | **Licenses are generated at build time** (`virtual:nexus-licenses` in `scripts/vite-shared.js`): every non-dev package in the lockfile plus the bundled Workbox packages and the two OFL fonts, with their license texts. | Spec 3.4 "licenses of all bundled libraries and fonts"; can't go stale. |
+| 2026-10-16 | **"Clear caches" keeps the Service Worker precache** (only runtime caches go), so Nexus stays usable offline. | Clearing the precache would break offline use until the next online visit. |
+| 2026-10-16 | **Settings deep links travel as an intent** (`settings.open` → `{ page }` or `{ scope, key }`), so an open Settings window (single instance) follows them; the palette's @ mode adds "Open in Settings" and opens colour/path settings there directly. | The lifecycle passes only intents to a running single-instance app. |
+| 2026-10-16 | **Pick commands run from a shortcut open the palette** with their options (`commands.setPicker`). | Before, e.g. a shortcut on "Change theme…" did nothing. |
+| 2026-10-16 | **`ctx.dialog.openFolder()`** picks a folder (Settings path settings such as the slideshow folder). | The file dialog could only pick files. |
 
 ## Cuts
 
@@ -196,7 +202,7 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 **1.10 Scheduler**
 
 - [x] [P1] Persistent scheduled jobs (reminders, alarms, recurring tasks): stored in IndexedDB, fired while Nexus is open, and **missed jobs are shown on next start** ("While you were away: 2 reminders").
-- [ ] [P1] Honest about limits: a closed browser tab cannot fire reminders. Say so in Settings and in the Calendar/Clock help. — _open: the message exists in EN/DE (`scheduler.limits`); it is shown once Settings (phase 3) and Calendar/Clock (phases 4–5) exist._
+- [ ] [P1] Honest about limits: a closed browser tab cannot fire reminders. Say so in Settings and in the Calendar/Clock help. — _Settings → Notifications shows it (phase 3); Calendar/Clock help follows in phases 4–5._
 - [x] [P1] Recurrence rules (daily, weekly on days, monthly, yearly, every N, until/count), with unit tests including DST changes.
 
 **1.11 Search service**
@@ -336,12 +342,12 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **3.4 Settings**
 
-- [ ] [P1] Sections: Personalization (theme, accent, wallpaper, fonts, transparency, animations, sounds), Desktop & Dock, Windows (snapping, tiling, animations), Notifications, Shortcuts (view/rebind all), Language & Region, Profiles & Lock, Storage, Apps (per-app settings rendered from manifests, default apps for file types), Privacy (what is stored, clear history), Accessibility, Backup & Restore, Updates, About.
-- [ ] [P1] Settings search (finds individual settings, deep-links to them; also available from the command palette with `@`).
-- [ ] [P1] **Storage page:** usage per app and per VFS folder, clear app data (with confirm), clear caches, quarantine list, persistent-storage status and request button.
-- [ ] [P1] **Backup page:** export full backup (optional password), import with preview, automatic backup reminder (every N days).
-- [ ] [P1] **About page:** version, edition (web/Lite), build date, changelog, licenses of all bundled libraries and fonts, live URL, download link for Nexus Lite, link to GitHub.
-- [ ] [P1] **Accessibility page:** reduced motion, high contrast, font size, focus ring style, screen-reader hints, larger hit targets, disable sounds.
+- [x] [P1] Sections: Personalization (theme, accent, wallpaper, fonts, transparency, animations, sounds), Desktop & Dock, Windows (snapping, tiling, animations), Notifications, Shortcuts (view/rebind all), Language & Region, Profiles & Lock, Storage, Apps (per-app settings rendered from manifests, default apps for file types), Privacy (what is stored, clear history), Accessibility, Backup & Restore, Updates, About.
+- [x] [P1] Settings search (finds individual settings, deep-links to them; also available from the command palette with `@`).
+- [x] [P1] **Storage page:** usage per app and per VFS folder, clear app data (with confirm), clear caches, quarantine list, persistent-storage status and request button.
+- [x] [P1] **Backup page:** export full backup (optional password), import with preview, automatic backup reminder (every N days).
+- [x] [P1] **About page:** version, edition (web/Lite), build date, changelog, licenses of all bundled libraries and fonts, live URL, download link for Nexus Lite, link to GitHub.
+- [x] [P1] **Accessibility page:** reduced motion, high contrast, font size, focus ring style, screen-reader hints, larger hit targets, disable sounds.
 
 **3.5 System Monitor**
 

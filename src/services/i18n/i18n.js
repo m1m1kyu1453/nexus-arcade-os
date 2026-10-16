@@ -249,7 +249,12 @@ export function createI18n({ bus, log, locale: initial = FALLBACK, dev = false }
      * @param {string | null} tag
      */
     setRegion(tag) {
-      const next = tag && Intl.DateTimeFormat.supportedLocalesOf(tag).length ? tag : null;
+      let next = null;
+      try {
+        if (tag && Intl.DateTimeFormat.supportedLocalesOf(tag).length) next = tag;
+      } catch {
+        // Not a valid language tag: follow the language.
+      }
       if (next === region) return;
       region = next;
       formatters.clear();

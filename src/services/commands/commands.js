@@ -35,6 +35,8 @@ export class CommandUnavailableError extends Error {
 export function createCommands({ bus, log, context, localize }) {
   /** @type {Map<string, Command>} */
   const commands = new Map();
+  /** @type {((id: string) => unknown) | null} */
+  let picker = null;
   const changed = () => bus.emit('commands:changed', {});
 
   return {
@@ -90,6 +92,8 @@ export function createCommands({ bus, log, context, localize }) {
       if (!command) throw new CommandUnavailableError(`Unknown command "${id}"`);
       if (!evaluateWhen(command.when, context()))
         throw new CommandUnavailableError(`Command "${id}" is not available here`);
+      // A command that needs a choice, run without one (e.g. from a shortcut): let the user pick.
+      if (command.pick && args === undefined && picker) return picker(id);
       try {
         const result = await command.run(args);
         bus.emit('command:executed', { id });
@@ -98,6 +102,14 @@ export function createCommands({ bus, log, context, localize }) {
         log.error(`Command "${id}" failed`, error);
         throw error;
       }
+    },
+
+    /**
+     * Who shows a pick command's options when it runs without an argument (the palette).
+     * @param {((id: string) => unknown) | null} fn
+     */
+    setPicker(fn) {
+      picker = fn;
     },
   };
 }

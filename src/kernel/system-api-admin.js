@@ -226,5 +226,13 @@ export function createAdminApi(deps) {
     clear: (type) => deps.intentDefaults.delete(`open:${type}`),
   };
 
-  return { storage, backup: backups, shortcuts: keyboard, profiles: profileApi, privacy, notifications: notify, defaults };
+  return {
+    storage,
+    backup: backups,
+    shortcuts: keyboard,
+    profiles: profileApi,
+    privacy,
+    notifications: notify,
+    defaults,
+  };
 }

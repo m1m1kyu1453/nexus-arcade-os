@@ -10,4 +10,7 @@ interface Window {
   /** Set by the entry point (src/main.js or src/lite.js). */
   NEXUS_EDITION: 'web' | 'lite';
 }
-declare module 'virtual:nexus-licenses' { const list: { name: string; version: string; license: string; kind: 'library' | 'font'; text: string }[]; export default list; }
+declare module 'virtual:nexus-licenses' {
+  const list: { name: string; version: string; license: string; kind: 'library' | 'font'; text: string }[];
+  export default list;
+}

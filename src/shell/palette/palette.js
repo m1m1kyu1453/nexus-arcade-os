@@ -588,5 +588,11 @@ export function createPalette(shell) {
     })(),
   });
 
+  // Pick commands run from a shortcut open here with their options.
+  sys.commands.setPicker((id) => {
+    open();
+    return runCommand(id);
+  });
+
   return { open, close, toggle: () => (isOpen() ? close() : open()), isOpen };
 }

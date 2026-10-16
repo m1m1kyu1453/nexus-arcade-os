@@ -24,6 +24,7 @@ export const REPO_URL = 'https://github.com/m1m1kyu1453/nexus-arcade-os';
  * @property {{ version: string, edition: 'web' | 'lite', profile: { name: string, username: string }, bootedAt: number }} info
  * @property {Record<string, any>} host  filled by the shell (window titles, wallpaper …); empty headless
  * @property {import('./system-api-admin.js').AdminDeps} admin
+ * @property {(key: string, vars?: Record<string, unknown>) => string} systemText  OS messages (namespace 'system')
  */
 
 /** Plain, structured-cloneable description of an app for system UIs. @param {import('./types').AppManifest} m */
@@ -203,6 +204,8 @@ export function createSystemApi(deps) {
     info,
     about,
     updates,
+    /** An OS message (e.g. 'scheduler.limits'), so system apps show the same wording. */
+    text: deps.systemText,
     ...admin,
   });
 }

@@ -1,0 +1,379 @@
+{
+  "title": "Settings",
+  "search": "Search settings",
+  "searchResults": "Search results",
+  "noResults": "No setting matches",
+  "pageLabel": "Page",
+  "back": "All settings",
+  "pages": {
+    "personalization": {
+      "title": "Personalization",
+      "intro": "Theme, colors, wallpaper, text size, transparency, animations and sounds.",
+      "keywords": "appearance theme color accent wallpaper background font text size blur transparency animation sound volume"
+    },
+    "desktop": {
+      "title": "Desktop & Dock",
+      "intro": "Where the dock sits and how it behaves, widgets and workspaces.",
+      "keywords": "dock taskbar widgets workspaces desktop"
+    },
+    "windows": {
+      "title": "Windows",
+      "intro": "Snapping, layouts and window animations.",
+      "keywords": "window snap tile tiling layout maximize"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "intro": "Do not disturb, notifications from each app and outside Nexus.",
+      "keywords": "notifications alerts do not disturb dnd mute"
+    },
+    "shortcuts": {
+      "title": "Shortcuts",
+      "intro": "Every keyboard shortcut. Change one by pressing the new keys.",
+      "keywords": "keyboard shortcuts keys hotkeys bindings rebind"
+    },
+    "language": {
+      "title": "Language & Region",
+      "intro": "The language of Nexus and how dates, times and numbers look.",
+      "keywords": "language region locale format date time number currency german english"
+    },
+    "profiles": {
+      "title": "Profiles & Lock",
+      "intro": "Your profile, a PIN or password lock, and other people on this device.",
+      "keywords": "profile user account lock pin password login switch log out startup"
+    },
+    "storage": {
+      "title": "Storage",
+      "intro": "What Nexus stores in this browser, per app and per folder.",
+      "keywords": "storage space disk usage quota data clear cache quarantine persistent trash"
+    },
+    "apps": {
+      "title": "Apps",
+      "intro": "Settings of each app and which app opens which file type.",
+      "keywords": "apps default apps file types open with app settings"
+    },
+    "privacy": {
+      "title": "Privacy",
+      "intro": "What is kept about your activity, and how to clear it.",
+      "keywords": "privacy history clipboard recent files log tracking clear"
+    },
+    "accessibility": {
+      "title": "Accessibility",
+      "intro": "Reduced motion, high contrast, text size, focus ring, screen readers and larger targets.",
+      "keywords": "accessibility a11y contrast motion screen reader focus large text sounds"
+    },
+    "backup": {
+      "title": "Backup & Restore",
+      "intro": "Save everything in one file and bring it back here or on another device.",
+      "keywords": "backup restore export import save file password"
+    },
+    "updates": {
+      "title": "Updates",
+      "intro": "The installed version, new versions and what changed.",
+      "keywords": "update version changelog new release"
+    },
+    "about": {
+      "title": "About",
+      "intro": "This copy of Nexus, links and licenses.",
+      "keywords": "about version license licenses credits github website lite download"
+    }
+  },
+  "group": {
+    "theme": "Theme",
+    "wallpaper": "Wallpaper",
+    "text": "Text",
+    "sound": "Sounds",
+    "dock": "Dock",
+    "desktop": "Desktop",
+    "snapping": "Snapping",
+    "motion": "Motion",
+    "windowKeys": "Keyboard",
+    "notifications": "Notifications",
+    "perApp": "Allow notifications from",
+    "history": "History",
+    "language": "Language",
+    "preview": "Preview",
+    "vision": "Vision",
+    "hearing": "Hearing",
+    "screenReader": "Screen readers",
+    "thisProfile": "This profile",
+    "lock": "Lock",
+    "startup": "Startup",
+    "otherProfiles": "Other profiles",
+    "browserStorage": "Browser storage",
+    "files": "Files",
+    "appData": "App data",
+    "quarantine": "Unreadable records",
+    "defaults": "Default apps",
+    "whatIsStored": "What is stored",
+    "export": "Back up",
+    "import": "Restore",
+    "version": "Version",
+    "changelog": "What's new",
+    "thisCopy": "This copy",
+    "links": "Links",
+    "licenses": "Licenses"
+  },
+  "form": {
+    "reset": "Reset",
+    "resetLabel": "Reset {name}",
+    "themeColor": "Theme color",
+    "none": "None",
+    "choose": "Choose…",
+    "clear": "Clear"
+  },
+  "wallpaper": {
+    "current": "Current wallpaper",
+    "gallery": "Gallery…",
+    "image": "Your picture…",
+    "kind": {
+      "live": "Animated: {id}",
+      "gradient": "Gradient: {id}",
+      "slideshow": "Slideshow"
+    }
+  },
+  "desktop": {
+    "widgets": "Widgets",
+    "widgetsHint": "Small live tools right on the desktop: clock, calendar, notes and more.",
+    "addWidget": "Add a widget",
+    "workspaces": "Workspaces",
+    "workspacesHint": "Add, rename and switch workspaces in the overview.",
+    "overview": "Open overview"
+  },
+  "keys": {
+    "snapLeft": "Snap to the left half",
+    "snapRight": "Snap to the right half",
+    "maximize": "Maximize",
+    "restore": "Restore or minimize",
+    "switcher": "Switch windows",
+    "overview": "Overview of all windows",
+    "filter": "Filter shortcuts",
+    "general": "General",
+    "none": "No shortcut",
+    "change": "Change",
+    "remove": "Remove",
+    "removeLabel": "Remove the shortcut of {name}",
+    "nothing": "No command matches",
+    "recordTitle": "New shortcut for “{name}”",
+    "recordHint": "Press the keys now. Esc cancels.",
+    "conflict": "{combo} is used by several commands: {names}",
+    "nowShared": "{combo} is now also used by {names}",
+    "resetAll": "Reset all",
+    "resetAllConfirm": "Reset every shortcut to its default?"
+  },
+  "notify": {
+    "permissionLabel": "Browser permission",
+    "permission": {
+      "granted": "Allowed",
+      "denied": "Blocked in the browser. Allow notifications for this site in the browser's settings.",
+      "default": "Not decided yet",
+      "unsupported": "This browser can't show system notifications"
+    },
+    "allow": "Allow…",
+    "allowFrom": "Notifications from {app}",
+    "noApps": "No app sends notifications yet.",
+    "history": "Notification history",
+    "historyHint": "Past notifications in the notification center.",
+    "clear": "Clear history"
+  },
+  "format": {
+    "date": "Date",
+    "short": "Short date and time",
+    "number": "Number",
+    "currency": "Currency"
+  },
+  "a11y": {
+    "highContrast": "High contrast",
+    "highContrastHint": "A theme with the strongest contrast. Turning it off brings back your theme.",
+    "keyboard": "Everything in Nexus works with the keyboard. Press Ctrl+/ for the list of shortcuts."
+  },
+  "profile": {
+    "name": "Name",
+    "color": "Color",
+    "colorHint": "Shown on the login screen.",
+    "user": "User name (home folder)",
+    "delete": "Delete",
+    "deleteConfirm": "Delete the profile “{name}” and all its data? This cannot be undone.",
+    "add": "Add a profile",
+    "addHint": "Each profile has its own files, settings and apps' data.",
+    "addButton": "Add",
+    "added": "Profile “{name}” added. Switch to it from the login screen.",
+    "switch": "Switch profile",
+    "switchButton": "Switch…",
+    "logOut": "Log out"
+  },
+  "lock": {
+    "title": "PIN or password",
+    "off": "No lock: anyone using this browser can open this profile.",
+    "on": {
+      "pin": "Locked with a PIN",
+      "password": "Locked with a password"
+    },
+    "set": "Set a PIN or password",
+    "change": "Change",
+    "remove": "Remove lock",
+    "notice": "This is a privacy lock, not real security: your data is not encrypted by it. Use encrypted backups for sensitive data.",
+    "kind": "Type",
+    "pin": "PIN (4–12 digits)",
+    "password": "Password",
+    "current": "Current PIN or password",
+    "new": "New PIN or password",
+    "repeat": "Repeat",
+    "save": "Save",
+    "saved": "Lock saved",
+    "mismatch": "The two entries don't match",
+    "now": "Lock now",
+    "nowButton": "Lock"
+  },
+  "storage": {
+    "used": "Used storage",
+    "usedOf": "{used} of {total} used",
+    "noEstimate": "This browser doesn't report how much space is available.",
+    "engine": "Stored in {engine}.",
+    "engines": {
+      "indexeddb": "IndexedDB (normal)",
+      "localstorage": "localStorage (limited fallback: about 5 MB)",
+      "memory": "memory only (nothing is kept after closing the tab)"
+    },
+    "persistence": "Keep data permanently",
+    "persist": {
+      "persistent": "On: the browser won't delete Nexus data to free space.",
+      "best-effort": "Off: the browser may delete data when space runs low or the site isn't used for a while.",
+      "unsupported": "Not supported by this browser."
+    },
+    "persistAsk": "Ask the browser",
+    "caches": "Caches",
+    "cachesHint": "Downloaded extras kept for offline use. Nexus itself stays installed.",
+    "clearCaches": "Clear caches",
+    "cachesCleared": {
+      "=0": "There were no caches to clear",
+      "one": "Cleared {count} cache",
+      "other": "Cleared {count} caches"
+    },
+    "trash": "Trash",
+    "show": "Show",
+    "noFiles": "No files yet.",
+    "records": { "one": "{size} in {count} record", "other": "{size} in {count} records" },
+    "clearApp": "Clear data",
+    "clearAppConfirm": "Delete all data of {app} (its documents, history and settings)? Files in your folders stay. This cannot be undone.",
+    "clearedApp": "{app}'s data was deleted",
+    "noAppData": "No app has stored anything yet.",
+    "system": "System",
+    "systemHint": "Settings, notifications, search index, log and more.",
+    "quarantined": "{reason} · {date} · {size}",
+    "discard": "Discard",
+    "discardConfirm": "Delete this unreadable record for good?",
+    "quarantineEmpty": "Nothing here: all stored data could be read."
+  },
+  "apps": {
+    "askAgain": "Ask again",
+    "noDefaults": "No defaults yet. Choose “Always use this app” when opening a file.",
+    "center": "Install and hide apps",
+    "centerHint": "In the App Center.",
+    "openCenter": "Open App Center"
+  },
+  "privacy": {
+    "local": "Everything in Nexus stays in this browser. There is no account and no server.",
+    "noTracking": "No analytics, no tracking, no ads.",
+    "network": "Nexus only goes online for things you set up yourself, like an AI server.",
+    "count": { "=0": "Empty", "one": "{count} entry", "other": "{count} entries" },
+    "clipboard": "Clipboard history",
+    "recent": "Recent files",
+    "notifications": "Notification history",
+    "search": "Search history",
+    "searchHint": "What you opened from search, to rank it higher.",
+    "log": "System log",
+    "clear": "Clear"
+  },
+  "backup": {
+    "exportHint": "One .nexus-backup file with all your files, settings and app data. Keep it somewhere safe.",
+    "password": "Password (optional)",
+    "repeat": "Repeat password",
+    "passwordWarning": "With a password the backup is encrypted. If you forget the password, the backup cannot be opened by anyone.",
+    "includeLog": "Include the system log (for troubleshooting)",
+    "export": "Download backup",
+    "exported": "Backup downloaded ({size})",
+    "mismatch": "The passwords don't match",
+    "last": "Last backup",
+    "never": "Never made here",
+    "importHint": "Restoring shows what's in the file first. Replace wipes this profile's data and loads the backup; merge adds what's missing.",
+    "choose": "Choose a backup file…",
+    "reading": "Reading the backup…",
+    "encrypted": "This backup is encrypted. Enter its password.",
+    "wrongPassword": "That password is wrong. Try again.",
+    "unlock": "Open",
+    "created": "Created",
+    "profile": "Profile",
+    "version": "Made with",
+    "contents": "Contents",
+    "contentsValue": "{records} records, {files} files, {size}",
+    "encryption": "Encrypted",
+    "yes": "Yes",
+    "no": "No",
+    "unknownStores": {
+      "one": "{count} part comes from a newer Nexus and will be skipped.",
+      "other": "{count} parts come from a newer Nexus and will be skipped."
+    },
+    "mode": "How to restore",
+    "replace": "Replace everything in this profile",
+    "merge": "Merge into this profile",
+    "modeHint": "Nexus reloads after restoring.",
+    "restore": "Restore",
+    "replaceConfirm": "Replace all data of this profile with the backup? Anything not in the backup is lost.",
+    "mergeConfirm": "Add the backup's data to this profile? Existing items with the same name are kept.",
+    "restoredNotice": {
+      "=0": "The backup was restored.",
+      "one": "The backup was restored. {count} item was kept because it already existed.",
+      "other": "The backup was restored. {count} items were kept because they already existed."
+    }
+  },
+  "updates": {
+    "installed": "Installed",
+    "installedValue": "Nexus {version}, built {date}",
+    "how": "New versions download in the background. You choose when to reload.",
+    "check": "Check for updates",
+    "checking": "Checking…",
+    "apply": "Reload with the new version",
+    "status": {
+      "available": "A new version is ready.",
+      "current": "You have the newest version.",
+      "offline": "You're offline. Connect to check for updates.",
+      "unavailable": "Updates can't be checked here."
+    },
+    "unavailable": "This copy of Nexus can't check for updates (no Service Worker).",
+    "lite": "Nexus Lite doesn't update itself. Download the newest file from the website."
+  },
+  "about": {
+    "tagline": "A futuristic desktop in your browser. Open source, offline, private.",
+    "version": "Version",
+    "edition": "Edition",
+    "editions": {
+      "web": "Website (installable, works offline)",
+      "lite": "Nexus Lite (one file)"
+    },
+    "built": "Built",
+    "profile": "Profile",
+    "website": "Website",
+    "source": "Source code",
+    "open": "Open",
+    "lite": "Nexus Lite",
+    "liteHint": "All of Nexus in one HTML file you can keep on a USB stick.",
+    "downloadLite": "Download Nexus Lite",
+    "youUseLite": "You're using Nexus Lite.",
+    "openWebsite": "Open the website",
+    "changelog": "Changelog",
+    "showChangelog": "Show",
+    "licensesHint": {
+      "one": "Nexus is built with {count} open-source component:",
+      "other": "Nexus is built with {count} open-source components:"
+    },
+    "noText": "License text not included in the package.",
+    "nexusLicense": "Nexus Arcade OS itself is MIT licensed."
+  },
+  "confirm": {
+    "cancel": "Cancel"
+  },
+  "done": {
+    "saved": "Saved",
+    "cleared": "Cleared"
+  }
+}

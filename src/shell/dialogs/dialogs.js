@@ -58,7 +58,7 @@ export function createDialogs(shell) {
 
   /**
    * Mini file browser shared by open and save.
-   * @param {{ mode: 'open' | 'save', title?: string, accept?: string[], multiple?: boolean, startIn?: string, suggestedName?: string }} options
+   * @param {{ mode: 'open' | 'save' | 'folder', title?: string, accept?: string[], multiple?: boolean, startIn?: string, suggestedName?: string }} options
    * @returns {Promise<string | string[] | null>}
    */
   async function browse({ mode, title, accept, multiple = false, startIn, suggestedName = '' }) {
@@ -84,7 +84,7 @@ export function createDialogs(shell) {
     /** @param {import('../../services/vfs/vfs.js').VfsNode} n */
     const accepted = (n) =>
       n.type === 'folder' ||
-      !accept?.length ||
+      (mode !== 'folder' && !accept?.length) ||
       accept.some((a) =>
         a.startsWith('.')
           ? n.name.toLowerCase().endsWith(a.toLowerCase())
@@ -134,7 +134,14 @@ export function createDialogs(shell) {
       );
       const nodes = (await sys.vfs.list(dir, { hidden: false }).catch(() => [])).filter(accepted);
       if (!nodes.length) {
-        replace(list, h('li', { class: 'nx-empty', role: 'presentation', text: t('dialog.emptyFolder') }));
+        replace(
+          list,
+          h('li', {
+            class: 'nx-empty',
+            role: 'presentation',
+            text: t(mode === 'folder' ? 'dialog.noSubfolders' : 'dialog.emptyFolder'),
+          }),
+        );
         return;
       }
       replace(
@@ -249,16 +256,18 @@ export function createDialogs(shell) {
       ),
     );
     const result = await openModal({
-      title: title ?? t(mode === 'open' ? 'dialog.openFile' : 'dialog.saveFile'),
+      title:
+        title ?? t(mode === 'open' ? 'dialog.openFile' : mode === 'folder' ? 'dialog.chooseFolder' : 'dialog.saveFile'),
       body,
       size: 'md',
       actions: [
         cancel(),
         {
-          label: t(mode === 'open' ? 'dialog.open' : 'dialog.save'),
+          label: t(mode === 'open' ? 'dialog.open' : mode === 'folder' ? 'dialog.selectFolder' : 'dialog.save'),
           value: 'submit',
           variant: 'primary',
           accept: async () => {
+            if (mode === 'folder') return true;
             if (mode === 'open') return selected.size > 0;
             saved = await savePath();
             return !!saved;
@@ -279,6 +288,7 @@ export function createDialogs(shell) {
       },
     });
     if (result === 'submit') {
+      if (mode === 'folder') return dir;
       if (mode === 'save') return saved;
       return multiple ? [...selected] : ([...selected][0] ?? null);
     }
@@ -376,6 +386,8 @@ export function createDialogs(shell) {
     openFile: (options = {}) => browse({ ...options, mode: 'open' }),
     /** @param {{ title?: string, suggestedName?: string, startIn?: string }} [options] */
     saveFile: (options = {}) => browse({ ...options, mode: 'save' }),
+    /** Picks a folder (the one shown when the user confirms). @param {{ title?: string, startIn?: string }} [options] */
+    openFolder: (options = {}) => browse({ ...options, mode: 'folder' }),
     color,
     pickApp,
   };
