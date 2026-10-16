@@ -23,6 +23,8 @@ export const PERMISSIONS = /** @type {const} */ ([
   'ai',
   'scheduler',
   'intents',
+  // Privileged ctx.system (built-in system apps only; plugins can never be granted it).
+  'system',
 ]);
 export const LOCALES = /** @type {const} */ (['en', 'de']);
 

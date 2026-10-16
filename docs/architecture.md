@@ -101,3 +101,15 @@ instance.unmount() + ctx.signal aborted + timers/listeners cleared
   Lite via `file://`. Helpers in `tests/helpers/nexus.js`.
 - CI (`.github/workflows/ci.yml`): lint → type check → unit → build → e2e. Render deploys only
   after CI passes.
+
+## `ctx.system` (privileged, phase 3)
+
+Built-in system apps (File Explorer, Terminal, Settings, System Monitor, App Center, Help) need
+OS-level access that normal apps and plugins must never have. They declare the `system`
+permission and receive `ctx.system` (`src/kernel/system-api.js`), a facade that hands out plain
+data and a few verbs (list/hide apps, clear app data, list/focus/close/kill windows, …), never the
+services themselves. The shell fills in parts only it knows (window titles, wallpaper) through
+`system.systemHost`. Plugins (phase 13) can never be granted `system`.
+
+Apps can veto a normal close with `AppInstance.canClose()` (unsaved changes); "End task"
+(`ctx.system.windows.kill`) and shutdown skip it.

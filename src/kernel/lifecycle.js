@@ -210,10 +210,26 @@ export function createLifecycle({ registry, bus, logger, host, createContext, os
     return id;
   }
 
-  /** @param {string} id */
-  async function close(id) {
+  /**
+   * Closes a window. A running app may veto with `canClose()` (unsaved changes) unless `force`.
+   * @param {string} id
+   * @param {{ force?: boolean }} [options]
+   * @returns {Promise<boolean>} false if the app kept the window open
+   */
+  async function close(id, { force = false } = {}) {
     const i = instances.get(id);
-    if (!i || i.state === 'closing') return;
+    if (!i || i.state === 'closing') return true;
+    if (!force && i.state === 'running' && typeof i.app?.canClose === 'function') {
+      let ok = true;
+      try {
+        ok = (await i.app.canClose()) !== false;
+      } catch (error) {
+        logger.log('warn', `app:${i.appId}`, 'canClose failed', error);
+      }
+      if (!ok || !instances.has(id)) return false;
+    }
+    // Another close may have started while canClose() was waiting.
+    if (/** @type {InstanceState} */ (i.state) === 'closing') return true;
     const wasCrashed = i.state === 'crashed';
     i.state = 'closing';
     if (!wasCrashed && i.app?.unmount) {
@@ -232,6 +248,7 @@ export function createLifecycle({ registry, bus, logger, host, createContext, os
     host.close(id);
     log.info(`Closed ${id}`);
     bus.emit('app:closed', { id, appId: i.appId });
+    return true;
   }
 
   /** @param {string} id */

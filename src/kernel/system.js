@@ -33,6 +33,7 @@ import { createVfs, VFS_STORE_SCHEMA } from '../services/vfs/vfs.js';
 import { createNativeDialogs } from '../shell/native-dialogs.js';
 import { createEventBus } from './bus.js';
 import { createAppContext } from './context.js';
+import { createSystemApi } from './system-api.js';
 import { createIntents } from './intents.js';
 import { createBoundary } from './error-boundary.js';
 import { createLifecycle } from './lifecycle.js';
@@ -510,6 +511,18 @@ async function openProfile(options, k, profile) {
     createContext: (manifest, extras) => createAppContext(manifest, services, extras),
     prepare: (manifest) => i18n.load(manifest.id),
   });
+  /** Parts of ctx.system only the shell can provide (window titles, wallpaper …). */
+  const systemHost = {};
+  services.systemApi = createSystemApi({
+    registry,
+    lifecycle,
+    settings,
+    db,
+    bus,
+    localize,
+    isReadOnly: services.isReadOnly,
+    host: systemHost,
+  });
   bus.on('app:launched', () => sound.play('open'));
   bus.on('app:closed', () => sound.play('close'));
   bus.on('app:crashed', () => sound.play('error'));
@@ -606,12 +619,13 @@ async function openProfile(options, k, profile) {
     migrationResults,
     localize,
     widgetContext,
+    systemHost,
     async stop() {
       sources.stop();
       scheduler.stop();
       relay.close();
       detachShortcuts();
-      for (const i of lifecycle.list()) await lifecycle.close(i.id);
+      for (const i of lifecycle.list()) await lifecycle.close(i.id, { force: true });
       await logger.flush();
       rawDb.close();
       systemDb?.close();

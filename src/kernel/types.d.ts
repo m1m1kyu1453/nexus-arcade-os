@@ -12,7 +12,7 @@ export type Unsub = () => void;
 export type AppCategory = 'productivity' | 'study' | 'office' | 'dev' | 'cslab' | 'games' | 'media' | 'ai' | 'system';
 
 /** Scoped storage is always granted. Enforced for plugins (phase 13), shown for all apps. */
-export type Permission = 'vfs' | 'notifications' | 'clipboard' | 'network' | 'ai' | 'scheduler' | 'intents';
+export type Permission = 'vfs' | 'notifications' | 'clipboard' | 'network' | 'ai' | 'scheduler' | 'intents' | 'system';
 
 // ─── Manifest ──────────────────────────────────────────────────────────────────────────────
 // Data only, plus lazy imports. Manifests are loaded eagerly at boot, so they must stay small
@@ -148,6 +148,8 @@ export interface AppModule {
 
 /** One running window of an app. */
 export interface AppInstance {
+  /** Asked before the window closes (not on "End task"); return false to keep it open, e.g. after "Cancel" on unsaved changes. */
+  canClose?(): boolean | Promise<boolean>;
   unmount?(): void | Promise<void>;
   onSuspend?(): void;
   onResume?(): void;
@@ -253,6 +255,8 @@ export interface AppContext {
     list(): Promise<Job[]>;
   };
   ai: { isAvailable(): boolean };
+  /** Privileged OS API; only set for built-in apps that declare the 'system' permission. */
+  system?: import('./system-api.js').SystemApi;
   log: Logger;
   /** Aborted on unmount: `el.addEventListener('click', fn, { signal: ctx.signal })`. */
   signal: AbortSignal;

@@ -59,6 +59,7 @@ const RESERVED_EVENTS = [
  * @property {{ alert(message: string): Promise<void>, confirm(message: string): Promise<boolean>, prompt(message: string, value?: string): Promise<string | null>, [name: string]: unknown }} dialogs
  * @property {{ edition: 'web' | 'lite', dev: boolean }} env
  * @property {(appId: string) => boolean} isReadOnly  data newer than the code, or a failed migration
+ * @property {(appId: string) => import('./system-api.js').SystemApi} [systemApi]  for apps with the 'system' permission
  */
 
 /** VFS operations apps may use (never with the OS-only `system` option). */
@@ -285,6 +286,8 @@ export function createAppContext(manifest, services, extras = {}) {
         list: () => scheduler.list(appId),
       },
       ai: services.ai,
+      // Privileged OS access; the registry only lets built-in apps declare 'system'.
+      system: manifest.permissions?.includes('system') ? services.systemApi?.(appId) : undefined,
       log: logger.child(`app:${appId}`),
       signal: runtime?.signal ?? new AbortController().signal,
       timers: runtime?.timers,
