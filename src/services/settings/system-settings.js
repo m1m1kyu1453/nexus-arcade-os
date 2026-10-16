@@ -218,4 +218,15 @@ export const SYSTEM_SETTINGS = [
       'Systembenachrichtigungen zeigen, wenn Nexus im Hintergrund ist',
     ),
   },
+  // Files
+  {
+    key: 'trashRetentionDays',
+    type: 'number',
+    default: 30,
+    min: 0,
+    max: 365,
+    step: 1,
+    label: L('Empty the trash automatically after (days)', 'Papierkorb automatisch leeren nach (Tagen)'),
+    description: L('0 keeps items until you empty the trash.', '0 behält Einträge, bis du den Papierkorb leerst.'),
+  },
 ];

@@ -300,6 +300,15 @@ async function openProfile(options, k, profile) {
   await vfs.init();
   const recent = createRecentFiles({ store: kv('system:recent'), bus });
   await recent.load();
+  /** Auto-empty: trash items older than the retention setting go for good (0 = keep). */
+  const purgeTrash = async () => {
+    const days = Number(settings.get('system', 'trashRetentionDays'));
+    if (!(days > 0)) return;
+    const removed = await vfs.purgeTrash(Date.now() - days * 86_400_000);
+    if (removed) log.info(`Emptied ${removed} old item(s) from the trash`);
+  };
+  await purgeTrash().catch((error) => log.warn('Could not empty old trash items', error));
+  const trashTimer = setInterval(() => void purgeTrash().catch(() => {}), 6 * 3_600_000);
   progress('files');
 
   /** @type {ReturnType<typeof createSound>} */
@@ -624,6 +633,7 @@ async function openProfile(options, k, profile) {
       sources.stop();
       scheduler.stop();
       relay.close();
+      clearInterval(trashTimer);
       detachShortcuts();
       for (const i of lifecycle.list()) await lifecycle.close(i.id, { force: true });
       await logger.flush();

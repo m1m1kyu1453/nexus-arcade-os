@@ -569,6 +569,24 @@ export function createVfs({ db, bus, user, now = Date.now, newId = () => crypto.
       announce('deleted', node);
     },
 
+    /**
+     * Permanently deletes trash items that were trashed before `before` (auto-empty).
+     * @param {number} before timestamp
+     * @returns {Promise<number>} items deleted
+     */
+    async purgeTrash(before) {
+      let count = 0;
+      for (const item of await this.listTrash()) {
+        if ((item.trash?.at ?? Infinity) >= before) continue;
+        // Another tab may purge at the same time; a vanished item is fine.
+        await this.deletePermanently(item.path).then(
+          () => count++,
+          () => {},
+        );
+      }
+      return count;
+    },
+
     async emptyTrash() {
       const items = await this.listTrash();
       for (const item of items) await this.deletePermanently(item.path);
@@ -641,6 +659,24 @@ export function createVfs({ db, bus, user, now = Date.now, newId = () => crypto.
         }
       });
       return matches.sort((a, b) => a.path.localeCompare(b.path));
+    },
+
+    /**
+     * Every tag in use (outside the trash) with how many items carry it, sorted by name.
+     * @returns {Promise<{ tag: string, count: number }[]>}
+     */
+    async tags() {
+      /** @type {Map<string, number>} */
+      const counts = new Map();
+      await read((tx) =>
+        tx.iterate(NODES, undefined, (n) => {
+          if (!n.tags?.length || isInside(TRASH, n.path)) return;
+          for (const tag of n.tags) counts.set(tag, (counts.get(tag) ?? 0) + 1);
+        }),
+      );
+      return [...counts]
+        .map(([tag, count]) => ({ tag, count }))
+        .sort((a, b) => a.tag.localeCompare(b.tag, undefined, { sensitivity: 'base' }));
     },
 
     /**

@@ -80,6 +80,8 @@ const FS_METHODS = /** @type {const} */ ([
   'restore',
   'deletePermanently',
   'emptyTrash',
+  'purgeTrash',
+  'tags',
   'setTags',
   'setMeta',
   'search',

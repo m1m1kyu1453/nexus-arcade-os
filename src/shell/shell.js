@@ -88,6 +88,10 @@ export async function startShell(root, { onProgress, onLog, beforeLogin } = {}) 
     profile = await loginScreen({ parent: document.body, kernel });
   } else profile = await kernel.defaultProfile();
   system = await kernel.openProfile(profile);
+  // What ctx.system needs from the shell.
+  Object.assign(system.systemHost, {
+    windowTitle: (/** @type {string} */ id) => shell.wm.get(id)?.title,
+  });
 
   // Session: workspaces, pinned apps, windows.
   shell.session = createSession(createStore(system, 'system:shell'), system.logger.child('shell'));

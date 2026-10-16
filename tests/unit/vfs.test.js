@@ -14,6 +14,35 @@ async function setup() {
 
 const names = (nodes) => nodes.map((n) => n.name);
 
+describe('vfs trash retention and tags', () => {
+  it('purges only items trashed before the cut-off', async () => {
+    let t = 1000;
+    const db = await createIdbEngine().open('profile', VFS_STORE_SCHEMA);
+    const vfs = createVfs({ db, bus: createEventBus(), user: 'ada', now: () => t });
+    await vfs.init();
+    await vfs.writeFile('/home/ada/old.txt', 'a');
+    await vfs.writeFile('/home/ada/new.txt', 'b');
+    t = 2000;
+    await vfs.trash('/home/ada/old.txt');
+    t = 5000;
+    await vfs.trash('/home/ada/new.txt');
+    expect(await vfs.purgeTrash(3000)).toBe(1);
+    expect((await vfs.listTrash()).map((n) => n.trash.originalPath)).toEqual(['/home/ada/new.txt']);
+  });
+
+  it('lists tags in use with counts, ignoring the trash', async () => {
+    const { vfs } = await setup();
+    await vfs.writeFile('/home/ada/a.txt', '', { tags: ['work', 'Urgent'] });
+    await vfs.writeFile('/home/ada/b.txt', '', { tags: ['work'] });
+    await vfs.writeFile('/home/ada/c.txt', '', { tags: ['gone'] });
+    await vfs.trash('/home/ada/c.txt');
+    expect(await vfs.tags()).toEqual([
+      { tag: 'Urgent', count: 1 },
+      { tag: 'work', count: 2 },
+    ]);
+  });
+});
+
 describe('vfs', () => {
   it('creates the default layout once (idempotent init)', async () => {
     const { vfs } = await setup();
