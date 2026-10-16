@@ -219,8 +219,23 @@ export async function mount(container, ctx, args) {
   const visible = (/** @type {Item[]} */ list) =>
     showHidden() ? list : list.filter((i) => !displayName(i).startsWith('.'));
 
-  /** Loads the current location. @param {{ keepSelection?: boolean }} [options] */
-  async function load({ keepSelection = true } = {}) {
+  /** The newest load; an older one that gets superseded resolves when this one has rendered. */
+  let latestLoad = Promise.resolve();
+
+  /**
+   * Loads the current location and renders it. Resolves once the view shows the result of this
+   * or a newer load (so callers can rely on the DOM afterwards).
+   * @param {{ keepSelection?: boolean }} [options]
+   * @returns {Promise<void>}
+   */
+  function load(options) {
+    const promise = loadNow(options);
+    latestLoad = promise;
+    return promise;
+  }
+
+  /** @param {{ keepSelection?: boolean }} [options] */
+  async function loadNow({ keepSelection = true } = {}) {
     if (renaming) return;
     const mine = ++loadToken;
     const loc = state.location;
@@ -252,11 +267,11 @@ export async function mount(container, ctx, args) {
       notifyError(String(/** @type {Error} */ (error).message));
       next = [];
     }
-    if (mine !== loadToken) return;
+    if (mine !== loadToken) return latestLoad;
     state.readOnly = readOnly || inTrash();
     items = sortItems(visible(next), state.sort, ctx.i18n.locale);
     if (state.view === 'columns' && isFolderLocation() && !state.query) await loadColumns();
-    if (mine !== loadToken) return;
+    if (mine !== loadToken) return latestLoad;
     const paths = new Set(items.map((i) => i.path));
     selected = keepSelection ? new Set([...selected].filter((p) => paths.has(p))) : new Set();
     state.loading = false;

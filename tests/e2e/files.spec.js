@@ -39,6 +39,7 @@ test.describe('file explorer', () => {
   test.skip(({ isMobile }) => isMobile, 'desktop flows (the mobile run covers the sheet layout)');
 
   test('create, upload, preview, views, copy/paste, rename, trash, restore, undo, tags, search', async ({ page }) => {
+    test.setTimeout(60_000); // one long flow
     const errors = collectErrors(page);
     await startNexus(page);
     await openExplorer(page);

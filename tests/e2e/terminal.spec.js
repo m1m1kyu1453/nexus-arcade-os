@@ -22,6 +22,7 @@ test.describe('terminal', () => {
   test.skip(({ isMobile }) => isMobile, 'keyboard flows');
 
   test('files, pipes, completion, history, Ctrl+C, less, apps, tabs; restored after reload', async ({ page }) => {
+    test.setTimeout(60_000); // one long flow
     const errors = collectErrors(page);
     await startNexus(page);
     await page.keyboard.press('Escape');
