@@ -29,6 +29,7 @@ const RESERVED_EVENTS = [
   'clipboard:',
   'permissions:',
   'ai:',
+  'network:',
   'search:',
   'system:',
   'window:',

@@ -39,7 +39,7 @@ export function createRuntime({ boundary, clock = browserClock() }) {
   let disposed = false;
   /** @type {Set<() => void>} */
   const cleanups = new Set();
-  /** @type {Set<{ pause(): void, resume(): void }>} */
+  /** @type {Set<{ pause(): void, resume(): void, kind?: string }>} */
   const pausables = new Set();
 
   /**
@@ -59,7 +59,7 @@ export function createRuntime({ boundary, clock = browserClock() }) {
   }
 
   /**
-   * @param {{ pause(): void, resume(): void, stop(): void }} p
+   * @param {{ pause(): void, resume(): void, stop(): void, kind?: string }} p
    */
   function managed(p) {
     pausables.add(p);
@@ -154,6 +154,7 @@ export function createRuntime({ boundary, clock = browserClock() }) {
         guarded(dt);
       };
       return managed({
+        kind: 'loop',
         resume() {
           if (id !== null) return;
           last = null;
@@ -210,6 +211,12 @@ export function createRuntime({ boundary, clock = browserClock() }) {
     /** Active timers and loops (System Monitor shows this). */
     get activeCount() {
       return pausables.size;
+    },
+    /** Of those, animation-frame loops. */
+    get loopCount() {
+      let n = 0;
+      for (const p of pausables) if (p.kind === 'loop') n++;
+      return n;
     },
   };
 }

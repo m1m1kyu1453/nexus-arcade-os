@@ -1,0 +1,85 @@
+{
+  "title": "Systemmonitor",
+  "tabs": {
+    "processes": "Prozesse",
+    "performance": "Leistung",
+    "storage": "Speicher",
+    "log": "Protokoll",
+    "network": "Netzwerk"
+  },
+  "proc": {
+    "none": "Keine Fenster offen.",
+    "window": "Fenster",
+    "app": "App",
+    "state": "Status",
+    "cpu": "CPU",
+    "elements": "Elemente",
+    "timers": "Timer",
+    "uptime": "Offen seit",
+    "running": "Läuft",
+    "suspended": "Pausiert",
+    "states": {
+      "loading": "Startet",
+      "crashed": "Funktioniert nicht mehr",
+      "closing": "Wird geschlossen"
+    },
+    "focus": "Zu diesem Fenster wechseln",
+    "end": "Task beenden",
+    "endLabel": "Task beenden: {name}",
+    "note": "CPU ist der Anteil der letzten Sekunde im eigenen Code der App. Ein Browser kann den Speicher nicht je Fenster messen; Elemente (der Teil der Seite im Fenster) ist die beste Schätzung. Pausierte Fenster (minimiert, anderer Arbeitsbereich, versteckter Tab) halten ihre Timer an."
+  },
+  "time": {
+    "seconds": { "one": "{count} s", "other": "{count} s" },
+    "minutes": { "one": "{count} Min.", "other": "{count} Min." },
+    "hours": "{hours} Std. {minutes} Min."
+  },
+  "perf": {
+    "fps": "Bilder pro Sekunde",
+    "frameAvg": "Durchschnittliches Bild",
+    "frameTime": "Bildzeit",
+    "frameWorst": "Langsamstes Bild pro Sekunde",
+    "elements": "Elemente auf der Seite",
+    "loops": "Animationsschleifen",
+    "timers": "Timer",
+    "workers": "Worker",
+    "heap": "JavaScript-Speicher",
+    "heapValue": "{used} von {limit}",
+    "noHeap": "Dieser Browser meldet keinen JavaScript-Speicher.",
+    "workerList": "Laufende Worker",
+    "noWorkers": "Keine Hintergrund-Worker laufen.",
+    "workerNote": "Worker erledigen schwere Arbeit (Suchindex, KI, Bildfilter) abseits des Hauptthreads."
+  },
+  "storage": {
+    "total": "{used} von {quota} in diesem Browser belegt",
+    "files": "Dateien",
+    "system": "System",
+    "manage": "In den Einstellungen verwalten"
+  },
+  "log": {
+    "level": "Mindeststufe",
+    "levels": {
+      "debug": "Alles",
+      "info": "Info und höher",
+      "warn": "Warnungen und Fehler",
+      "error": "Nur Fehler"
+    },
+    "source": "Quelle (z. B. kernel, app:nexus.files)",
+    "search": "Meldungen durchsuchen",
+    "export": "Exportieren …",
+    "empty": "Keine passenden Einträge."
+  },
+  "net": {
+    "online": "Online",
+    "offline": "Offline: Alles in Nexus funktioniert weiter; nur Funktionen, die das Internet brauchen, warten.",
+    "explain": "Nexus verbindet sich nur für Dinge, die du selbst startest, zum Beispiel einen KI-Server oder den HTTP-Client. Diese Anfragen stehen hier.",
+    "none": "Noch keine Anfragen.",
+    "time": "Zeit",
+    "app": "App",
+    "method": "Methode",
+    "url": "Adresse",
+    "status": "Status",
+    "duration": "Dauer",
+    "pending": "Wartet",
+    "clear": "Liste leeren"
+  }
+}

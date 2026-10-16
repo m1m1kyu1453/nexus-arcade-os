@@ -3,7 +3,7 @@
 ## Status
 
 - **Current phase:** 3 — System apps (phase 2 done 2026-10-16, `v0.2.0`)
-- **Next step:** phase 3: Explorer, Terminal, Nexus Edit and Settings P1s done. Next: System Monitor (3.5; Processes/Performance/Storage/Log/Network tabs on `ctx.system.windows`, `storage.usage`, a new log/network facet), App Center (3.6: `ctx.system.apps.setEnabled/clearData`; screenshots must be taken and bundled), Help (3.7: `ctx.system.apps.help(id)`; F1 opens the focused app's help).
+- **Next step:** phase 3: Explorer, Terminal, Nexus Edit, Settings and System Monitor P1s done. Next: App Center (3.6: list by category with size/permissions, hide = `ctx.system.apps.setEnabled`, per-app page with bundled screenshots + changelog + settings link + Clear data), then Help (3.7: `ctx.system.apps.help(id)` + general docs; F1 opens the focused app's help), then the phase 3 wrap-up (v0.3.0).
 - **Phase 2 verification:** 516 unit tests; e2e `tests/e2e/shell.spec.js` runs the done-when flows with keyboard only, mouse and touch, each restored after a reload; smoke tests (website, offline reload, Lite on `file://`).
 - **Phase 1 verification:** 336 unit tests incl. `tests/unit/system.test.js` (whole system in jsdom: launch, storage, VFS, search, crash/restart, language switch, backup → wipe → restore, newer-data read-only); e2e asserts the kernel boots (`<html data-kernel="ready">`) on the website, offline, and in Lite from `file://`.
 
@@ -73,6 +73,8 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-16 | **Settings deep links travel as an intent** (`settings.open` → `{ page }` or `{ scope, key }`), so an open Settings window (single instance) follows them; the palette's @ mode adds "Open in Settings" and opens colour/path settings there directly. | The lifecycle passes only intents to a running single-instance app. |
 | 2026-10-16 | **Pick commands run from a shortcut open the palette** with their options (`commands.setPicker`). | Before, e.g. a shortcut on "Change theme…" did nothing. |
 | 2026-10-16 | **`ctx.dialog.openFolder()`** picks a folder (Settings path settings such as the slideshow folder). | The file dialog could only pick files. |
+| 2026-10-16 | **System Monitor numbers:** "CPU" per window = time spent in the window's guarded callbacks (error boundary, outermost call only) per second; "memory estimate" = the window's DOM elements (browsers can't measure memory per window; JS heap shown where `performance.memory` exists). Workers are counted by wrapping `Worker` at boot (`kernel/workers.js`); workers that close themselves aren't seen (said in the UI). | Spec 3.5 "where possible": honest numbers instead of guesses. |
+| 2026-10-16 | **Network log service** (`services/network/network.js`, in memory, last 200): apps that go online (HTTP client phase 7, AI phase 12) record each request; the Monitor shows them. No such app exists yet, so the tab explains that and lists nothing. | Spec 3.5 Network tab; Nexus itself never makes requests. |
 
 ## Cuts
 
@@ -351,7 +353,7 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **3.5 System Monitor**
 
-- [ ] [P1] Tabs: Processes (open windows/apps with memory estimate where possible, CPU-ish frame time, "End task"), Performance (FPS graph, frame time, JS heap where supported, number of DOM nodes, active animation loops and workers), Storage (per app), Log (system log with filters and export), Network (online/offline, request log of user-initiated requests like AI/HTTP client).
+- [x] [P1] Tabs: Processes (open windows/apps with memory estimate where possible, CPU-ish frame time, "End task"), Performance (FPS graph, frame time, JS heap where supported, number of DOM nodes, active animation loops and workers), Storage (per app), Log (system log with filters and export), Network (online/offline, request log of user-initiated requests like AI/HTTP client).
 
 **3.6 App Center**
 

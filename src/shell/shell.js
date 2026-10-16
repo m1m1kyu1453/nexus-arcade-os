@@ -91,6 +91,7 @@ export async function startShell(root, { onProgress, onLog, beforeLogin } = {}) 
   // What ctx.system needs from the shell.
   Object.assign(system.systemHost, {
     windowTitle: (/** @type {string} */ id) => shell.wm.get(id)?.title,
+    windowNodes: (/** @type {string} */ id) => shell.wm.get(id)?.body.getElementsByTagName('*').length ?? null,
   });
 
   // Session: workspaces, pinned apps, windows.

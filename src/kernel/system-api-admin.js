@@ -7,6 +7,7 @@ import { getPersistence, requestPersistence } from '../services/storage/persist.
 import { deleteQuarantined, listQuarantine } from '../services/storage/quarantine.js';
 import { approximateSize, estimateQuota } from '../services/storage/quota.js';
 import { downloadBlob } from '../services/vfs/transfer.js';
+import { liveWorkers } from './workers.js';
 
 /**
  * @typedef {object} AdminDeps
@@ -25,6 +26,7 @@ import { downloadBlob } from '../services/vfs/transfer.js';
  * @property {import('../services/search/search.js').Search | null} search
  * @property {{ get(key: string): Promise<unknown>, set(key: string, value: unknown): Promise<void>, delete(key: string): Promise<void>, entries(): Promise<Record<string, unknown>> }} intentDefaults
  * @property {{ get(key: string): Promise<unknown>, set(key: string, value: unknown): Promise<void> }} backupState
+ * @property {import('../services/network/network.js').NetworkLog} network
  * @property {string} engineKind
  * @property {(text: import('./types').L10n | string) => string} localize
  */
@@ -226,6 +228,45 @@ export function createAdminApi(deps) {
     clear: (type) => deps.intentDefaults.delete(`open:${type}`),
   };
 
+  const log = {
+    /** @param {{ minLevel?: import('./logger.js').Level, source?: string, limit?: number }} [filter] */
+    entries: (filter) => logger.entries(filter),
+    /** New entries as they are logged; returns an unsubscribe. @param {(entry: import('./logger.js').LogEntry) => void} fn */
+    subscribe: (fn) => logger.subscribe(fn),
+    /**
+     * Downloads the (filtered) log as a text file.
+     * @param {{ minLevel?: import('./logger.js').Level, source?: string }} [filter]
+     */
+    download(filter) {
+      const lines = logger.entries(filter).map((e) => {
+        const data = e.data === undefined ? '' : ` ${typeof e.data === 'string' ? e.data : JSON.stringify(e.data)}`;
+        return `${new Date(e.t).toISOString()} ${e.level.toUpperCase().padEnd(5)} [${e.source}] ${e.message}${data}`;
+      });
+      const stamp = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+      downloadBlob(new Blob([`${lines.join('\n')}\n`], { type: 'text/plain' }), `nexus-log-${stamp}.txt`);
+    },
+  };
+
+  const performance = {
+    /** Workers started by Nexus and still running. */
+    workers: () => liveWorkers(),
+    /** Elements on the page (the whole desktop). */
+    domNodes: () => globalThis.document?.getElementsByTagName('*').length ?? 0,
+    /** JS heap in bytes where the browser reports it (Chromium), else null. */
+    heap() {
+      const m = /** @type {any} */ (globalThis.performance)?.memory;
+      return m ? { used: m.usedJSHeapSize, total: m.totalJSHeapSize, limit: m.jsHeapSizeLimit } : null;
+    },
+  };
+
+  const network = {
+    get online() {
+      return globalThis.navigator?.onLine ?? true;
+    },
+    list: () => deps.network.list(),
+    clear: () => deps.network.clear(),
+  };
+
   return {
     storage,
     backup: backups,
@@ -234,5 +275,8 @@ export function createAdminApi(deps) {
     privacy,
     notifications: notify,
     defaults,
+    log,
+    performance,
+    network,
   };
 }

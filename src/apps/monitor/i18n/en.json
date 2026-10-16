@@ -1,0 +1,85 @@
+{
+  "title": "System Monitor",
+  "tabs": {
+    "processes": "Processes",
+    "performance": "Performance",
+    "storage": "Storage",
+    "log": "Log",
+    "network": "Network"
+  },
+  "proc": {
+    "none": "No windows are open.",
+    "window": "Window",
+    "app": "App",
+    "state": "State",
+    "cpu": "CPU",
+    "elements": "Elements",
+    "timers": "Timers",
+    "uptime": "Open for",
+    "running": "Running",
+    "suspended": "Paused",
+    "states": {
+      "loading": "Starting",
+      "crashed": "Stopped working",
+      "closing": "Closing"
+    },
+    "focus": "Switch to this window",
+    "end": "End task",
+    "endLabel": "End task: {name}",
+    "note": "CPU is the share of the last second spent in the app's own code. A browser can't measure memory per window; Elements (the window's part of the page) is the closest estimate. Paused windows (minimized, on another workspace, hidden tab) stop their timers."
+  },
+  "time": {
+    "seconds": { "one": "{count} s", "other": "{count} s" },
+    "minutes": { "one": "{count} min", "other": "{count} min" },
+    "hours": "{hours} h {minutes} min"
+  },
+  "perf": {
+    "fps": "Frames per second",
+    "frameAvg": "Average frame",
+    "frameTime": "Frame time",
+    "frameWorst": "Slowest frame per second",
+    "elements": "Elements on the page",
+    "loops": "Animation loops",
+    "timers": "Timers",
+    "workers": "Workers",
+    "heap": "JavaScript memory",
+    "heapValue": "{used} of {limit}",
+    "noHeap": "This browser doesn't report JavaScript memory.",
+    "workerList": "Running workers",
+    "noWorkers": "No background workers are running.",
+    "workerNote": "Workers do heavy work (search index, AI, image filters) off the main thread."
+  },
+  "storage": {
+    "total": "{used} of {quota} used in this browser",
+    "files": "Files",
+    "system": "System",
+    "manage": "Manage in Settings"
+  },
+  "log": {
+    "level": "Minimum level",
+    "levels": {
+      "debug": "Everything",
+      "info": "Info and above",
+      "warn": "Warnings and errors",
+      "error": "Errors only"
+    },
+    "source": "Source (e.g. kernel, app:nexus.files)",
+    "search": "Search messages",
+    "export": "Export…",
+    "empty": "No entries match."
+  },
+  "net": {
+    "online": "Online",
+    "offline": "Offline: everything in Nexus keeps working; only features that need the internet wait.",
+    "explain": "Nexus only connects for things you start yourself, like an AI server or the HTTP client. Those requests are listed here.",
+    "none": "No requests yet.",
+    "time": "Time",
+    "app": "App",
+    "method": "Method",
+    "url": "Address",
+    "status": "Status",
+    "duration": "Duration",
+    "pending": "Waiting",
+    "clear": "Clear list"
+  }
+}

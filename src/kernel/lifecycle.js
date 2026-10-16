@@ -88,6 +88,8 @@ export function createLifecycle({ registry, bus, logger, host, createContext, os
     focused: focusedId === i.id,
     launchedAt: i.launchedAt,
     activeTimers: i.runtime.activeCount,
+    busyMs: i.boundary.busyMs,
+    loops: i.runtime.loopCount,
     args: i.args,
   });
 

@@ -2,16 +2,21 @@
 // Error boundary per app window. The first uncaught error from the app (mount, a guarded
 // callback, a rejected promise of a guarded async callback) "crashes" the window: the boundary
 // trips once and reports to `onCrash`. Later errors from the same dying instance are ignored.
+// It also sums the time spent in guarded callbacks (the System Monitor's "CPU" per window).
 
 /**
  * @typedef {'load' | 'mount' | 'unmount' | 'event' | 'timer' | 'callback' | 'intent' | 'lifecycle'} ErrorSource
  */
 
 /**
- * @param {{ onCrash: (error: unknown, source: ErrorSource) => void }} options
+ * @param {{ onCrash: (error: unknown, source: ErrorSource) => void, now?: () => number }} options
  */
-export function createBoundary({ onCrash }) {
+export function createBoundary({ onCrash, now = () => performance.now() }) {
   let tripped = false;
+  /** Milliseconds spent in guarded callbacks (synchronous part only). */
+  let busy = 0;
+  /** Nested guarded calls count once (only the outermost is timed). */
+  let depth = 0;
 
   /** @param {unknown} error @param {ErrorSource} source */
   function report(error, source) {
@@ -25,6 +30,9 @@ export function createBoundary({ onCrash }) {
     get tripped() {
       return tripped;
     },
+    get busyMs() {
+      return busy;
+    },
     /**
      * Wraps a callback: sync throws and async rejections are reported instead of escaping.
      * @template {(...args: any[]) => any} F
@@ -37,6 +45,7 @@ export function createBoundary({ onCrash }) {
         /** @this {unknown} */
         function guarded(/** @type {any[]} */ ...args) {
           if (tripped) return undefined;
+          const start = depth++ === 0 ? now() : 0;
           try {
             // Forward `this` for DOM handlers.
             const result = fn.apply(this, args);
@@ -47,6 +56,8 @@ export function createBoundary({ onCrash }) {
           } catch (error) {
             report(error, source);
             return undefined;
+          } finally {
+            if (--depth === 0) busy += now() - start;
           }
         }
       );

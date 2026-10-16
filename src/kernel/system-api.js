@@ -126,6 +126,8 @@ export function createSystemApi(deps) {
         suspended: i.suspended,
         launchedAt: i.launchedAt,
         activeTimers: i.activeTimers,
+        loops: i.loops,
+        busyMs: i.busyMs,
       })),
     /** @param {string} id */
     focus: (id) => lifecycle.focus(id),
@@ -207,6 +209,21 @@ export function createSystemApi(deps) {
     /** An OS message (e.g. 'scheduler.limits'), so system apps show the same wording. */
     text: deps.systemText,
     ...admin,
+    // Subscriptions end with the window.
+    log: { ...admin.log, subscribe: (/** @type {any} */ fn) => track(admin.log.subscribe(fn)) },
+    network: {
+      ...admin.network,
+      get online() {
+        return admin.network.online;
+      },
+      /** @param {() => void} fn */
+      onChange: (fn) => track(bus.on('network:changed', fn)),
+    },
+    performance: {
+      ...admin.performance,
+      /** Elements inside one window. @param {string} id */
+      windowNodes: (id) => host.windowNodes?.(id) ?? null,
+    },
   });
 }
 

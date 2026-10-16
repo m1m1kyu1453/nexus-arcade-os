@@ -28,6 +28,7 @@ import { QUARANTINE_STORE_SCHEMA } from '../services/storage/quarantine.js';
 import { storageBreakdown, withQuotaReporting } from '../services/storage/quota.js';
 import { selectEngine } from '../services/storage/select.js';
 import { createThemeService } from '../services/theme/engine.js';
+import { createNetworkLog } from '../services/network/network.js';
 import { createRecentFiles } from '../services/vfs/recent.js';
 import { createVfs, VFS_STORE_SCHEMA } from '../services/vfs/vfs.js';
 import { createNativeDialogs } from '../shell/native-dialogs.js';
@@ -41,6 +42,7 @@ import { createLogger } from './logger.js';
 import { createRegistry } from './registry.js';
 import { createRuntime } from './runtime.js';
 import { createTabRelay } from './tab-relay.js';
+import { trackWorkers } from './workers.js';
 
 /** @typedef {import('./types').AppManifest} AppManifest */
 
@@ -106,6 +108,8 @@ export async function bootKernel(options) {
   const progress = options.onProgress ?? (() => {});
   const doc = options.document ?? globalThis.document;
   const win = doc?.defaultView ?? undefined;
+  // Count workers from the start (System Monitor); only in a real browser window.
+  if (win && !options.engine) trackWorkers(win);
 
   // 1. Logging first, so everything after can report problems.
   /** @type {import('../services/storage/types.js').Database | null} */
@@ -583,6 +587,7 @@ async function openProfile(options, k, profile) {
     logEntries: () => logger.entries(),
   });
   const backupState = kv('system:backup');
+  const network = createNetworkLog({ bus });
 
   /** Parts of ctx.system only the shell can provide (window titles, updates …). */
   const systemHost = {};
@@ -618,6 +623,7 @@ async function openProfile(options, k, profile) {
       search,
       intentDefaults: kv('system:intents'),
       backupState,
+      network,
       engineKind: engine.kind,
       localize,
     },
@@ -689,6 +695,7 @@ async function openProfile(options, k, profile) {
     localize,
     widgetContext,
     systemHost,
+    network,
     async stop() {
       sources.stop();
       scheduler.stop();
