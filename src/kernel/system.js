@@ -283,6 +283,12 @@ async function openProfile(options, k, profile) {
   await i18n.load('system');
   doc?.documentElement.setAttribute('lang', i18n.locale);
   settings.onChange('system', 'language', () => void i18n.setLocale(resolveLocale()));
+  const applyRegion = () => {
+    const region = /** @type {string} */ (settings.get('system', 'region'));
+    i18n.setRegion(region === 'auto' ? null : region);
+  };
+  applyRegion();
+  settings.onChange('system', 'region', applyRegion);
   /** @param {string | import('./types').L10n} text */
   const localize = (text) => (typeof text === 'string' ? text : (text[i18n.locale] ?? text.en));
 
@@ -524,24 +530,6 @@ async function openProfile(options, k, profile) {
     createContext: (manifest, extras) => createAppContext(manifest, services, extras),
     prepare: (manifest) => i18n.load(manifest.id),
   });
-  /** Parts of ctx.system only the shell can provide (window titles, wallpaper …). */
-  const systemHost = {};
-  services.systemApi = createSystemApi({
-    registry,
-    lifecycle,
-    settings,
-    db,
-    bus,
-    localize,
-    isReadOnly: services.isReadOnly,
-    theme,
-    info: { version, edition, profile: { name: profile.name, username: profile.username }, bootedAt: Date.now() },
-    headless: async (appId) => {
-      await i18n.load(appId);
-      return headless(/** @type {AppManifest} */ (registry.get(appId)));
-    },
-    host: systemHost,
-  });
   bus.on('app:launched', () => sound.play('open'));
   bus.on('app:closed', () => sound.play('close'));
   bus.on('app:crashed', () => sound.play('error'));
@@ -594,6 +582,45 @@ async function openProfile(options, k, profile) {
     profile: () => /** @type {any} */ (profile),
     logEntries: () => logger.entries(),
   });
+  const backupState = kv('system:backup');
+
+  /** Parts of ctx.system only the shell can provide (window titles, updates …). */
+  const systemHost = {};
+  services.systemApi = createSystemApi({
+    registry,
+    lifecycle,
+    settings,
+    db,
+    bus,
+    localize,
+    isReadOnly: services.isReadOnly,
+    theme,
+    info: { version, edition, profile: { name: profile.name, username: profile.username }, bootedAt: Date.now() },
+    headless: async (appId) => {
+      await i18n.load(appId);
+      return headless(/** @type {AppManifest} */ (registry.get(appId)));
+    },
+    host: systemHost,
+    admin: {
+      db: rawDb,
+      registry,
+      vfs,
+      backup,
+      profiles,
+      profile,
+      commands,
+      shortcuts,
+      notifications,
+      clipboard,
+      recent,
+      logger,
+      search,
+      intentDefaults: kv('system:intents'),
+      backupState,
+      engineKind: engine.kind,
+      localize,
+    },
+  });
 
   // 9. Startup notices.
   if (selected.warning) {
@@ -604,6 +631,7 @@ async function openProfile(options, k, profile) {
       timeoutMs: 0,
     });
   }
+  void remindToBackUp().catch((error) => log.warn('Backup reminder failed', error));
   if (failed.length)
     log.error(`${failed.length} app(s) could not be registered: ${failed.map((f) => f.id).join(', ')}`);
   scheduler.start().then(async (missed) => {
@@ -618,6 +646,27 @@ async function openProfile(options, k, profile) {
       timeoutMs: 0,
     });
   });
+
+  /** "Back up your data" every N days (Settings → Backup); never on a profile's first days. */
+  async function remindToBackUp() {
+    const days = Number(settings.get('system', 'backupReminderDays'));
+    if (!(days > 0)) return;
+    const last = Number((await backupState.get('lastAt')) ?? 0);
+    const since = last || Number(profile.createdAt ?? Date.now());
+    const lastReminder = Number((await backupState.get('remindedAt')) ?? 0);
+    const day = 86_400_000;
+    if (Date.now() - since < days * day || Date.now() - lastReminder < day) return;
+    await backupState.set('remindedAt', Date.now());
+    const handle = await notifications.notify({
+      title: i18n.t('system', 'backup.reminderTitle'),
+      body: i18n.t('system', last ? 'backup.reminderBody' : 'backup.reminderNever', {
+        days: Math.floor((Date.now() - since) / day),
+      }),
+      actions: [{ id: 'backup', label: i18n.t('system', 'backup.reminderAction') }],
+      timeoutMs: 0,
+    });
+    handle.onAction(() => void commands.execute('settings.open', { page: 'backup' }).catch(() => {}));
+  }
 
   log.info(`Ready: ${registry.list().length} app(s), profile "${profile.name}"`);
   bus.emit('system:ready', { profile: profile.id });

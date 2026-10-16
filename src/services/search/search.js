@@ -123,6 +123,14 @@ export function createSearch({ backend, log, store }) {
         pendingUsage = null;
       }, 1000);
     },
+
+    /** Forgets what the user picked before (Settings → Privacy). */
+    async clearUsage() {
+      clearTimeout(saveTimer);
+      pendingUsage = null;
+      await backend.call('setUsage', {});
+      await store.set('usage', {});
+    },
   };
 }
 

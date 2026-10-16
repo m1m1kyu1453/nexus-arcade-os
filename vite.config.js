@@ -1,7 +1,7 @@
 // Website build: multi-file, code-split, PWA with a precaching Service Worker.
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import { cspPlugin, defineConstants } from './scripts/vite-shared.js';
+import { cspPlugin, defineConstants, licensesPlugin } from './scripts/vite-shared.js';
 
 export default defineConfig({
   define: defineConstants('web'),
@@ -11,6 +11,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   plugins: [
+    licensesPlugin(),
     cspPlugin('web'),
     VitePWA({
       strategies: 'injectManifest',

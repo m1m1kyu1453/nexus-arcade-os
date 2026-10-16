@@ -49,6 +49,29 @@ body {
   outline-offset: 2px;
 }
 
+/* Settings → Accessibility: a focus ring that is hard to miss on any background. */
+:root[data-focus-ring='strong'] :focus-visible {
+  outline: 3px solid var(--text-1) !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px var(--accent) !important;
+}
+
+/* Settings → Accessibility: larger buttons and touch targets (WCAG 2.5.5: 44 × 44 px). */
+:root[data-large-targets='true'] {
+  & .nx-btn {
+    min-height: 44px;
+  }
+  & .nx-icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+  & [role='menuitem'],
+  & [role='option'],
+  & [role='tab'] {
+    min-height: 44px;
+  }
+}
+
 button {
   font: inherit;
   color: inherit;

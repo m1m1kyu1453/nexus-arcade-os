@@ -193,7 +193,8 @@
       "shortcuts": "Tastenkürzel",
       "tour": "Willkommenstour",
       "prefixes": "So nutzt du die Befehlspalette"
-    }
+    },
+    "openInSettings": "In den Einstellungen öffnen"
   },
   "launcher": {
     "title": "Apps",
@@ -454,5 +455,17 @@
     "apps": "Apps",
     "home": "Start",
     "switcher": "Wechseln"
+  },
+  "backup": {
+    "reminderTitle": "Zeit für ein Backup",
+    "reminderBody": "Dein letztes Backup ist {days} Tage alt. Alles in Nexus liegt nur in diesem Browser.",
+    "reminderNever": "Du hast noch kein Backup gemacht. Alles in Nexus liegt nur in diesem Browser.",
+    "reminderAction": "Jetzt sichern"
+  },
+  "a11y": {
+    "opened": "Fenster geöffnet: {title}",
+    "focused": "{title}",
+    "closed": "{app} geschlossen",
+    "notification": "Benachrichtigung: {title}. {body}"
   }
 }

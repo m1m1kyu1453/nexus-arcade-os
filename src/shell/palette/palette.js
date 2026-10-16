@@ -185,18 +185,26 @@ export function createPalette(shell) {
       step = {
         title,
         cancel: live ? () => set(original) : undefined,
-        options: options.map((o, i) => ({
-          id: `option:${i}`,
-          kind: 'option',
-          title: o.label,
-          current: o.value === decl.value,
-          onFocus: live ? () => set(o.value) : undefined,
-          activate: async () => {
-            close(false);
-            await set(o.value);
-          },
-        })),
+        options: [
+          ...options.map((o, i) => ({
+            id: `option:${i}`,
+            kind: 'option',
+            title: o.label,
+            current: o.value === decl.value,
+            onFocus: live ? () => set(o.value) : undefined,
+            activate: async () => {
+              close(false);
+              await set(o.value);
+            },
+          })),
+          ...openInSettings(scope, key),
+        ],
       };
+    } else if (!['string', 'number'].includes(decl.type) && openInSettings(scope, key).length) {
+      // Colours, paths, shortcuts and dates are easier in Settings than as typed text.
+      close(false);
+      void sys.commands.execute('settings.open', { scope, key });
+      return;
     } else {
       step = {
         title,
@@ -214,6 +222,23 @@ export function createPalette(shell) {
       };
     }
     enterStep();
+  }
+
+  /** "Open in Settings" (deep link to the setting) when the Settings app is installed. @param {string} scope @param {string} key */
+  function openInSettings(scope, key) {
+    if (!sys.registry.isEnabled('nexus.settings')) return [];
+    return [
+      {
+        id: 'option:open-settings',
+        kind: 'option',
+        icon: 'settings',
+        title: t('palette.openInSettings'),
+        activate: async () => {
+          close(false);
+          await sys.commands.execute('settings.open', { scope, key });
+        },
+      },
+    ];
   }
 
   function enterStep() {

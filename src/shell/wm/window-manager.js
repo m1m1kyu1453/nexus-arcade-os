@@ -318,7 +318,10 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
       }
       w.rect = { ...w.rect, x: startRect.x + dx, y: Math.max(workArea().y, startRect.y + dy) };
       apply(w);
-      zone = zoneAt({ x: ev.clientX, y: ev.clientY }, workArea());
+      // Settings → Windows can turn edge snapping off.
+      zone = sys().settings.get('system', 'windowSnapping')
+        ? zoneAt({ x: ev.clientX, y: ev.clientY }, workArea())
+        : null;
       showPreview(zone);
     };
     const up = () => {
@@ -587,6 +590,7 @@ export function createWindowManager({ layer, system, workArea, dockIconRect = ()
     const maxBtn = /** @type {HTMLElement} */ (controls.querySelector('[data-action="maximize"]'));
     maxBtn.addEventListener('pointerenter', (e) => {
       if (e.pointerType === 'touch' || manifest.window?.resizable === false) return;
+      if (!sys().settings.get('system', 'windowSnapLayouts')) return;
       hoverTimer = window.setTimeout(() => showSnapLayouts(w, maxBtn), 450);
     });
     maxBtn.addEventListener('pointerleave', () => clearTimeout(hoverTimer));

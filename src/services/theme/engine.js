@@ -135,6 +135,8 @@ export function createThemeService({ settings, bus, root, matchMedia = globalThi
     root.dataset.scheme = next.theme.scheme;
     root.dataset.motion = next.motion;
     root.dataset.batterySaver = String(!!sys('batterySaver'));
+    root.dataset.focusRing = String(sys('focusRing'));
+    root.dataset.largeTargets = String(!!sys('largeTargets'));
     root.style.colorScheme = next.theme.scheme;
     root.ownerDocument?.querySelector('meta[name="theme-color"]')?.setAttribute('content', next.theme.colors.bg);
     const changed = applied?.theme.id !== next.theme.id;
@@ -156,6 +158,8 @@ export function createThemeService({ settings, bus, root, matchMedia = globalThi
     'transparency',
     'animation',
     'batterySaver',
+    'focusRing',
+    'largeTargets',
   ]);
   settings.onChange('system', '*', (_value, key) => {
     if (THEME_KEYS.has(key)) apply({ animate: true });

@@ -193,7 +193,8 @@
       "shortcuts": "Keyboard shortcuts",
       "tour": "Welcome tour",
       "prefixes": "How to use the command palette"
-    }
+    },
+    "openInSettings": "Open in Settings"
   },
   "launcher": {
     "title": "Apps",
@@ -454,5 +455,17 @@
     "apps": "Apps",
     "home": "Home",
     "switcher": "Switcher"
+  },
+  "backup": {
+    "reminderTitle": "Time for a backup",
+    "reminderBody": "Your last backup is {days} days old. Everything in Nexus lives only in this browser.",
+    "reminderNever": "You haven’t made a backup yet. Everything in Nexus lives only in this browser.",
+    "reminderAction": "Back up now"
+  },
+  "a11y": {
+    "opened": "Window opened: {title}",
+    "focused": "{title}",
+    "closed": "{app} closed",
+    "notification": "Notification: {title}. {body}"
   }
 }

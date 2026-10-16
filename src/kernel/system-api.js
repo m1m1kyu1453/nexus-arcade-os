@@ -3,7 +3,12 @@
 // Settings, System Monitor, App Center, Help). Only apps that declare the `system` permission
 // get it, and only built-in apps may declare it; plugins (phase 13) never can.
 // It is a facade: apps see plain data and a few verbs, never the services themselves.
+import { buildDate } from '../env.js';
 import { createAppStorage } from '../services/storage/app-storage.js';
+import { createAdminApi } from './system-api-admin.js';
+
+export const LIVE_URL = 'https://nexus-arcade-os.onrender.com';
+export const REPO_URL = 'https://github.com/m1m1kyu1453/nexus-arcade-os';
 
 /**
  * @typedef {object} SystemApiDeps
@@ -18,6 +23,7 @@ import { createAppStorage } from '../services/storage/app-storage.js';
  * @property {(appId: string) => Promise<import('./types').HeadlessContext>} headless  ctx for an app's handlers (messages loaded)
  * @property {{ version: string, edition: 'web' | 'lite', profile: { name: string, username: string }, bootedAt: number }} info
  * @property {Record<string, any>} host  filled by the shell (window titles, wallpaper …); empty headless
+ * @property {import('./system-api-admin.js').AdminDeps} admin
  */
 
 /** Plain, structured-cloneable description of an app for system UIs. @param {import('./types').AppManifest} m */
@@ -156,14 +162,49 @@ export function createSystemApi(deps) {
   };
 
   /** Version, edition, profile and boot time (Terminal `nexusfetch`, Settings → About). */
-  const info = () => ({ ...deps.info, profile: { ...deps.info.profile } });
+  const info = () => ({ ...deps.info, buildDate, profile: { ...deps.info.profile } });
+
+  const about = {
+    liveUrl: LIVE_URL,
+    repoUrl: REPO_URL,
+    /** Nexus Lite is downloaded from the website (the Lite file itself has no copy of it). */
+    liteUrl: `${LIVE_URL}/nexus-lite.html`,
+    /** Third-party libraries and fonts with their license texts (generated at build time). */
+    licenses: async () => (await import('virtual:nexus-licenses')).default,
+    /** CHANGELOG.md (Markdown). */
+    changelog: async () => (await import('../../CHANGELOG.md?raw')).default,
+  };
+
+  /** Update checks; only the website has them (null in Nexus Lite and without a Service Worker). */
+  const updates = {
+    get supported() {
+      return !!host.updates;
+    },
+    get available() {
+      return !!host.updates?.available;
+    },
+    /** @returns {Promise<'available' | 'current' | 'offline' | 'unavailable'>} */
+    check: async () => (host.updates ? host.updates.check() : 'unavailable'),
+    apply: () => host.updates?.apply(),
+  };
+
+  const admin = createAdminApi(deps.admin);
 
   /**
    * One facade object per app; `appId` is kept for logging and future auditing.
    * @param {string} _appId
    * @param {(unsub: () => void) => () => void} [track]
    */
-  return (_appId, track = (u) => u) => ({ apps, windows, settings: settingsFor(track), theme: themes, info });
+  return (_appId, track = (u) => u) => ({
+    apps,
+    windows,
+    settings: settingsFor(track),
+    theme: themes,
+    info,
+    about,
+    updates,
+    ...admin,
+  });
 }
 
 /** @typedef {ReturnType<ReturnType<typeof createSystemApi>>} SystemApi */

@@ -1,5 +1,5 @@
 // Build settings shared by the website (vite.config.js) and Nexus Lite (vite.lite.config.js).
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
 
@@ -49,5 +49,60 @@ export function cspPlugin(edition) {
         injectTo: /** @type {const} */ ('head-prepend'),
       },
     ],
+  };
+}
+
+/** Bundled although they are dev dependencies (the Service Worker and its registration). */
+const ALSO_BUNDLED = ['workbox-core', 'workbox-precaching', 'workbox-routing', 'workbox-window'];
+/** In the lockfile without being bundled (type definitions). */
+const NOT_BUNDLED = new Set(['@types/trusted-types']);
+const FONTS = [
+  { name: 'Inter', version: '', license: 'OFL-1.1', file: 'src/styles/fonts/Inter-OFL.txt' },
+  { name: 'JetBrains Mono', version: '', license: 'OFL-1.1', file: 'src/styles/fonts/JetBrainsMono-OFL.txt' },
+];
+
+/**
+ * `virtual:nexus-licenses`: every third-party package and font in the build with its license
+ * text, for Settings → About. Read from the lockfile and node_modules at build time, so the list
+ * can't go stale.
+ */
+export function licensesPlugin() {
+  const id = 'virtual:nexus-licenses';
+  const resolved = `\0${id}`;
+  const root = new URL('../', import.meta.url);
+  const read = (/** @type {string} */ path) => readFileSync(new URL(path, root), 'utf8');
+  /** @param {string} name */
+  function licenseText(name) {
+    for (const file of ['LICENSE', 'LICENSE.md', 'LICENSE.txt', 'license', 'LICENCE', 'COPYING']) {
+      const path = `node_modules/${name}/${file}`;
+      if (existsSync(new URL(path, root))) return read(path).trim();
+    }
+    return '';
+  }
+  return {
+    name: 'nexus-licenses',
+    /** @param {string} source */
+    resolveId: (source) => (source === id ? resolved : null),
+    /** @param {string} loadId */
+    load(loadId) {
+      if (loadId !== resolved) return null;
+      const lock = JSON.parse(read('package-lock.json'));
+      /** @type {Map<string, { name: string, version: string, license: string }>} */
+      const packages = new Map();
+      for (const [path, info] of Object.entries(lock.packages)) {
+        if (!path.startsWith('node_modules/') || info.dev) continue;
+        const name = path.slice(path.lastIndexOf('node_modules/') + 13);
+        if (!NOT_BUNDLED.has(name)) packages.set(name, { name, version: info.version, license: info.license });
+      }
+      for (const name of ALSO_BUNDLED) {
+        const info = lock.packages[`node_modules/${name}`];
+        if (info) packages.set(name, { name, version: info.version, license: info.license });
+      }
+      const list = [
+        ...[...packages.values()].map((p) => ({ ...p, kind: 'library', text: licenseText(p.name) })),
+        ...FONTS.map(({ file, ...f }) => ({ ...f, kind: 'font', text: read(file).trim() })),
+      ].sort((a, b) => a.name.localeCompare(b.name));
+      return `export default ${JSON.stringify(list)};`;
+    },
   };
 }

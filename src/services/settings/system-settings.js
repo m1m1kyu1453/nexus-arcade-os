@@ -9,6 +9,26 @@ const themeOptions = THEMES.map((t) => ({ value: t.id, label: t.name }));
 const darkThemes = THEMES.filter((t) => t.scheme === 'dark').map((t) => ({ value: t.id, label: t.name }));
 const lightThemes = THEMES.filter((t) => t.scheme === 'light').map((t) => ({ value: t.id, label: t.name }));
 
+/** Region formats offered in Settings → Language & Region: [BCP 47 tag, English, German]. */
+const REGIONS = [
+  ['en-US', 'English (United States)', 'Englisch (USA)'],
+  ['en-GB', 'English (United Kingdom)', 'Englisch (Vereinigtes Königreich)'],
+  ['en-CA', 'English (Canada)', 'Englisch (Kanada)'],
+  ['en-AU', 'English (Australia)', 'Englisch (Australien)'],
+  ['en-IN', 'English (India)', 'Englisch (Indien)'],
+  ['de-DE', 'German (Germany)', 'Deutsch (Deutschland)'],
+  ['de-AT', 'German (Austria)', 'Deutsch (Österreich)'],
+  ['de-CH', 'German (Switzerland)', 'Deutsch (Schweiz)'],
+  ['fr-FR', 'French (France)', 'Französisch (Frankreich)'],
+  ['es-ES', 'Spanish (Spain)', 'Spanisch (Spanien)'],
+  ['it-IT', 'Italian (Italy)', 'Italienisch (Italien)'],
+  ['nl-NL', 'Dutch (Netherlands)', 'Niederländisch (Niederlande)'],
+  ['pl-PL', 'Polish (Poland)', 'Polnisch (Polen)'],
+  ['pt-BR', 'Portuguese (Brazil)', 'Portugiesisch (Brasilien)'],
+  ['tr-TR', 'Turkish (Türkiye)', 'Türkisch (Türkei)'],
+  ['ja-JP', 'Japanese (Japan)', 'Japanisch (Japan)'],
+];
+
 /** @type {SettingDecl[]} */
 export const SYSTEM_SETTINGS = [
   // Language & region
@@ -22,6 +42,16 @@ export const SYSTEM_SETTINGS = [
       { value: 'de', label: L('German', 'Deutsch') },
     ],
     label: L('Language', 'Sprache'),
+  },
+  {
+    key: 'region',
+    type: 'enum',
+    default: 'auto',
+    options: [
+      { value: 'auto', label: L('Same as the language', 'Wie die Sprache') },
+      ...REGIONS.map(([value, en, de]) => ({ value, label: L(en, de) })),
+    ],
+    label: L('Formats (dates, times, numbers)', 'Formate (Datum, Uhrzeit, Zahlen)'),
   },
   // Appearance
   {
@@ -228,5 +258,55 @@ export const SYSTEM_SETTINGS = [
     step: 1,
     label: L('Empty the trash automatically after (days)', 'Papierkorb automatisch leeren nach (Tagen)'),
     description: L('0 keeps items until you empty the trash.', '0 behält Einträge, bis du den Papierkorb leerst.'),
+  },
+  // Windows
+  {
+    key: 'windowSnapping',
+    type: 'boolean',
+    default: true,
+    label: L('Snap windows to screen edges and corners', 'Fenster an Bildschirmränder und Ecken andocken'),
+  },
+  {
+    key: 'windowSnapLayouts',
+    type: 'boolean',
+    default: true,
+    label: L('Show snap layouts on the maximize button', 'Andock-Layouts an der Maximieren-Schaltfläche zeigen'),
+  },
+  // Accessibility
+  {
+    key: 'focusRing',
+    type: 'enum',
+    default: 'standard',
+    options: [
+      { value: 'standard', label: L('Standard', 'Standard') },
+      { value: 'strong', label: L('Strong (thick, high contrast)', 'Deutlich (dick, kontrastreich)') },
+    ],
+    label: L('Keyboard focus ring', 'Fokusrahmen der Tastatur'),
+  },
+  {
+    key: 'largeTargets',
+    type: 'boolean',
+    default: false,
+    label: L('Larger buttons and touch targets', 'Größere Schaltflächen und Tippflächen'),
+  },
+  {
+    key: 'screenReaderHints',
+    type: 'boolean',
+    default: false,
+    label: L(
+      'Announce windows and notifications to screen readers',
+      'Fenster und Benachrichtigungen für Screenreader ansagen',
+    ),
+  },
+  // Backup
+  {
+    key: 'backupReminderDays',
+    type: 'number',
+    default: 14,
+    min: 0,
+    max: 365,
+    step: 1,
+    label: L('Remind me to back up every (days)', 'An ein Backup erinnern alle (Tage)'),
+    description: L('0 turns the reminder off.', '0 schaltet die Erinnerung aus.'),
   },
 ];

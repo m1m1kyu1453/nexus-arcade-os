@@ -61,6 +61,8 @@ export function createI18n({ bus, log, locale: initial = FALLBACK, dev = false }
   const reportedMissing = new Set();
   /** @type {Map<string, any>} */
   const formatters = new Map();
+  /** BCP 47 tag for date/number formats, or null to use the language. @type {string | null} */
+  let region = null;
 
   /** @param {string} ns @param {Locale} l */
   async function loadOne(ns, l) {
@@ -92,10 +94,12 @@ export function createI18n({ bus, log, locale: initial = FALLBACK, dev = false }
    * @returns {InstanceType<C>}
    */
   function formatter(Ctor, options = {}) {
-    const key = `${Ctor.name}:${locale}:${JSON.stringify(options)}`;
+    // Dates and numbers follow the region (e.g. "en-GB" or "de-CH"); plural rules the language.
+    const tag = /** @type {unknown} */ (Ctor) === Intl.PluralRules ? locale : (region ?? locale);
+    const key = `${Ctor.name}:${tag}:${JSON.stringify(options)}`;
     let f = formatters.get(key);
     if (!f) {
-      f = new Ctor(locale, options);
+      f = new Ctor(tag, options);
       formatters.set(key, f);
     }
     return f;
@@ -238,6 +242,21 @@ export function createI18n({ bus, log, locale: initial = FALLBACK, dev = false }
       formatters.clear();
       globalThis.document?.documentElement.setAttribute('lang', next);
       bus.emit('i18n:changed', { locale: next });
+    },
+
+    /**
+     * Formats for dates, times and numbers ("de-CH", "en-GB" …); null follows the language.
+     * @param {string | null} tag
+     */
+    setRegion(tag) {
+      const next = tag && Intl.DateTimeFormat.supportedLocalesOf(tag).length ? tag : null;
+      if (next === region) return;
+      region = next;
+      formatters.clear();
+      bus.emit('i18n:changed', { locale, region });
+    },
+    get region() {
+      return region;
     },
 
     t: translate,
