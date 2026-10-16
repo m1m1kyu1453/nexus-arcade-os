@@ -83,6 +83,17 @@ export function toggle({ label, checked, onChange }) {
   return h('label', { class: 'nx-toggle' }, input, h('span'), label);
 }
 
+/**
+ * The element that really has focus, looking into shadow roots (the code editor lives in one).
+ * Use it to remember focus before an overlay and give it back afterwards.
+ * @returns {HTMLElement | null}
+ */
+export function focusedElement() {
+  let el = /** @type {Element | null} */ (document.activeElement);
+  while (el?.shadowRoot?.activeElement) el = el.shadowRoot.activeElement;
+  return /** @type {HTMLElement | null} */ (el);
+}
+
 /** Removes all children and appends new ones. @param {Element} el @param {...(Node | string)} children */
 export function replace(el, ...children) {
   el.replaceChildren(...children);

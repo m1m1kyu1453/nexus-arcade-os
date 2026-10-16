@@ -2,7 +2,7 @@
 // Notification center + quick settings: a slide-out panel with quick tiles, the "While you
 // were away" summary from the scheduler, and notifications grouped by app (clear one/all,
 // actions). Opens from the bell, with Alt+N, or by swiping down on phones.
-import { h, icon, replace } from '../../ui/dom.js';
+import { focusedElement, h, icon, replace } from '../../ui/dom.js';
 import { closeMenus } from '../../ui/menu.js';
 import { trapFocus } from '../../ui/overlay.js';
 import { appIcon } from '../app-icon.js';
@@ -43,7 +43,7 @@ export function createNotificationCenter(shell) {
 
   function open() {
     closeMenus();
-    previousFocus = /** @type {HTMLElement | null} */ (document.activeElement);
+    previousFocus = focusedElement();
     backdrop.hidden = false;
     render();
     panel.focus();

@@ -1,0 +1,56 @@
+{
+  "title": "Nexus Edit",
+  "untitled": "Untitled",
+  "tabs": "Open files",
+  "closeTab": "Close {name}",
+  "dirty": "Unsaved changes",
+  "empty": "No file is open",
+  "toolbar": {
+    "new": "New file (Ctrl+Alt+N)",
+    "open": "Open… (Ctrl+O)",
+    "save": "Save (Ctrl+S)",
+    "saveAs": "Save as",
+    "find": "Find and replace (Ctrl+F)",
+    "gotoLine": "Go to line (Ctrl+G)",
+    "wrap": "Word wrap (Alt+Z)",
+    "preview": "Markdown preview (Ctrl+Alt+P)",
+    "zoomIn": "Larger text (Ctrl+=)",
+    "zoomOut": "Smaller text (Ctrl+-)"
+  },
+  "status": {
+    "position": "Ln {line}, Col {column}",
+    "selected": { "one": "({count} selected)", "other": "({count} selected)" },
+    "plain": "Plain text",
+    "encoding": "Files are stored as UTF-8",
+    "eol": "Line endings (click to change)",
+    "zoom": "Text size (click to reset)"
+  },
+  "notice": {
+    "changed": "This file was changed somewhere else.",
+    "deleted": "This file was moved to the trash or deleted. Save it to keep your text.",
+    "readOnly": "This file is read-only. Use Save as to keep a copy.",
+    "reload": "Load the new version",
+    "keep": "Keep mine",
+    "saveAs": "Save as…"
+  },
+  "confirm": {
+    "oneTitle": "Save changes to “{name}”?",
+    "oneBody": "Your changes will be lost if you don't save them.",
+    "manyTitle": "Save changes to {count} files?",
+    "manyBody": "These files have unsaved changes:",
+    "save": "Save",
+    "saveAll": "Save all",
+    "discard": "Don't save",
+    "cancel": "Cancel"
+  },
+  "errors": {
+    "openTitle": "Couldn't open the file",
+    "saveTitle": "Couldn't save",
+    "notFound": "“{name}” doesn't exist",
+    "tooLarge": "“{name}” is too large for the editor (over 8 MB)",
+    "binary": "“{name}” isn't a text file"
+  },
+  "done": {
+    "saved": "Saved {name}"
+  }
+}

@@ -3,7 +3,7 @@
 // typeahead, Enter/Space, Escape, ←/→ for submenus), icons, shortcuts, disabled and checkable
 // items, separators, submenus, and positioning inside the viewport. Touch: long-press opens it.
 import { formatShortcut } from '../services/commands/keys.js';
-import { h, icon } from './dom.js';
+import { focusedElement, h, icon } from './dom.js';
 import './menu.css';
 
 /**
@@ -29,7 +29,7 @@ let closeOpenMenu = null;
  */
 export function openMenu(entries, { x = 0, y = 0, anchor, onClose, label }) {
   closeOpenMenu?.();
-  const previousFocus = /** @type {HTMLElement | null} */ (document.activeElement);
+  const previousFocus = focusedElement();
   /** @type {HTMLElement[]} */
   const stack = [];
 

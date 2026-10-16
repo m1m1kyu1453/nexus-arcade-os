@@ -2,7 +2,7 @@
 // Overview: thumbnails of the current workspace's windows, a strip of workspaces (click to
 // switch, drop windows onto them, add, rename), and type-to-search apps. Opens with
 // Mod+Shift+Space (or Mod+Tab where the browser passes it) and from the top-left hot corner.
-import { h, icon, replace } from '../../ui/dom.js';
+import { focusedElement, h, icon, replace } from '../../ui/dom.js';
 import { closeMenus } from '../../ui/menu.js';
 import { openModal, trapFocus } from '../../ui/overlay.js';
 import { appIcon } from '../app-icon.js';
@@ -39,7 +39,7 @@ export function createOverview(shell) {
     if (isOpen()) return;
     closeMenus();
     shell.ui.launcher?.close();
-    previousFocus = /** @type {HTMLElement | null} */ (document.activeElement);
+    previousFocus = focusedElement();
     root.hidden = false;
     root.setAttribute('aria-label', t('overview.title'));
     search.placeholder = t('overview.search');

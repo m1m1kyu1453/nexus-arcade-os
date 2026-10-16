@@ -1,0 +1,225 @@
+.nx-edit {
+  container-type: inline-size;
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  height: 100%;
+  min-height: 0;
+  color: var(--text-1);
+  font-size: var(--text-sm);
+
+  &.is-drop-target {
+    box-shadow: inset 0 0 0 2px var(--accent);
+  }
+}
+
+.nx-edit-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  & .nx-icon-btn[aria-pressed='true'] {
+    background: var(--surface-3);
+    color: var(--accent);
+  }
+  & [hidden] {
+    display: none;
+  }
+}
+
+.nx-edit-sep {
+  width: 1px;
+  height: 20px;
+  margin: 0 var(--space-1);
+  background: var(--border);
+  flex: none;
+}
+
+.nx-edit-tabs {
+  display: flex;
+  min-width: 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface-1) 60%, transparent);
+  scrollbar-width: thin;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.nx-edit-tab {
+  display: flex;
+  align-items: center;
+  flex: none;
+  border-right: 1px solid var(--border);
+  color: var(--text-2);
+
+  &.is-active {
+    background: var(--surface-2);
+    color: var(--text-1);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+  &:hover {
+    color: var(--text-1);
+  }
+}
+
+.nx-edit-tab-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 220px;
+  padding: 6px 4px 6px 12px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.nx-edit-dirty {
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.nx-edit-tab-close {
+  display: inline-flex;
+  margin-right: 6px;
+  padding: 3px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  &:hover {
+    background: var(--surface-3);
+  }
+}
+
+.nx-edit-body {
+  position: relative;
+  min-height: 0;
+}
+
+.nx-edit-pane {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  grid-template-columns: minmax(0, 1fr);
+
+  &[hidden] {
+    display: none;
+  }
+  &.has-preview {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  &:not(.has-preview) .nx-edit-preview {
+    display: none;
+  }
+}
+
+.nx-edit-cm {
+  grid-row: 2;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.nx-edit-preview {
+  grid-row: 2;
+  overflow-y: auto;
+  padding: var(--space-4);
+  border-left: 1px solid var(--border);
+}
+
+.nx-edit-notice {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--warning) 14%, transparent);
+
+  & span {
+    flex: 1;
+  }
+  & .nx-btn {
+    padding-block: 2px;
+  }
+}
+
+.nx-edit-empty {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: var(--space-3);
+  height: 100%;
+  color: var(--text-3);
+  & p {
+    margin: 0;
+  }
+}
+
+.nx-edit-empty-actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.nx-edit-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 2px var(--space-3);
+  border-top: 1px solid var(--border);
+  font-size: var(--text-xs);
+  color: var(--text-3);
+  white-space: nowrap;
+
+  &[hidden] {
+    display: none;
+  }
+}
+
+.nx-edit-status-fill {
+  flex: 1;
+}
+
+.nx-edit-status-btn {
+  padding: 1px 6px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  &:hover {
+    background: var(--surface-3);
+    color: var(--text-1);
+  }
+}
+
+@container (max-width: 560px) {
+  .nx-edit-pane.has-preview {
+    grid-template-columns: minmax(0, 1fr);
+    & .nx-edit-preview {
+      display: none;
+    }
+  }
+}
+
+.nx-edit-host {
+  display: block;
+  height: 100%;
+}

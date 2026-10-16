@@ -3,7 +3,7 @@
 ## Status
 
 - **Current phase:** 3 — System apps (phase 2 done 2026-10-16, `v0.2.0`)
-- **Next step:** phase 3: Explorer and Terminal P1s done. Next: Nexus Edit (3.3, CodeMirror 6; must accept dropped VFS paths via `PATHS_MIME` to finish the Explorer "drag to other apps" item), then Settings (3.4), System Monitor (3.5), App Center (3.6), Help (3.7, renders `manifest.help`; F1).
+- **Next step:** phase 3: File Explorer, Terminal and Nexus Edit P1s done. Next: Settings (3.4) on `ctx.system.settings` (+ storage, backup, shortcuts, profiles parts of ctx.system still to add), then System Monitor (3.5), App Center (3.6), Help (3.7: render `manifest.help` via `ctx.system.apps.help`; F1 opens the focused app's page).
 - **Phase 2 verification:** 516 unit tests; e2e `tests/e2e/shell.spec.js` runs the done-when flows with keyboard only, mouse and touch, each restored after a reload; smoke tests (website, offline reload, Lite on `file://`).
 - **Phase 1 verification:** 336 unit tests incl. `tests/unit/system.test.js` (whole system in jsdom: launch, storage, VFS, search, crash/restart, language switch, backup → wipe → restore, newer-data read-only); e2e asserts the kernel boots (`<html data-kernel="ready">`) on the website, offline, and in Lite from `file://`.
 
@@ -64,6 +64,9 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-16 | **Terminal safety:** `rm` moves to the Trash (`-P` deletes for good); `mv`/`cp` move a file they would overwrite to the Trash first. Variables are never field-split. | Nothing is lost by a typo; no "file name with spaces" surprises. |
 | 2026-10-16 | **Terminal keys:** Ctrl+L (clear), Ctrl+R (history search) and Ctrl+W (delete word) are registered as window shortcuts so they win over the system ones (lock, close); Ctrl+K stays the command palette. | App-scoped shortcuts already take precedence in the shortcut service. |
 | 2026-10-16 | **`ui/` also holds small pure helpers apps share** (`calc.js` moved from the palette, `paths.js`, `markdown.js`, `highlight.js`). ESLint's app boundary now also covers one level of app subfolders (`src/apps/<app>/<dir>/*.js`). | Apps may only import `ui/` and `styles/`; no duplicated logic. |
+| 2026-10-16 | **CodeMirror views live in a shadow root** (`src/apps/editor/editor.js`): CodeMirror (style-mod) then uses constructed style sheets, which the strict CSP allows; it would otherwise inject `<style>` tags that `style-src 'self'` blocks. Token colours (`ui/content.css`) are adopted into the shadow root. `isEditable` and the new `ui/dom.js` `focusedElement()` look into shadow roots (shortcuts in the editor, focus restore after overlays). | Keeps the website CSP without `'unsafe-inline'`. |
+| 2026-10-16 | **Nexus Edit keeps unsaved text as drafts** (app kv, per tab, flushed on `pagehide`) and restores them after a reload; closing a tab or the window with changes asks Save / Don't save / Cancel (`canClose`). Files changed elsewhere reload when clean, otherwise a notice offers both versions. | Spec 3.3 "protection on close"; nothing typed is lost to a reload. |
+| 2026-10-16 | **Edit window shortcuts** override system ones while it is focused: Ctrl+W (close tab), Ctrl+/ (comment), Ctrl+Space (completion). New file is Ctrl+Alt+N (Ctrl+N/Ctrl+T belong to the browser). | App-scoped shortcuts win; browser-reserved keys can't be used. |
 
 ## Cuts
 
@@ -304,7 +307,7 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 - [x] [P1] Sidebar: favorites (Desktop, Documents, Downloads, Pictures, Music, Videos, Projects), Trash, tags, recent files; storage usage bar.
 - [x] [P1] Views: icons (with thumbnails for images), list, details (sortable columns: name, size, type, modified), and column view.
 - [x] [P1] Breadcrumb path bar (click to navigate, click empty space to type a path), back/forward/up, search within the current folder and below.
-- [ ] [P1] Operations: new folder/file, rename (F2), copy/cut/paste, drag & drop (within Explorer, to the desktop, to other apps, from the real OS), delete to trash, restore, permanent delete with confirm, properties dialog (size, dates, type, tags, default app).
+- [x] [P1] Operations: new folder/file, rename (F2), copy/cut/paste, drag & drop (within Explorer, to the desktop, to other apps, from the real OS), delete to trash, restore, permanent delete with confirm, properties dialog (size, dates, type, tags, default app).
 - [x] [P1] Multi-select (Ctrl/Shift, box select), keyboard navigation (type-ahead), undo for the last operation.
 - [x] [P1] "Open with…", "Set default app", "Download", "Copy path", "Open terminal here".
 - [x] [P1] Preview pane: images, text/code (highlighted), Markdown (rendered), audio/video players, PDF (browser's built-in viewer if available).
@@ -326,10 +329,10 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **3.3 Nexus Edit (text editor)**
 
-- [ ] [P1] Tabs, open/save from VFS, new file, "Save as", unsaved-changes indicator and protection on close.
-- [ ] [P1] Syntax highlighting for common languages (via CodeMirror 6 if approved), line numbers, word wrap toggle, find/replace (regex), go to line, font size zoom.
-- [ ] [P1] Status bar: line/column, encoding, language, line ending.
-- [ ] [P2] Markdown preview side by side; minimap; multiple cursors.
+- [x] [P1] Tabs, open/save from VFS, new file, "Save as", unsaved-changes indicator and protection on close.
+- [x] [P1] Syntax highlighting for common languages (via CodeMirror 6 if approved), line numbers, word wrap toggle, find/replace (regex), go to line, font size zoom.
+- [x] [P1] Status bar: line/column, encoding, language, line ending.
+- [ ] [P2] Markdown preview side by side; minimap; multiple cursors. _(Markdown preview and multiple cursors done; minimap open.)_
 
 **3.4 Settings**
 

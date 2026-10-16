@@ -275,8 +275,28 @@ export async function mount(container, ctx, args) {
     const paths = new Set(items.map((i) => i.path));
     selected = keepSelection ? new Set([...selected].filter((p) => paths.has(p))) : new Set();
     state.loading = false;
+    // Unchanged content (e.g. a watcher reload after our own change): keep the DOM, so a drag
+    // or hover that has just started isn't interrupted.
+    const key = renderKey();
+    if (key === lastRenderKey && view.childElementCount) return paint();
+    lastRenderKey = key;
     render();
   }
+
+  /** What a render depends on besides the selection. */
+  let lastRenderKey = '';
+  const renderKey = () =>
+    JSON.stringify([
+      state.location,
+      state.view,
+      state.sort,
+      state.kind,
+      state.query,
+      state.readOnly,
+      ctx.i18n.locale,
+      items.map((i) => [i.path, i.size, i.modified, i.tags, i.trash?.at]),
+      state.view === 'columns' ? [...columnItems].map(([k, v]) => [k, v.map((i) => i.path)]) : null,
+    ]);
 
   /** Children of every folder shown in the column view. */
   async function loadColumns() {

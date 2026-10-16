@@ -3,7 +3,7 @@
 // category. Fully keyboard-operable (arrows move between tiles, typing searches). Opens with
 // Mod+Space or by tapping the Mod key alone. On phones it fills the screen.
 import { isEditable } from '../../services/commands/shortcuts.js';
-import { h, icon, replace } from '../../ui/dom.js';
+import { focusedElement, h, icon, replace } from '../../ui/dom.js';
 import { attachContextMenu, closeMenus } from '../../ui/menu.js';
 import { trapFocus } from '../../ui/overlay.js';
 import { appIcon } from '../app-icon.js';
@@ -43,7 +43,7 @@ export function createLauncher(shell) {
   function open() {
     closeMenus();
     shell.ui.palette?.close();
-    previousFocus = /** @type {HTMLElement | null} */ (document.activeElement);
+    previousFocus = focusedElement();
     backdrop.hidden = false;
     backdrop.dataset.dock = String(sys.settings.get('system', 'dockPosition'));
     panel.setAttribute('aria-label', t('launcher.title'));

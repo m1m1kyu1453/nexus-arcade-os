@@ -5,7 +5,7 @@
 //   =  calculator    ?  help topics  #  files by tag
 // Commands with `pick` get a second step with options (and live preview).
 import { formatShortcut } from '../../services/commands/keys.js';
-import { h, icon, replace } from '../../ui/dom.js';
+import { focusedElement, h, icon, replace } from '../../ui/dom.js';
 import { closeMenus } from '../../ui/menu.js';
 import { trapFocus } from '../../ui/overlay.js';
 import { registerCommand } from '../util.js';
@@ -81,7 +81,7 @@ export function createPalette(shell) {
 
   function open(prefill = '') {
     closeMenus();
-    previousFocus = /** @type {HTMLElement | null} */ (document.activeElement);
+    previousFocus = focusedElement();
     step = null;
     backdrop.hidden = false;
     input.value = prefill;

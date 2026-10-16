@@ -2,7 +2,7 @@
 // Keyboard shortcut overlay: hold Mod+/ to see every shortcut available right now (commands whose
 // `when` matches the current focus), grouped by category. A quick tap keeps it open until Escape.
 import { formatShortcut } from '../../services/commands/keys.js';
-import { h, icon, replace } from '../../ui/dom.js';
+import { focusedElement, h, icon, replace } from '../../ui/dom.js';
 import { trapFocus } from '../../ui/overlay.js';
 import { registerCommand } from '../util.js';
 import './shortcuts-overlay.css';
@@ -91,7 +91,7 @@ export function createShortcutsOverlay(shell) {
       return;
     }
     render();
-    previous = /** @type {HTMLElement | null} */ (document.activeElement);
+    previous = focusedElement();
     openedAt = performance.now();
     pinned = pin;
     backdrop.hidden = false;

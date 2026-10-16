@@ -18,7 +18,10 @@ const CHORD_TIMEOUT_MS = 1500;
 
 /** @param {EventTarget | null} target */
 export function isEditable(target) {
-  const el = /** @type {HTMLElement | null} */ (target);
+  let el = /** @type {HTMLElement | null} */ (target);
+  // Events from inside a shadow root (the code editor) are retargeted to its host: look at
+  // what has focus inside it.
+  while (el?.shadowRoot?.activeElement) el = /** @type {HTMLElement} */ (el.shadowRoot.activeElement);
   if (!el || typeof el.closest !== 'function') return false;
   if (el.isContentEditable) return true;
   const tag = el.tagName;

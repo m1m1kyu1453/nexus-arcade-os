@@ -1,6 +1,6 @@
 // @ts-check
 // Modal dialogs, anchored popovers and tooltips.
-import { h } from './dom.js';
+import { focusedElement, h } from './dom.js';
 import './overlay.css';
 
 const FOCUSABLE =
@@ -61,7 +61,7 @@ export function trapFocus(root) {
  */
 export function openModal({ title, body, actions = [], dismissValue, onOpen, className = '', size = 'sm' }) {
   return new Promise((resolve) => {
-    const previous = /** @type {HTMLElement | null} */ (document.activeElement);
+    const previous = focusedElement();
     const titleId = `nx-modal-${Math.random().toString(36).slice(2)}`;
     const footer = h('footer', { class: 'nx-modal-actions' });
     const dialog = h(
@@ -145,7 +145,7 @@ export function openPopover(anchor, content, { placement = 'auto', onClose, clas
   const left = Math.min(Math.max(4, a.left + a.width / 2 - p.width / 2), window.innerWidth - p.width - 4);
   pop.style.top = `${Math.max(4, top)}px`;
   pop.style.left = `${left}px`;
-  const previous = /** @type {HTMLElement | null} */ (document.activeElement);
+  const previous = focusedElement();
   let open = true;
   const close = () => {
     if (!open) return;

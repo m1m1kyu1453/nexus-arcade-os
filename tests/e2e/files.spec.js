@@ -74,6 +74,14 @@ test.describe('file explorer', () => {
     const img = preview.locator('img.nx-files-preview-img');
     await expect.poll(() => img.evaluate((el) => /** @type {HTMLImageElement} */ (el).naturalWidth)).toBe(1);
 
+    // Dragging an item hands its VFS path to the drop target (desktop, Nexus Edit …).
+    const payload = await item(page, 'pixel.png').evaluate((el) => {
+      const dt = new DataTransfer();
+      el.dispatchEvent(new DragEvent('dragstart', { bubbles: true, cancelable: true, dataTransfer: dt }));
+      return dt.getData('application/x-nexus-paths');
+    });
+    expect(JSON.parse(payload)).toEqual(['/home/user/Documents/pixel.png']);
+
     // Details view sorts by size (largest first on the first click).
     await files(page).locator('.nx-files-views [data-view="details"]').click();
     await files(page).locator('.nx-files-header button', { hasText: 'Size' }).click();

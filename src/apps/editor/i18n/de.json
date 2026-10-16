@@ -1,0 +1,56 @@
+{
+  "title": "Nexus Edit",
+  "untitled": "Unbenannt",
+  "tabs": "Geöffnete Dateien",
+  "closeTab": "{name} schließen",
+  "dirty": "Ungespeicherte Änderungen",
+  "empty": "Keine Datei geöffnet",
+  "toolbar": {
+    "new": "Neue Datei (Strg+Alt+N)",
+    "open": "Öffnen … (Strg+O)",
+    "save": "Speichern (Strg+S)",
+    "saveAs": "Speichern unter",
+    "find": "Suchen und ersetzen (Strg+F)",
+    "gotoLine": "Gehe zu Zeile (Strg+G)",
+    "wrap": "Zeilenumbruch (Alt+Z)",
+    "preview": "Markdown-Vorschau (Strg+Alt+P)",
+    "zoomIn": "Größerer Text (Strg+=)",
+    "zoomOut": "Kleinerer Text (Strg+-)"
+  },
+  "status": {
+    "position": "Z {line}, Sp {column}",
+    "selected": { "one": "({count} ausgewählt)", "other": "({count} ausgewählt)" },
+    "plain": "Nur Text",
+    "encoding": "Dateien werden als UTF-8 gespeichert",
+    "eol": "Zeilenenden (klicken zum Ändern)",
+    "zoom": "Textgröße (klicken zum Zurücksetzen)"
+  },
+  "notice": {
+    "changed": "Diese Datei wurde an anderer Stelle geändert.",
+    "deleted": "Diese Datei wurde in den Papierkorb verschoben oder gelöscht. Speichere sie, um deinen Text zu behalten.",
+    "readOnly": "Diese Datei ist schreibgeschützt. Mit „Speichern unter“ behältst du eine Kopie.",
+    "reload": "Neue Version laden",
+    "keep": "Meine behalten",
+    "saveAs": "Speichern unter …"
+  },
+  "confirm": {
+    "oneTitle": "Änderungen an „{name}“ speichern?",
+    "oneBody": "Deine Änderungen gehen verloren, wenn du sie nicht speicherst.",
+    "manyTitle": "Änderungen an {count} Dateien speichern?",
+    "manyBody": "Diese Dateien haben ungespeicherte Änderungen:",
+    "save": "Speichern",
+    "saveAll": "Alle speichern",
+    "discard": "Nicht speichern",
+    "cancel": "Abbrechen"
+  },
+  "errors": {
+    "openTitle": "Die Datei konnte nicht geöffnet werden",
+    "saveTitle": "Speichern fehlgeschlagen",
+    "notFound": "„{name}“ existiert nicht",
+    "tooLarge": "„{name}“ ist zu groß für den Editor (über 8 MB)",
+    "binary": "„{name}“ ist keine Textdatei"
+  },
+  "done": {
+    "saved": "{name} gespeichert"
+  }
+}
