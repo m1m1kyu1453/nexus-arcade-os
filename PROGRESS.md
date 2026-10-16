@@ -3,7 +3,7 @@
 ## Status
 
 - **Current phase:** 3 — System apps (phase 2 done 2026-10-16, `v0.2.0`)
-- **Next step:** phase 3, Explorer is mostly done (see checklist; "drag to other apps" waits for Nexus Edit to accept drops, "Open terminal here" for the Terminal). Next: Terminal (3.2), then Nexus Edit (3.3), Settings (3.4), System Monitor (3.5), App Center (3.6), Help (3.7, incl. F1).
+- **Next step:** phase 3: Explorer and Terminal P1s done. Next: Nexus Edit (3.3, CodeMirror 6; must accept dropped VFS paths via `PATHS_MIME` to finish the Explorer "drag to other apps" item), then Settings (3.4), System Monitor (3.5), App Center (3.6), Help (3.7, renders `manifest.help`; F1).
 - **Phase 2 verification:** 516 unit tests; e2e `tests/e2e/shell.spec.js` runs the done-when flows with keyboard only, mouse and touch, each restored after a reload; smoke tests (website, offline reload, Lite on `file://`).
 - **Phase 1 verification:** 336 unit tests incl. `tests/unit/system.test.js` (whole system in jsdom: launch, storage, VFS, search, crash/restart, language switch, backup → wipe → restore, newer-data read-only); e2e asserts the kernel boots (`<html data-kernel="ready">`) on the website, offline, and in Lite from `file://`.
 
@@ -60,6 +60,10 @@ Recorded per NEXUS_BRIEF.md §2.4. Newest last.
 | 2026-10-16 | **Intents use the VFS's stored mime type** when a caller passes only a path; folders (`inode/directory`) open in the File Explorer. | Imported files keep their real type; folders had no handler. |
 | 2026-10-16 | **CSP: `media-src 'self' blob:` and `frame-src 'self' blob:`** for Explorer previews (audio/video, the browser's PDF viewer). PDFs are framed only as `application/pdf` Blobs. | Previews read VFS files as blob: URLs. |
 | 2026-10-16 | **Drag & drop between Nexus apps uses `application/x-nexus-paths`** (JSON array of VFS paths, `ui/file-icons.js` `PATHS_MIME`/`draggedPaths`). The desktop accepts it (move, Ctrl = copy). | One format for Explorer → desktop / other apps. |
+| 2026-10-16 | **Manifest fields `terminal` and `help`.** `terminal: [{ name, description, usage }]` with handlers in `AppModule.terminal` (run headless via `ctx.system.apps.runTerminal`, get a `TerminalIo`); `help: () => import('./help.md?raw')` for the Help app and F1. The File Explorer adds `explore [FOLDER]`. | Spec 3.2 "apps can register their own commands"; data-only manifests (2026-10-15 decision). |
+| 2026-10-16 | **Terminal safety:** `rm` moves to the Trash (`-P` deletes for good); `mv`/`cp` move a file they would overwrite to the Trash first. Variables are never field-split. | Nothing is lost by a typo; no "file name with spaces" surprises. |
+| 2026-10-16 | **Terminal keys:** Ctrl+L (clear), Ctrl+R (history search) and Ctrl+W (delete word) are registered as window shortcuts so they win over the system ones (lock, close); Ctrl+K stays the command palette. | App-scoped shortcuts already take precedence in the shortcut service. |
+| 2026-10-16 | **`ui/` also holds small pure helpers apps share** (`calc.js` moved from the palette, `paths.js`, `markdown.js`, `highlight.js`). ESLint's app boundary now also covers one level of app subfolders (`src/apps/<app>/<dir>/*.js`). | Apps may only import `ui/` and `styles/`; no duplicated logic. |
 
 ## Cuts
 
@@ -302,7 +306,7 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 - [x] [P1] Breadcrumb path bar (click to navigate, click empty space to type a path), back/forward/up, search within the current folder and below.
 - [ ] [P1] Operations: new folder/file, rename (F2), copy/cut/paste, drag & drop (within Explorer, to the desktop, to other apps, from the real OS), delete to trash, restore, permanent delete with confirm, properties dialog (size, dates, type, tags, default app).
 - [x] [P1] Multi-select (Ctrl/Shift, box select), keyboard navigation (type-ahead), undo for the last operation.
-- [ ] [P1] "Open with…", "Set default app", "Download", "Copy path", "Open terminal here".
+- [x] [P1] "Open with…", "Set default app", "Download", "Copy path", "Open terminal here".
 - [x] [P1] Preview pane: images, text/code (highlighted), Markdown (rendered), audio/video players, PDF (browser's built-in viewer if available).
 - [ ] [P2] Tabs and split view (two folders side by side).
 - [ ] [P2] Zip: compress selection, extract archive (if fflate is approved).
@@ -311,12 +315,12 @@ Every item from every spec, grouped by phase. Untagged items inherit the priorit
 
 **3.2 Terminal**
 
-- [ ] [P1] Proper terminal UI: monospace, ANSI colors, prompt with user@nexus and current path, scrollback, selection and copy, paste, `Ctrl+C` to cancel, `Ctrl+L` clear, tabs (multiple sessions).
-- [ ] [P1] History (up/down, `history`, `!n`, search with `Ctrl+R`), tab completion for commands, paths and app ids.
-- [ ] [P1] Shell features: quoting, escaping, pipes `|`, redirection `>`, `>>`, `<`, `&&`, `||`, `;`, environment variables (`$HOME`, `export`), aliases, `~` expansion, glob `*` in paths.
-- [ ] [P1] Built-in commands: `help`, `man <cmd>`, `ls` (`-la`), `cd`, `pwd`, `cat`, `less`, `head`, `tail`, `touch`, `mkdir -p`, `rm -r`, `mv`, `cp -r`, `find`, `grep` (regex, `-i -n -r`), `wc`, `sort`, `uniq`, `tree`, `echo`, `date`, `cal`, `clear`, `whoami`, `uptime`, `du`, `df`, `env`, `alias`, `history`, `open <app|file>`, `apps`, `kill <window>`, `theme <name>`, `wallpaper <file>`, `notify <text>`, `calc <expr>`, `nexusfetch` (system info with ASCII logo).
-- [ ] [P1] Apps can register their own commands (e.g. `notes new "Title"`, `task add "Buy milk" --due tomorrow`, `play snake`).
-- [ ] [P2] Scripts: run `.nsh` files from the VFS (line-by-line with variables, `if`, `for`), and `~/.nexusrc` on start.
+- [x] [P1] Proper terminal UI: monospace, ANSI colors, prompt with user@nexus and current path, scrollback, selection and copy, paste, `Ctrl+C` to cancel, `Ctrl+L` clear, tabs (multiple sessions).
+- [x] [P1] History (up/down, `history`, `!n`, search with `Ctrl+R`), tab completion for commands, paths and app ids.
+- [x] [P1] Shell features: quoting, escaping, pipes `|`, redirection `>`, `>>`, `<`, `&&`, `||`, `;`, environment variables (`$HOME`, `export`), aliases, `~` expansion, glob `*` in paths.
+- [x] [P1] Built-in commands: `help`, `man <cmd>`, `ls` (`-la`), `cd`, `pwd`, `cat`, `less`, `head`, `tail`, `touch`, `mkdir -p`, `rm -r`, `mv`, `cp -r`, `find`, `grep` (regex, `-i -n -r`), `wc`, `sort`, `uniq`, `tree`, `echo`, `date`, `cal`, `clear`, `whoami`, `uptime`, `du`, `df`, `env`, `alias`, `history`, `open <app|file>`, `apps`, `kill <window>`, `theme <name>`, `wallpaper <file>`, `notify <text>`, `calc <expr>`, `nexusfetch` (system info with ASCII logo).
+- [x] [P1] Apps can register their own commands (e.g. `notes new "Title"`, `task add "Buy milk" --due tomorrow`, `play snake`).
+- [ ] [P2] Scripts: run `.nsh` files from the VFS (line-by-line with variables, `if`, `for`), and `~/.nexusrc` on start. _(`~/.nexusrc` done; `.nsh` with `if`/`for` open.)_
 - [ ] [P2] A small text editor inside the terminal (`edit file.txt`, nano-like).
 - [ ] [P3] `cowsay`, `fortune`, `sl`, `matrix`, and similar fun commands.
 

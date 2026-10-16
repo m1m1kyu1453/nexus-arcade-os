@@ -14,6 +14,9 @@ import { createAppStorage } from '../services/storage/app-storage.js';
  * @property {import('./bus.js').EventBus} bus
  * @property {(text: import('./types').L10n | string) => string} localize
  * @property {(appId: string) => boolean} isReadOnly
+ * @property {import('../services/theme/engine.js').ThemeService} theme
+ * @property {(appId: string) => Promise<import('./types').HeadlessContext>} headless  ctx for an app's handlers (messages loaded)
+ * @property {{ version: string, edition: 'web' | 'lite', profile: { name: string, username: string }, bootedAt: number }} info
  * @property {Record<string, any>} host  filled by the shell (window titles, wallpaper …); empty headless
  */
 
@@ -32,12 +35,14 @@ function describe(m) {
     commands: (m.commands ?? []).map((c) => ({ id: c.id, title: c.title, shortcut: c.shortcut })),
     settings: m.settings ?? [],
     collections: Object.keys(m.storage?.collections ?? {}),
+    terminal: m.terminal ?? [],
+    hasHelp: typeof m.help === 'function',
   };
 }
 
 /** @param {SystemApiDeps} deps */
 export function createSystemApi(deps) {
-  const { registry, lifecycle, settings, db, bus, localize, host } = deps;
+  const { registry, lifecycle, settings, db, bus, localize, host, theme } = deps;
 
   const apps = {
     /** @param {{ includeDisabled?: boolean }} [options] */
@@ -70,6 +75,35 @@ export function createSystemApi(deps) {
       await storage.kv.clear();
       await settings.resetScope(id);
     },
+    /** Terminal commands declared by enabled apps. */
+    terminalCommands: () =>
+      registry
+        .list()
+        .flatMap((m) =>
+          (m.terminal ?? []).map((c) => ({ app: m.id, name: c.name, description: c.description, usage: c.usage })),
+        ),
+    /**
+     * Runs an app's terminal command handler (loads the app's code and messages first).
+     * @param {string} appId
+     * @param {string} name
+     * @param {import('./types').TerminalIo} io
+     * @returns {Promise<number>}
+     */
+    async runTerminal(appId, name, io) {
+      if (!registry.isEnabled(appId)) throw new Error(`Unknown app "${appId}"`);
+      const mod = await registry.load(appId);
+      const handler = mod.terminal?.[name];
+      if (!handler) throw new Error(`${appId} declares terminal command "${name}" but has no handler`);
+      const status = await handler(await deps.headless(appId), io);
+      return typeof status === 'number' ? status : 0;
+    },
+    /** An app's help page (Markdown), or null. @param {string} id */
+    async help(id) {
+      const m = registry.get(id);
+      if (!m?.help) return null;
+      const loaded = await m.help();
+      return typeof loaded === 'string' ? loaded : loaded.default;
+    },
   };
 
   const windows = {
@@ -96,8 +130,40 @@ export function createSystemApi(deps) {
     launch: (appId, args) => lifecycle.launch(appId, args ?? {}),
   };
 
-  /** One facade object per app; `appId` is kept for logging and future auditing. */
-  return (/** @type {string} */ _appId) => ({ apps, windows });
+  /**
+   * System and app settings (scope 'system' or an app id), validated by the settings service.
+   * @param {(unsub: () => void) => () => void} track  ends subscriptions with the window
+   */
+  const settingsFor = (track) => ({
+    /** @param {string} key @param {string} [scope] */
+    get: (key, scope = 'system') => settings.get(scope, key),
+    /** @param {string} key @param {unknown} value @param {string} [scope] */
+    set: (key, value, scope = 'system') => settings.set(scope, key, value),
+    /** @param {string} key @param {string} [scope] */
+    reset: (key, scope = 'system') => settings.reset(scope, key),
+    /** Declarations with current values. @param {string} [scope] */
+    describe: (scope = 'system') => settings.describe(scope),
+    scopes: () => settings.scopes(),
+    /** @param {string} key ('*' = any) @param {(value: unknown, key: string) => void} fn @param {string} [scope] */
+    onChange: (key, fn, scope = 'system') => track(settings.onChange(scope, key, fn)),
+  });
+
+  const themes = {
+    list: () => theme.themes().map((t) => ({ id: t.id, name: t.name, scheme: t.scheme })),
+    get current() {
+      return theme.current;
+    },
+  };
+
+  /** Version, edition, profile and boot time (Terminal `nexusfetch`, Settings → About). */
+  const info = () => ({ ...deps.info, profile: { ...deps.info.profile } });
+
+  /**
+   * One facade object per app; `appId` is kept for logging and future auditing.
+   * @param {string} _appId
+   * @param {(unsub: () => void) => () => void} [track]
+   */
+  return (_appId, track = (u) => u) => ({ apps, windows, settings: settingsFor(track), theme: themes, info });
 }
 
 /** @typedef {ReturnType<ReturnType<typeof createSystemApi>>} SystemApi */

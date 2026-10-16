@@ -4,6 +4,7 @@
 import { capturePointer, h, icon, iconButton } from '../../ui/dom.js';
 import { draggedPaths, PATHS_MIME, SHORTCUT_EXT } from '../../ui/file-icons.js';
 import { attachContextMenu } from '../../ui/menu.js';
+import { resolvePath } from '../../ui/paths.js';
 import {
   crumbs,
   displayName,
@@ -38,6 +39,21 @@ const TERMINAL = 'nexus.terminal';
 export const commands = {
   'files.open': (ctx) => ctx.commands.execute('shell.launchApp', { appId: 'nexus.files' }),
   'files.trash': (ctx) => ctx.commands.execute('shell.launchApp', { appId: 'nexus.files', args: { path: TRASH } }),
+};
+
+/** @type {import('../../kernel/types').AppModule['terminal']} */
+export const terminal = {
+  /** `explore [FOLDER]` in the Terminal. */
+  async explore(ctx, io) {
+    const path = resolvePath(io.args[0] ?? '.', io.cwd, /** @type {string} */ (ctx.fs.home));
+    const node = await /** @type {any} */ (ctx.fs).stat(path);
+    if (node?.type !== 'folder') {
+      io.err(`explore: ${ctx.i18n.t(node ? 'errors.notFolder' : 'errors.notFound', { path: io.args[0] ?? path })}\n`);
+      return 1;
+    }
+    await ctx.commands.execute('shell.launchApp', { appId: 'nexus.files', args: { path } });
+    return 0;
+  },
 };
 
 /** @type {import('../../kernel/types').AppModule['mount']} */

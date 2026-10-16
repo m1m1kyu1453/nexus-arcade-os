@@ -1,7 +1,8 @@
 // @ts-check
-// Safe calculator for the command palette's "=" mode (no eval). Supports numbers (decimal,
-// 1e3, 0x/0b/0o), + - * / % ^ (power, right-associative), parentheses, unary minus, the
-// constants pi, e, tau and the functions below. Returns null for anything it can't parse.
+// Safe calculator (no eval), shared by the command palette's "=" mode and apps (Terminal `calc`).
+// Supports numbers (decimal, 1e3, 0x/0b/0o), + - * / % ^ (power, right-associative), parentheses,
+// unary minus, the constants pi, e, tau and the functions below. Returns null for anything it
+// can't parse.
 
 /** @type {Record<string, (...args: number[]) => number>} */
 const FUNCTIONS = {

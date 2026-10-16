@@ -79,34 +79,8 @@ function partsFrom(base, parts) {
   return parts.map((name, i) => ({ name, path: `${base}/${parts.slice(0, i + 1).join('/')}` }));
 }
 
-/**
- * Resolves what the user typed into the path bar: absolute, "~", "~/x", or relative to `cwd`.
- * @param {string} input
- * @param {string} cwd
- * @param {string} home
- */
-export function resolveInput(input, cwd, home) {
-  let raw = input.trim().replace(/\\/g, '/');
-  if (raw === '' || raw === '.') return cwd;
-  if (raw === '~') raw = home;
-  else if (raw.startsWith('~/')) raw = home + raw.slice(1);
-  else if (!raw.startsWith('/')) raw = `${cwd === '/' ? '' : cwd}/${raw}`;
-  /** @type {string[]} */
-  const out = [];
-  for (const part of raw.split('/')) {
-    if (!part || part === '.') continue;
-    if (part === '..') out.pop();
-    else out.push(part);
-  }
-  return `/${out.join('/')}`;
-}
-
-/** Parent folder ('/' stays '/'). @param {string} path */
-export function parentOf(path) {
-  if (path === '/') return '/';
-  const i = path.lastIndexOf('/');
-  return i <= 0 ? '/' : path.slice(0, i);
-}
+/** Resolves what the user typed into the path bar (see ui/paths.js). */
+export { parentOf, resolvePath as resolveInput } from '../../ui/paths.js';
 
 /** Back/forward navigation history. */
 export class History {

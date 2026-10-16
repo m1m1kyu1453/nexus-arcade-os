@@ -34,13 +34,28 @@ export default [
   // App boundary (NEXUS_BRIEF.md §5.3): apps and games talk to the OS only through `ctx`.
   // They may import their own files, shared UI and styles, and (games) the game engine.
   {
-    files: ['src/apps/**/*.js'],
+    files: ['src/apps/*/*.js'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
           patterns: [
             { regex: String.raw`^\.\./(?!\.\./(ui|styles)/)`, message: 'Apps use ctx, ui/ and styles/ only.' },
+          ],
+        },
+      ],
+    },
+  },
+  // Same boundary one folder deeper (e.g. src/apps/terminal/shell/*.js): "../" stays in the app.
+  // Apps keep at most one level of subfolders, so these two blocks cover every app file.
+  {
+    files: ['src/apps/*/*/*.js'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            { regex: String.raw`^(\.\./){2}(?!\.\./(ui|styles)/)`, message: 'Apps use ctx, ui/ and styles/ only.' },
           ],
         },
       ],

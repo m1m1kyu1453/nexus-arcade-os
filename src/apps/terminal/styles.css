@@ -1,0 +1,309 @@
+.nx-term {
+  /* The 16 ANSI colours come from the theme, so output stays readable in light themes too. */
+  --ansi-0: var(--text-3);
+  --ansi-1: var(--danger);
+  --ansi-2: var(--success);
+  --ansi-3: var(--warning);
+  --ansi-4: var(--info);
+  --ansi-5: var(--accent-2);
+  --ansi-6: var(--accent);
+  --ansi-7: var(--text-1);
+  --ansi-8: var(--text-2);
+  --ansi-9: color-mix(in srgb, var(--danger) 80%, var(--text-1));
+  --ansi-10: color-mix(in srgb, var(--success) 80%, var(--text-1));
+  --ansi-11: color-mix(in srgb, var(--warning) 80%, var(--text-1));
+  --ansi-12: color-mix(in srgb, var(--info) 80%, var(--text-1));
+  --ansi-13: color-mix(in srgb, var(--accent-2) 80%, var(--text-1));
+  --ansi-14: color-mix(in srgb, var(--accent) 80%, var(--text-1));
+  --ansi-15: var(--text-1);
+
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  min-height: 0;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  color: var(--text-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.nx-term-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-bottom: 1px solid var(--border);
+  font-family: var(--font-sans);
+  min-width: 0;
+}
+
+.nx-term-tabs {
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.nx-term-tab {
+  display: flex;
+  align-items: center;
+  flex: none;
+  border-radius: var(--radius-sm);
+  color: var(--text-2);
+
+  &.is-active {
+    background: var(--surface-3);
+    color: var(--text-1);
+  }
+  &:hover {
+    color: var(--text-1);
+  }
+}
+
+.nx-term-tab-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 180px;
+  padding: 4px 10px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.nx-term-tab-close {
+  display: inline-flex;
+  padding: 3px;
+  margin-right: 4px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  &:hover {
+    background: var(--surface-2);
+  }
+}
+
+.nx-term-sessions {
+  position: relative;
+  min-height: 0;
+}
+
+.nx-term-session {
+  position: absolute;
+  inset: 0;
+  &[hidden] {
+    display: none;
+  }
+}
+
+.nx-term-screen {
+  height: 100%;
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-3);
+  line-height: 1.45;
+  outline: none;
+  cursor: text;
+}
+
+.nx-term-line {
+  min-height: 1.45em;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+
+  &.is-input {
+    display: flex;
+    white-space: pre;
+  }
+  &[hidden] {
+    display: none;
+  }
+}
+
+.nx-term-prompt {
+  flex: none;
+  white-space: pre;
+}
+
+.nx-term-input {
+  flex: 1;
+  min-width: 2ch;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  caret-color: var(--accent);
+}
+
+.nx-term-err {
+  color: var(--ansi-9);
+}
+
+.nx-term-probe {
+  position: absolute;
+  visibility: hidden;
+  white-space: pre;
+}
+
+.nx-ansi-bold {
+  font-weight: 700;
+}
+.nx-ansi-dim {
+  opacity: 0.65;
+}
+.nx-ansi-italic {
+  font-style: italic;
+}
+.nx-ansi-underline {
+  text-decoration: underline;
+}
+.nx-ansi-fg-default {
+  color: var(--text-1);
+}
+.nx-ansi-fg-bg {
+  color: var(--bg);
+}
+.nx-ansi-bg-fg {
+  background: var(--text-1);
+}
+.nx-ansi-bg-default {
+  background: var(--bg);
+}
+.nx-ansi-fg0 {
+  color: var(--ansi-0);
+}
+.nx-ansi-fg1 {
+  color: var(--ansi-1);
+}
+.nx-ansi-fg2 {
+  color: var(--ansi-2);
+}
+.nx-ansi-fg3 {
+  color: var(--ansi-3);
+}
+.nx-ansi-fg4 {
+  color: var(--ansi-4);
+}
+.nx-ansi-fg5 {
+  color: var(--ansi-5);
+}
+.nx-ansi-fg6 {
+  color: var(--ansi-6);
+}
+.nx-ansi-fg7 {
+  color: var(--ansi-7);
+}
+.nx-ansi-fg8 {
+  color: var(--ansi-8);
+}
+.nx-ansi-fg9 {
+  color: var(--ansi-9);
+}
+.nx-ansi-fg10 {
+  color: var(--ansi-10);
+}
+.nx-ansi-fg11 {
+  color: var(--ansi-11);
+}
+.nx-ansi-fg12 {
+  color: var(--ansi-12);
+}
+.nx-ansi-fg13 {
+  color: var(--ansi-13);
+}
+.nx-ansi-fg14 {
+  color: var(--ansi-14);
+}
+.nx-ansi-fg15 {
+  color: var(--ansi-15);
+}
+.nx-ansi-bg0 {
+  background: var(--ansi-0);
+}
+.nx-ansi-bg1 {
+  background: var(--ansi-1);
+}
+.nx-ansi-bg2 {
+  background: var(--ansi-2);
+}
+.nx-ansi-bg3 {
+  background: var(--ansi-3);
+}
+.nx-ansi-bg4 {
+  background: var(--ansi-4);
+}
+.nx-ansi-bg5 {
+  background: var(--ansi-5);
+}
+.nx-ansi-bg6 {
+  background: var(--ansi-6);
+}
+.nx-ansi-bg7 {
+  background: var(--ansi-7);
+}
+.nx-ansi-bg8 {
+  background: var(--ansi-8);
+}
+.nx-ansi-bg9 {
+  background: var(--ansi-9);
+}
+.nx-ansi-bg10 {
+  background: var(--ansi-10);
+}
+.nx-ansi-bg11 {
+  background: var(--ansi-11);
+}
+.nx-ansi-bg12 {
+  background: var(--ansi-12);
+}
+.nx-ansi-bg13 {
+  background: var(--ansi-13);
+}
+.nx-ansi-bg14 {
+  background: var(--ansi-14);
+}
+.nx-ansi-bg15 {
+  background: var(--ansi-15);
+}
+
+/* less */
+.nx-term-pager {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  background: var(--bg);
+}
+
+.nx-term-pager-body {
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-3);
+  line-height: 1.45;
+  outline: none;
+}
+
+.nx-term-pager-status {
+  padding: 2px var(--space-3);
+  background: var(--text-1);
+  color: var(--bg);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The line being written stays empty after output that ended with a newline. */
+.nx-term-output > .nx-term-line:last-child:empty {
+  display: none;
+}

@@ -109,6 +109,20 @@ export function validateManifest(manifest) {
     if ('run' in c) fail(`${path}.run`, "manifests are data-only; put the handler in the module's `commands`");
   });
 
+  const terminalNames = new Set();
+  optionalArray(m, 'terminal', fail, (c, path) => {
+    if (!isObject(c)) return fail(path, 'must be an object');
+    if (typeof c.name !== 'string' || !/^[a-z][a-z0-9-]*$/.test(c.name))
+      fail(`${path}.name`, 'must be a lowercase command name');
+    else if (terminalNames.has(c.name)) fail(`${path}.name`, `duplicate terminal command "${c.name}"`);
+    terminalNames.add(c.name);
+    l10n(c.description, `${path}.description`, fail);
+    if (c.usage !== undefined && typeof c.usage !== 'string') fail(`${path}.usage`, 'must be a string');
+    if ('run' in c) fail(`${path}.run`, "manifests are data-only; put the handler in the module's `terminal`");
+  });
+  if (m.help !== undefined && typeof m.help !== 'function')
+    fail('help', 'must be a function returning import("./help.md?raw")');
+
   const settingKeys = new Set();
   optionalArray(m, 'settings', fail, (s, path) => {
     if (!isObject(s)) return fail(path, 'must be an object');

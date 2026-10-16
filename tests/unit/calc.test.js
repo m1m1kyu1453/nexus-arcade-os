@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { evaluate, formatResult } from '../../src/shell/palette/calc.js';
+import { evaluate, formatResult } from '../../src/ui/calc.js';
 
 describe('palette calculator', () => {
   it.each([

@@ -1,0 +1,248 @@
+{
+  "title": "Terminal",
+  "input": "Befehl",
+  "tabs": "Terminal-Tabs",
+  "newTab": "Neuer Tab (Alt+T)",
+  "closeTab": "Tab {name} schließen",
+  "welcome": "Nexus-Shell. Tippe \u001b[1mhelp\u001b[22m für Befehle, \u001b[1mman <befehl>\u001b[22m für Details, Tab zum Vervollständigen.",
+  "search": "(Rückwärtssuche)'{query}': ",
+  "searchFailed": "(Rückwärtssuche erfolglos)'{query}': ",
+  "pager": "Textanzeige",
+  "pagerStatus": "Zeilen {first}–{last} von {total} · Leertaste/b Seite · ↑/↓ Zeile · q beenden",
+  "pagerEnd": "(ENDE)",
+  "err": {
+    "noEntry": "{path}: Datei oder Ordner nicht gefunden",
+    "isFolder": "{path}: Ist ein Ordner",
+    "notFolder": "{path}: Kein Ordner",
+    "binary": "{path}: Binärdatei (mit open öffnen oder im Datei-Explorer ansehen)",
+    "tooMany": "zu viele Argumente",
+    "missingOperand": "Operand fehlt",
+    "exists": "{path}: Existiert bereits",
+    "isFolderUseR": "{path}: Ist ein Ordner (-r verwenden)",
+    "missingDest": "Ziel fehlt",
+    "same": "{path}: Quelle und Ziel sind gleich",
+    "badNumber": "ungültige Zahl: {value}",
+    "needsValue": "{option} braucht einen Wert",
+    "findType": "-type muss f (Dateien) oder d (Ordner) sein",
+    "unknownOption": "unbekannte Option {option}",
+    "grepUsage": "Aufruf: grep [-inrvclwFE] MUSTER [DATEI…]",
+    "badRegex": "ungültiges Muster: {reason}",
+    "noOs": "hier nicht verfügbar",
+    "manUsage": "Aufruf: man BEFEHL",
+    "noManual": "kein Handbucheintrag für {name}",
+    "calUsage": "Aufruf: cal [MONAT [JAHR]]",
+    "badName": "{name}: kein gültiger Name",
+    "noAlias": "{name}: kein solcher Alias",
+    "noAppOrFile": "{name}: keine solche App oder Datei",
+    "killUsage": "Aufruf: kill FENSTER… (siehe ps)",
+    "noWindow": "{name}: kein solches Fenster",
+    "noTheme": "{name}: kein solches Design (siehe theme)",
+    "notImage": "{path}: kein Bild",
+    "calcUsage": "Aufruf: calc AUSDRUCK",
+    "calc": "„{expr}“ kann nicht berechnet werden",
+    "sleepUsage": "Aufruf: sleep SEKUNDEN",
+    "noCommand": "{name}: nicht gefunden",
+    "notFound": "{name}: Befehl nicht gefunden. „help“ zeigt alle Befehle.",
+    "syntax": "Syntaxfehler: {reason}"
+  },
+  "out": {
+    "treeSummary": "{folders} Ordner, {files} Dateien",
+    "dfFs": "Speicher",
+    "dfSize": "Größe",
+    "dfBlocks": "1K-Blöcke",
+    "dfUsed": "Belegt",
+    "dfAvail": "Frei",
+    "dfUse": "Belegt%",
+    "dfFiles": "{files} Dateien und {folders} Ordner in Nexus, {trash} im Papierkorb",
+    "total": "gesamt",
+    "days": { "one": "{count} Tag", "other": "{count} Tage" },
+    "hours": { "one": "{count} Stunde", "other": "{count} Stunden" },
+    "minutes": { "one": "{count} Minute", "other": "{count} Minuten" },
+    "helpTitle": "Eingebaute Befehle",
+    "helpApps": "Befehle von Apps",
+    "helpFooter": "man BEFEHL für Details · Tab vervollständigt · ↑/↓ Verlauf · Strg+R Suche · Strg+C abbrechen · Strg+L leeren",
+    "usage": "Aufruf",
+    "fromApp": "von {app}",
+    "aliasFor": "Alias für „{value}“",
+    "uptime": "läuft seit {time}, {windows} Fenster offen",
+    "hidden": "ausgeblendet",
+    "noWindows": "Keine Fenster offen.",
+    "psWindow": "Fenster",
+    "psState": "Status",
+    "psTitle": "Titel",
+    "suspended": "pausiert",
+    "running": "läuft",
+    "builtin": "eingebauter Befehl",
+    "filesCount": { "one": "{count} Datei", "other": "{count} Dateien" }
+  },
+  "fetch": {
+    "os": "System",
+    "uptime": "Laufzeit",
+    "shell": "Shell",
+    "apps": "Apps",
+    "windows": "Fenster",
+    "theme": "Design",
+    "language": "Sprache",
+    "display": "Bildschirm",
+    "files": "Dateien",
+    "storage": "Speicher"
+  },
+  "man": {
+    "pwd": { "summary": "aktuellen Ordner ausgeben", "usage": "pwd" },
+    "cd": {
+      "summary": "Ordner wechseln",
+      "usage": "cd [ORDNER]",
+      "details": "Ohne Ordner geht es in deinen persönlichen Ordner. „cd -“ springt zurück; „~“ ist der persönliche Ordner."
+    },
+    "ls": {
+      "summary": "Ordnerinhalt auflisten",
+      "usage": "ls [-laht1Sr] [PFAD…]",
+      "details": "-l ausführlich (Größe, Datum, Tags)   -a versteckte Dateien   -h lesbare Größen\n-t neueste zuerst   -S größte zuerst   -r umgekehrt   -1 eine pro Zeile"
+    },
+    "cat": {
+      "summary": "Dateien ausgeben",
+      "usage": "cat [-n] [DATEI…]",
+      "details": "-n nummeriert die Zeilen. Ohne Dateien wird die Eingabe aus der Pipe ausgegeben."
+    },
+    "less": {
+      "summary": "Text seitenweise anzeigen",
+      "usage": "less [DATEI…]",
+      "details": "Leertaste/b: Seite vor/zurück · ↑/↓ oder j/k: Zeile · g/G: Anfang/Ende · q: beenden"
+    },
+    "head": {
+      "summary": "erste Zeilen von Dateien",
+      "usage": "head [-n N] [DATEI…]",
+      "details": "Zeigt 10 Zeilen, außer -n sagt etwas anderes (auch: head -5)."
+    },
+    "tail": {
+      "summary": "letzte Zeilen von Dateien",
+      "usage": "tail [-n N] [DATEI…]",
+      "details": "Zeigt 10 Zeilen, außer -n sagt etwas anderes (auch: tail -5)."
+    },
+    "touch": { "summary": "leere Dateien anlegen oder ihr Datum aktualisieren", "usage": "touch DATEI…" },
+    "mkdir": {
+      "summary": "Ordner anlegen",
+      "usage": "mkdir [-p] ORDNER…",
+      "details": "-p legt fehlende übergeordnete Ordner an und meckert nicht über vorhandene."
+    },
+    "rm": {
+      "summary": "Dateien in den Papierkorb verschieben",
+      "usage": "rm [-rfP] PFAD…",
+      "details": "Einträge kommen in den Papierkorb und lassen sich im Datei-Explorer wiederherstellen.\n-r Ordner mit Inhalt   -f fehlende Dateien ignorieren   -P endgültig löschen"
+    },
+    "mv": {
+      "summary": "verschieben oder umbenennen",
+      "usage": "mv [-n] QUELLE… ZIEL",
+      "details": "Bei mehreren Quellen muss ZIEL ein Ordner sein. Eine Datei, die überschrieben würde, kommt vorher in den Papierkorb; -n behält sie stattdessen."
+    },
+    "cp": {
+      "summary": "Dateien und Ordner kopieren",
+      "usage": "cp [-rn] QUELLE… ZIEL",
+      "details": "-r kopiert Ordner mit Inhalt. Eine Datei, die überschrieben würde, kommt vorher in den Papierkorb; -n behält sie stattdessen."
+    },
+    "find": {
+      "summary": "Dateien nach Name oder Typ suchen",
+      "usage": "find [PFAD…] [-name MUSTER] [-iname MUSTER] [-type f|d]",
+      "details": "Muster nutzen * ? [abc]; setze sie in Anführungszeichen, damit die Shell sie nicht erweitert: find . -name \"*.md\""
+    },
+    "tree": {
+      "summary": "Ordner als Baum anzeigen",
+      "usage": "tree [-ad] [-L TIEFE] [ORDNER]",
+      "details": "-a versteckte Dateien   -d nur Ordner   -L wie tief"
+    },
+    "du": {
+      "summary": "Speicherbedarf von Ordnern",
+      "usage": "du [-hsa] [PFAD…]",
+      "details": "Größen in KB (-h für lesbare Größen). -s nur die Summe   -a auch Dateien"
+    },
+    "df": { "summary": "belegter und freier Browserspeicher", "usage": "df [-h]" },
+    "echo": {
+      "summary": "Text ausgeben",
+      "usage": "echo [-ne] [TEXT…]",
+      "details": "-n kein Zeilenumbruch am Ende   -e versteht \\n, \\t und \\e (für Farben)"
+    },
+    "grep": {
+      "summary": "Zeilen finden, die zu einem Muster passen",
+      "usage": "grep [-inrvclwFE] MUSTER [DATEI…]",
+      "details": "MUSTER ist ein regulärer Ausdruck.\n-i Groß/klein egal   -n Zeilennummern   -r Ordner durchsuchen   -v nicht passende Zeilen\n-c zählen   -l nur Dateinamen   -w ganze Wörter   -F einfacher Text statt Muster"
+    },
+    "wc": { "summary": "Zeilen, Wörter und Bytes zählen", "usage": "wc [-lwcm] [DATEI…]" },
+    "sort": {
+      "summary": "Zeilen sortieren",
+      "usage": "sort [-rnuf] [DATEI…]",
+      "details": "-r umgekehrt   -n nach Zahl   -u ohne Duplikate   -f Groß/klein egal"
+    },
+    "uniq": {
+      "summary": "wiederholte benachbarte Zeilen entfernen",
+      "usage": "uniq [-cidu] [DATEI…]",
+      "details": "-c zählen   -i Groß/klein egal   -d nur wiederholte   -u nur einmalige. Meist nach sort."
+    },
+    "help": { "summary": "alle Befehle auflisten", "usage": "help [BEFEHL]" },
+    "man": { "summary": "Handbuch eines Befehls anzeigen", "usage": "man BEFEHL" },
+    "clear": { "summary": "Bildschirm leeren (auch Strg+L)", "usage": "clear" },
+    "whoami": { "summary": "deinen Benutzernamen ausgeben", "usage": "whoami" },
+    "uptime": { "summary": "wie lange Nexus schon läuft", "usage": "uptime" },
+    "date": {
+      "summary": "Datum und Uhrzeit ausgeben",
+      "usage": "date [-uIR]",
+      "details": "-u in UTC   -I ISO-Datum   -R RFC-Format"
+    },
+    "cal": { "summary": "Kalender anzeigen", "usage": "cal [MONAT [JAHR]]" },
+    "env": { "summary": "Umgebungsvariablen ausgeben", "usage": "env" },
+    "export": {
+      "summary": "Umgebungsvariablen setzen",
+      "usage": "export NAME=WERT…",
+      "details": "NAME=WERT allein in einer Zeile geht auch. Verwende sie als $NAME."
+    },
+    "unset": { "summary": "Umgebungsvariablen entfernen", "usage": "unset NAME…" },
+    "alias": {
+      "summary": "Aliase festlegen oder auflisten",
+      "usage": "alias [NAME[=BEFEHL]…]",
+      "details": "alias ll='ls -la' lässt „ll“ den Befehl „ls -la“ ausführen. Aliase gelten für alle Tabs und bleiben gespeichert."
+    },
+    "unalias": { "summary": "Aliase entfernen", "usage": "unalias NAME…" },
+    "history": {
+      "summary": "Befehlsverlauf anzeigen",
+      "usage": "history [-c] [N]",
+      "details": "!N führt Eintrag N erneut aus, !! den letzten, !-2 den vorletzten, !text den neuesten, der mit text beginnt.\n-c leert den Verlauf."
+    },
+    "open": {
+      "summary": "Dateien, Ordner oder Apps öffnen",
+      "usage": "open DATEI|ORDNER|APP…",
+      "details": "Dateien öffnen mit ihrer Standard-App, Ordner im Datei-Explorer. Apps per ID (nexus.files) oder Name (files)."
+    },
+    "apps": {
+      "summary": "installierte Apps auflisten",
+      "usage": "apps [-al]",
+      "details": "-a auch ausgeblendete Apps   -l mit Kategorie und Version"
+    },
+    "ps": { "summary": "offene Fenster auflisten", "usage": "ps" },
+    "kill": {
+      "summary": "Fenster ohne Nachfrage schließen",
+      "usage": "kill FENSTER…",
+      "details": "FENSTER ist eine Fenster-ID (nexus.files#1), eine App-ID (schließt alle ihre Fenster) oder eine Nummer aus ps."
+    },
+    "theme": {
+      "summary": "Designs auflisten oder wechseln",
+      "usage": "theme [NAME]",
+      "details": "Ohne Namen werden die Designs aufgelistet (● markiert das aktuelle). „theme auto“ folgt dem System."
+    },
+    "wallpaper": {
+      "summary": "Hintergrundbild festlegen",
+      "usage": "wallpaper [BILD|live:ID|gradient:ID]",
+      "details": "Eine Bilddatei aus deinen Dateien oder die ID eines eingebauten Hintergrunds. Ohne Argument wird der aktuelle angezeigt."
+    },
+    "notify": { "summary": "eine Benachrichtigung zeigen", "usage": "notify TEXT" },
+    "calc": {
+      "summary": "einen Ausdruck berechnen",
+      "usage": "calc AUSDRUCK",
+      "details": "+ - * / % ^, Klammern, pi, e und Funktionen wie sqrt, sin, log, round. Ausdrücke mit * oder ( ) in Anführungszeichen setzen: calc '2 * (3 + 4)'"
+    },
+    "nexusfetch": { "summary": "Systeminfos mit dem Nexus-Logo", "usage": "nexusfetch" },
+    "sleep": { "summary": "einige Sekunden warten (Strg+C bricht ab)", "usage": "sleep SEKUNDEN" },
+    "which": { "summary": "zeigen, woher ein Befehl kommt", "usage": "which BEFEHL…" },
+    "true": { "summary": "nichts tun, erfolgreich", "usage": "true" },
+    "false": { "summary": "nichts tun, erfolglos", "usage": "false" },
+    "exit": { "summary": "diesen Tab schließen", "usage": "exit" }
+  }
+}

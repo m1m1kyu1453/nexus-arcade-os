@@ -31,6 +31,14 @@ export default {
       label: { en: 'Ask before moving to the trash', de: 'Vor dem Verschieben in den Papierkorb fragen' },
     },
   ],
+  terminal: [
+    {
+      name: 'explore',
+      description: { en: 'Open a folder in the File Explorer', de: 'Einen Ordner im Datei-Explorer öffnen' },
+      usage: 'explore [FOLDER]',
+    },
+  ],
   messages: { en: () => import('./i18n/en.json'), de: () => import('./i18n/de.json') },
+  help: () => import('./help.md?raw'),
   load: () => import('./index.js'),
 };

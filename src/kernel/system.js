@@ -534,6 +534,12 @@ async function openProfile(options, k, profile) {
     bus,
     localize,
     isReadOnly: services.isReadOnly,
+    theme,
+    info: { version, edition, profile: { name: profile.name, username: profile.username }, bootedAt: Date.now() },
+    headless: async (appId) => {
+      await i18n.load(appId);
+      return headless(/** @type {AppManifest} */ (registry.get(appId)));
+    },
     host: systemHost,
   });
   bus.on('app:launched', () => sound.play('open'));

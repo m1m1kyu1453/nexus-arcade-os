@@ -1,0 +1,248 @@
+{
+  "title": "Terminal",
+  "input": "Command",
+  "tabs": "Terminal tabs",
+  "newTab": "New tab (Alt+T)",
+  "closeTab": "Close tab {name}",
+  "welcome": "Nexus shell. Type \u001b[1mhelp\u001b[22m for commands, \u001b[1mman <command>\u001b[22m for details, Tab to complete.",
+  "search": "(reverse-i-search)'{query}': ",
+  "searchFailed": "(failed reverse-i-search)'{query}': ",
+  "pager": "Pager",
+  "pagerStatus": "lines {first}–{last} of {total} · Space/b page · ↑/↓ line · q quit",
+  "pagerEnd": "(END)",
+  "err": {
+    "noEntry": "{path}: No such file or folder",
+    "isFolder": "{path}: Is a folder",
+    "notFolder": "{path}: Not a folder",
+    "binary": "{path}: Binary file (use open, or view it in the File Explorer)",
+    "tooMany": "too many arguments",
+    "missingOperand": "missing operand",
+    "exists": "{path}: Already exists",
+    "isFolderUseR": "{path}: Is a folder (use -r)",
+    "missingDest": "missing destination",
+    "same": "{path}: Source and destination are the same",
+    "badNumber": "invalid number: {value}",
+    "needsValue": "{option} needs a value",
+    "findType": "-type must be f (files) or d (folders)",
+    "unknownOption": "unknown option {option}",
+    "grepUsage": "usage: grep [-inrvclwFE] PATTERN [FILE…]",
+    "badRegex": "invalid pattern: {reason}",
+    "noOs": "not available here",
+    "manUsage": "usage: man COMMAND",
+    "noManual": "no manual entry for {name}",
+    "calUsage": "usage: cal [MONTH [YEAR]]",
+    "badName": "{name}: not a valid name",
+    "noAlias": "{name}: no such alias",
+    "noAppOrFile": "{name}: no such app or file",
+    "killUsage": "usage: kill WINDOW… (see ps)",
+    "noWindow": "{name}: no such window",
+    "noTheme": "{name}: no such theme (see theme)",
+    "notImage": "{path}: not an image",
+    "calcUsage": "usage: calc EXPRESSION",
+    "calc": "can't calculate “{expr}”",
+    "sleepUsage": "usage: sleep SECONDS",
+    "noCommand": "{name}: not found",
+    "notFound": "{name}: command not found. Type “help” for a list.",
+    "syntax": "syntax error: {reason}"
+  },
+  "out": {
+    "treeSummary": "{folders} folders, {files} files",
+    "dfFs": "Storage",
+    "dfSize": "Size",
+    "dfBlocks": "1K-blocks",
+    "dfUsed": "Used",
+    "dfAvail": "Available",
+    "dfUse": "Use%",
+    "dfFiles": "{files} files and {folders} folders in Nexus, {trash} in the trash",
+    "total": "total",
+    "days": { "one": "{count} day", "other": "{count} days" },
+    "hours": { "one": "{count} hour", "other": "{count} hours" },
+    "minutes": { "one": "{count} minute", "other": "{count} minutes" },
+    "helpTitle": "Built-in commands",
+    "helpApps": "Commands from apps",
+    "helpFooter": "man COMMAND for details · Tab completes · ↑/↓ history · Ctrl+R search · Ctrl+C stop · Ctrl+L clear",
+    "usage": "Usage",
+    "fromApp": "provided by {app}",
+    "aliasFor": "alias for “{value}”",
+    "uptime": "up {time}, {windows} windows open",
+    "hidden": "hidden",
+    "noWindows": "No windows are open.",
+    "psWindow": "Window",
+    "psState": "State",
+    "psTitle": "Title",
+    "suspended": "suspended",
+    "running": "running",
+    "builtin": "shell built-in",
+    "filesCount": { "one": "{count} file", "other": "{count} files" }
+  },
+  "fetch": {
+    "os": "OS",
+    "uptime": "Uptime",
+    "shell": "Shell",
+    "apps": "Apps",
+    "windows": "Windows",
+    "theme": "Theme",
+    "language": "Language",
+    "display": "Display",
+    "files": "Files",
+    "storage": "Storage"
+  },
+  "man": {
+    "pwd": { "summary": "print the current folder", "usage": "pwd" },
+    "cd": {
+      "summary": "change the current folder",
+      "usage": "cd [FOLDER]",
+      "details": "Without a folder, goes to your home folder. “cd -” returns to the previous folder; “~” is home."
+    },
+    "ls": {
+      "summary": "list folder contents",
+      "usage": "ls [-laht1Sr] [PATH…]",
+      "details": "-l long format (size, date, tags)   -a show hidden files   -h human sizes\n-t newest first   -S largest first   -r reverse   -1 one per line"
+    },
+    "cat": {
+      "summary": "print files",
+      "usage": "cat [-n] [FILE…]",
+      "details": "-n numbers the lines. Without files, prints the piped input."
+    },
+    "less": {
+      "summary": "page through text",
+      "usage": "less [FILE…]",
+      "details": "Space/b: page down/up · ↑/↓ or j/k: line · g/G: start/end · q: quit"
+    },
+    "head": {
+      "summary": "first lines of files",
+      "usage": "head [-n N] [FILE…]",
+      "details": "Shows 10 lines unless -n says otherwise (also: head -5)."
+    },
+    "tail": {
+      "summary": "last lines of files",
+      "usage": "tail [-n N] [FILE…]",
+      "details": "Shows 10 lines unless -n says otherwise (also: tail -5)."
+    },
+    "touch": { "summary": "create empty files or update their date", "usage": "touch FILE…" },
+    "mkdir": {
+      "summary": "create folders",
+      "usage": "mkdir [-p] FOLDER…",
+      "details": "-p creates missing parent folders and doesn't complain about existing ones."
+    },
+    "rm": {
+      "summary": "move files to the trash",
+      "usage": "rm [-rfP] PATH…",
+      "details": "Items go to the Trash, so you can restore them in the File Explorer.\n-r folders and their contents   -f ignore missing files   -P delete permanently"
+    },
+    "mv": {
+      "summary": "move or rename",
+      "usage": "mv [-n] SOURCE… DEST",
+      "details": "With several sources, DEST must be a folder. A file that would be overwritten goes to the trash first; -n keeps existing files instead."
+    },
+    "cp": {
+      "summary": "copy files and folders",
+      "usage": "cp [-rn] SOURCE… DEST",
+      "details": "-r copies folders with their contents. A file that would be overwritten goes to the trash first; -n keeps it instead."
+    },
+    "find": {
+      "summary": "search for files by name or type",
+      "usage": "find [PATH…] [-name PATTERN] [-iname PATTERN] [-type f|d]",
+      "details": "Patterns use * ? [abc]; quote them so the shell doesn't expand them: find . -name \"*.md\""
+    },
+    "tree": {
+      "summary": "show a folder as a tree",
+      "usage": "tree [-ad] [-L DEPTH] [FOLDER]",
+      "details": "-a hidden files   -d folders only   -L how deep to go"
+    },
+    "du": {
+      "summary": "disk usage of folders",
+      "usage": "du [-hsa] [PATH…]",
+      "details": "Sizes in KB (-h for readable sizes). -s only the total   -a files too"
+    },
+    "df": { "summary": "browser storage used and available", "usage": "df [-h]" },
+    "echo": {
+      "summary": "print text",
+      "usage": "echo [-ne] [TEXT…]",
+      "details": "-n no newline at the end   -e understand \\n, \\t and \\e (for colours)"
+    },
+    "grep": {
+      "summary": "find lines that match a pattern",
+      "usage": "grep [-inrvclwFE] PATTERN [FILE…]",
+      "details": "PATTERN is a regular expression.\n-i ignore case   -n line numbers   -r search folders   -v non-matching lines\n-c count   -l file names only   -w whole words   -F plain text, not a pattern"
+    },
+    "wc": { "summary": "count lines, words and bytes", "usage": "wc [-lwcm] [FILE…]" },
+    "sort": {
+      "summary": "sort lines",
+      "usage": "sort [-rnuf] [FILE…]",
+      "details": "-r reverse   -n by number   -u drop duplicates   -f ignore case"
+    },
+    "uniq": {
+      "summary": "drop repeated adjacent lines",
+      "usage": "uniq [-cidu] [FILE…]",
+      "details": "-c count   -i ignore case   -d only repeated   -u only unique. Usually after sort."
+    },
+    "help": { "summary": "list all commands", "usage": "help [COMMAND]" },
+    "man": { "summary": "show the manual of a command", "usage": "man COMMAND" },
+    "clear": { "summary": "clear the screen (also Ctrl+L)", "usage": "clear" },
+    "whoami": { "summary": "print your user name", "usage": "whoami" },
+    "uptime": { "summary": "how long Nexus has been running", "usage": "uptime" },
+    "date": {
+      "summary": "print the date and time",
+      "usage": "date [-uIR]",
+      "details": "-u in UTC   -I ISO date   -R RFC format"
+    },
+    "cal": { "summary": "show a calendar", "usage": "cal [MONTH [YEAR]]" },
+    "env": { "summary": "print the environment variables", "usage": "env" },
+    "export": {
+      "summary": "set environment variables",
+      "usage": "export NAME=VALUE…",
+      "details": "NAME=VALUE on its own line works too. Use them as $NAME."
+    },
+    "unset": { "summary": "remove environment variables", "usage": "unset NAME…" },
+    "alias": {
+      "summary": "define or list aliases",
+      "usage": "alias [NAME[=COMMAND]…]",
+      "details": "alias ll='ls -la' makes “ll” run “ls -la”. Aliases are saved for all tabs."
+    },
+    "unalias": { "summary": "remove aliases", "usage": "unalias NAME…" },
+    "history": {
+      "summary": "show the command history",
+      "usage": "history [-c] [N]",
+      "details": "!N runs entry N again, !! the last one, !-2 the one before, !text the newest starting with text.\n-c clears the history."
+    },
+    "open": {
+      "summary": "open files, folders or apps",
+      "usage": "open FILE|FOLDER|APP…",
+      "details": "Files open with their default app, folders in the File Explorer. Apps by id (nexus.files) or name (files)."
+    },
+    "apps": {
+      "summary": "list installed apps",
+      "usage": "apps [-al]",
+      "details": "-a include hidden apps   -l with category and version"
+    },
+    "ps": { "summary": "list open windows", "usage": "ps" },
+    "kill": {
+      "summary": "close windows without asking",
+      "usage": "kill WINDOW…",
+      "details": "WINDOW is a window id (nexus.files#1), an app id (closes all its windows) or a number from ps."
+    },
+    "theme": {
+      "summary": "list or change the theme",
+      "usage": "theme [NAME]",
+      "details": "Without a name, lists the themes (● marks the current one). “theme auto” follows the system."
+    },
+    "wallpaper": {
+      "summary": "set the wallpaper",
+      "usage": "wallpaper [IMAGE|live:ID|gradient:ID]",
+      "details": "An image file from your files, or a built-in wallpaper id. Without an argument, shows the current one."
+    },
+    "notify": { "summary": "show a notification", "usage": "notify TEXT" },
+    "calc": {
+      "summary": "calculate an expression",
+      "usage": "calc EXPRESSION",
+      "details": "+ - * / % ^, parentheses, pi, e, and functions like sqrt, sin, log, round. Quote expressions with * or ( ): calc '2 * (3 + 4)'"
+    },
+    "nexusfetch": { "summary": "system information with the Nexus logo", "usage": "nexusfetch" },
+    "sleep": { "summary": "wait a number of seconds (Ctrl+C stops)", "usage": "sleep SECONDS" },
+    "which": { "summary": "tell where a command comes from", "usage": "which COMMAND…" },
+    "true": { "summary": "do nothing, successfully", "usage": "true" },
+    "false": { "summary": "do nothing, unsuccessfully", "usage": "false" },
+    "exit": { "summary": "close this tab", "usage": "exit" }
+  }
+}

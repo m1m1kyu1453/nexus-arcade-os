@@ -31,7 +31,9 @@ As in NEXUS_BRIEF.md §5.1, plus:
 - `src/dev/` — debug screen and the kernel test app (dev builds and tests only; a complete app example).
 - `src/shell/boot.js` creates the shell parts in order; `shell.js` builds the layers and the window manager (`shell.ui.*` holds each part: dock, palette, launcher, center, widgets, dialogs, shortcuts, mobile …). `bare-host.js` (tests) and `native-dialogs.js` (headless fallback) remain from phase 1.
 - `src/shell/wm/` — window manager (`geometry.js` is pure and tested), overview, switcher. `src/shell/widgets/` — widget host, grid math, built-in widgets. `src/shell/dialogs/` — `ctx.dialog`. `src/shell/mobile/` — `<html data-mobile>` layout below 768 px.
-- `src/ui/` — shared UI kit for shell and apps: `dom.js` (`h`, `icon`, `capturePointer` …), `menu.js` (context menus), `overlay.js` (modals, popovers, tooltips), `icons/`.
+- `src/ui/` — shared UI kit for shell and apps: `dom.js` (`h`, `icon`, `capturePointer` …), `menu.js` (context menus), `overlay.js` (modals, popovers, tooltips), `icons/`, `file-icons.js` (+ `PATHS_MIME` drag type), and small pure helpers apps share: `paths.js`, `calc.js`, `markdown.js` (marked + DOMPurify), `highlight.js` (CodeMirror parsers, lazy).
+- `src/kernel/system-api.js` — `ctx.system` for built-in apps with the `system` permission (apps, windows, settings, theme, terminal commands, help, info).
+- Apps may have one level of subfolders (e.g. `src/apps/terminal/shell/`); ESLint enforces the boundary for both levels.
 - `scripts/` — build helpers (shared Vite settings, icon renderer).
 - `tests/helpers/` — `setup-unit.js` (fresh fake IndexedDB per test), `nexus.js` (Playwright: `startNexus` clean profile + seed, `collectErrors`, `liteUrl`).
 - Empty folders carry a short `README.md` instead of an empty `index.js` (no dead code).
@@ -87,4 +89,6 @@ Ask before adding anything else (brief §2.4).
 - E2E runs against the production build: `npm run build` before `npx playwright test`, or the tests exercise stale code.
 - Chain checks with `set -o pipefail` (`npm test | grep …` otherwise hides failures).
 - The overview's thumbnails are clones of `.nx-window`: scope window selectors (CSS and tests) to `.nx-windows .nx-window`.
-- Session saves are debounced (600 ms): tests wait ~1 s before a reload that must restore state.
+- Session saves are debounced (600 ms): tests wait ~1 s before a reload that must restore state. Apps call `ctx.window.stateChanged()` when their `saveState()` changes.
+- The Bash tool collapses backslashes in heredocs (`\\n` → newline, `\\d` → `d`): write files or patch scripts containing backslashes with the Write/Edit tools.
+- Global shortcuts run in the capture phase, even in inputs for Ctrl/Alt combos: an app that needs a key (Terminal Ctrl+L) registers it with `ctx.shortcuts` (window scope wins).

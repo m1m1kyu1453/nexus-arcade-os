@@ -39,6 +39,10 @@ export interface AppManifest {
   settings?: SettingDecl[];
   widgets?: WidgetDecl[];
   achievements?: AchievementDecl[];
+  /** Terminal commands this app adds (e.g. `notes new "Title"`). Handlers live in `AppModule.terminal`. */
+  terminal?: TerminalCommandDecl[];
+  /** Lazy help page (Markdown), shown by the Help app and on F1. */
+  help?: () => Promise<{ default: string } | string>;
   /** Lazy search provider, loaded when the search service first needs it. */
   search?: () => Promise<{ default: SearchProvider }>;
   /** Stored data: collections (one IndexedDB store each) and the data schema version. */
@@ -85,6 +89,27 @@ export type SettingDecl =
   | (SettingBase & { type: 'string' | 'color' | 'shortcut' | 'path' | 'date'; default: string })
   | (SettingBase & { type: 'boolean'; default: boolean })
   | (SettingBase & { type: 'enum'; default: string; options: { value: string; label: L10n }[] });
+
+export interface TerminalCommandDecl {
+  /** What the user types, e.g. 'notes'. */
+  name: string;
+  description: L10n;
+  /** e.g. 'notes new <title>' (shown by `help` and `man`). */
+  usage?: string;
+}
+
+/** What a terminal command handler gets. Output may contain ANSI colour codes. */
+export interface TerminalIo {
+  args: string[];
+  /** Piped input, or null when there is none. */
+  stdin: string | null;
+  cwd: string;
+  env: Record<string, string>;
+  out(text: string): void;
+  err(text: string): void;
+  /** Aborted when the user presses Ctrl+C. */
+  signal: AbortSignal;
+}
 
 export interface WidgetDecl {
   id: string;
@@ -144,6 +169,8 @@ export interface AppModule {
   mount(container: HTMLElement, ctx: AppContext, args: LaunchArgs): AppInstance | Promise<AppInstance>;
   /** Handlers for `manifest.commands`, run without a window (e.g. from the command palette). */
   commands?: Record<string, (ctx: HeadlessContext, args?: unknown) => unknown>;
+  /** Handlers for `manifest.terminal`, keyed by name; resolve to the exit status (0 = success). */
+  terminal?: Record<string, (ctx: HeadlessContext, io: TerminalIo) => number | void | Promise<number | void>>;
 }
 
 /** One running window of an app. */

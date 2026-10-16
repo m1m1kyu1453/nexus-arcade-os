@@ -9,7 +9,7 @@ import { h, icon, replace } from '../../ui/dom.js';
 import { closeMenus } from '../../ui/menu.js';
 import { trapFocus } from '../../ui/overlay.js';
 import { registerCommand } from '../util.js';
-import { evaluate, formatResult } from './calc.js';
+import { evaluate, formatResult } from '../../ui/calc.js';
 import './palette.css';
 
 const MODES = /** @type {const} */ ({
